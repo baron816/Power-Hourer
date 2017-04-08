@@ -32,7 +32,7 @@ export function fetchPlaylistsEpic(action$, store) {
     return ajax.getJSON('https://www.googleapis.com/youtube/v3/playlists?part=snippet%2C+contentDetails&mine=true', {
       Authorization: 'Bearer ' + accessToken
     })
-    .map(response => fetchPlaylistFulfilled(response));
+    .map(response => fetchPlaylistFulfilled(response.items));
   });
 }
 
@@ -40,6 +40,6 @@ export function fetchPlaylistItemsEpic(action$) {
   return action$.ofType(FETCH_PLAYLIST_ITEMS)
   .mergeMap(function (action) {
     return ajax.getJSON(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet%2C+contentDetails&playlistId=${action.playlistId}&maxResults=15&key=${YOUTUBE_API_KEY}`)
-    .map(response => fetchPlaylistItemsFulfilled(response));
+    .map(response => fetchPlaylistItemsFulfilled(response.items));
   });
 }
