@@ -2,7 +2,8 @@ import {
   SET_ACCESS_TOKEN,
   FETCH_PLAYLISTS,
   RESET_STATE,
-  FETCH_PLAYLIST_ITEMS
+  FETCH_PLAYLIST_ITEMS,
+  NEXT_VIDEO
 } from './actionCreators';
 
 //Redux
@@ -16,6 +17,12 @@ export function setAccessToken(token) {
 export function resetState() {
   return {
     type: RESET_STATE
+  };
+}
+
+export function nextVideo() {
+  return {
+    type: NEXT_VIDEO
   };
 }
 

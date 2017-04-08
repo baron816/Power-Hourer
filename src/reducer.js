@@ -4,7 +4,8 @@ import {
   SET_ACCESS_TOKEN,
   GET_PLAYLISTS,
   RESET_STATE,
-  GET_PLAYLIST_ITEMS
+  GET_PLAYLIST_ITEMS,
+  NEXT_VIDEO
 } from './actionCreators';
 
 // import { REHYDRATE } from 'redux-persist/constants';
@@ -12,7 +13,8 @@ import {
 const initialState = fromJS({
   accessToken: '',
   playlists: [],
-  playlistItems: []
+  playlistItems: [],
+  playlistIndex: 0
 });
 
 function setToken(state, token) {
@@ -20,11 +22,15 @@ function setToken(state, token) {
 }
 
 function setPlaylists(state, payload) {
-  return state.updateIn(['playlists'], (list) => list.concat(payload.items));
+  return state.updateIn(['playlists'], (list) => list.concat(payload));
 }
 
 function setPlaylistItems(state, payload) {
-  return state.set('playlistItems', List(payload.items));
+  return state.set('playlistItems', List(payload));
+}
+
+function incrementPlaylistIndex(state) {
+  return state.set('playlistIndex', state.get('playlistIndex') + 1);
 }
 
 export default function reducer(state = initialState, action) {
@@ -37,6 +43,8 @@ export default function reducer(state = initialState, action) {
       return setPlaylists(state, action.payload);
     case GET_PLAYLIST_ITEMS:
       return setPlaylistItems(state, action.payload);
+    case NEXT_VIDEO:
+      return incrementPlaylistIndex(state);
     default:
       return state;
   }
