@@ -88,35 +88,59 @@ describe('reducer', function () {
   });
 
   describe('GOTO_VIDEO', function () {
-    const initialState = fromJS({
-      playlistIndex: 0
+    it('goes to the selected video', function () {
+      const initialState = fromJS({
+        playlistIndex: 0
+      });
+
+      const action = {
+        type: GOTO_VIDEO,
+        index: 2
+      };
+
+      const nextState = reducer(initialState, action);
+
+      expect(nextState).toEqual(Map({
+        playlistIndex: 2
+      }));
     });
-
-    const action = {
-      type: GOTO_VIDEO,
-      index: 2
-    };
-
-    const nextState = reducer(initialState, action);
-
-    expect(nextState).toEqual(Map({
-      playlistIndex: 2
-    }));
   });
 
   describe('NEXT_VIDEO', function () {
-    const initialState = fromJS({
-      playlistIndex: 1
+    it('goes to the next video', function () {
+      const initialState = fromJS({
+        playlistIndex: 1,
+        playlistItems: [{id: 'asdgew'}, {id: '32srfrg'}, {id: 'ydfbsbm2'}]
+      });
+
+      const action = {
+        type: NEXT_VIDEO
+      };
+
+      const nextState = reducer(initialState, action);
+
+      expect(nextState).toEqual(Map({
+        playlistIndex: 2,
+        playlistItems: List([Map({id: 'asdgew'}), Map({id: '32srfrg'}), Map({id: 'ydfbsbm2'})])
+      }));
     });
 
-    const action = {
-      type: NEXT_VIDEO
-    };
+    it('does not go to the next if it is at the end', function () {
+      const initialState = fromJS({
+        playlistIndex: 2,
+        playlistItems: [{id: 'asdgew'}, {id: '32srfrg'}, {id: 'ydfbsbm2'}]
+      });
 
-    const nextState = reducer(initialState, action);
+      const action = {
+        type: NEXT_VIDEO
+      };
 
-    expect(nextState).toEqual(Map({
-      playlistIndex: 2
-    }));
+      const nextState = reducer(initialState, action);
+
+      expect(nextState).toEqual(Map({
+        playlistIndex: 2,
+        playlistItems: List([Map({id: 'asdgew'}), Map({id: '32srfrg'}), Map({id: 'ydfbsbm2'})])
+      }));
+    });
   });
 });

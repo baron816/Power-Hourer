@@ -31,7 +31,10 @@ function setPlaylistItems(state, payload) {
 }
 
 function incrementPlaylistIndex(state) {
-  return state.set('playlistIndex', state.get('playlistIndex') + 1);
+  if (state.get('playlistIndex') < state.get('playlistItems').size - 1) {
+    return state.set('playlistIndex', state.get('playlistIndex') + 1);
+  }
+  return state;
 }
 
 function setVideoIndex(state, index) {
