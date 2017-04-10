@@ -3,7 +3,8 @@ import {
   FETCH_PLAYLISTS,
   RESET_STATE,
   FETCH_PLAYLIST_ITEMS,
-  NEXT_VIDEO
+  NEXT_VIDEO,
+  GOTO_VIDEO
 } from './actionCreators';
 
 //Redux
@@ -23,6 +24,13 @@ export function resetState() {
 export function nextVideo() {
   return {
     type: NEXT_VIDEO
+  };
+}
+
+export function goToVideo(index) {
+  return {
+    type: GOTO_VIDEO,
+    index
   };
 }
 
