@@ -2,15 +2,20 @@ import React from 'react';
 import './App.css';
 import Login from './Login/Login';
 import { connect } from 'react-redux';
-import ReactPlayer from 'react-player';
+import YouTube from 'react-youtube';
 import { persistor } from './store';
 
-import { fetchPlaylists, resetState, fetchPlaylistItems, nextVideo } from './actions';
+import { fetchPlaylists, resetState, fetchPlaylistItems, nextVideo, goToVideo } from './actions';
 
 function App(params) {
   const c = new React.Component(params);
 
+  c.state = {
+    callNext: true
+  };
+
   c.render = function() {
+
     return (
       <div className="App">
 
@@ -32,9 +37,9 @@ function App(params) {
 
         <div className="PlaylistItems">
           <ul>
-            {c.props.playlistItems.map(function (item) {
+            {c.props.playlistItems.map(function (item, index) {
               return(
-                <li key={item.id}>{item.snippet.title}</li>
+                <li key={item.id} data-index={index} onClick={setVideoIndex}>{item.snippet.title}</li>
               );
             })}
           </ul>
@@ -42,10 +47,10 @@ function App(params) {
 
         <div className="currentVideo">
           {c.props.playlistItems.size &&
-            <ReactPlayer
-              url={`http://youtube.com/embed/${videoId()}`}
-              controls={true}
-              onEnded={handleVideoEnd}
+            <YouTube
+              videoId={videoId()}
+              opts={{playerVars: {start: 30, end: 40, autoplay: 1, rel: 0}}}
+              onEnd={handleVideoEnd}
             />
           }
         </div>
@@ -59,13 +64,21 @@ function App(params) {
     };
   }
 
+  function setVideoIndex(event) {
+    c.props.dispatch(goToVideo(event.target.dataset.index));
+  }
+
   function videoId() {
     const { playlistItems, playlistIndex } = c.props;
     return playlistItems.get(playlistIndex).snippet.resourceId.videoId;
   }
 
   function handleVideoEnd() {
-    c.props.dispatch(nextVideo());
+    // if statement is workaround for bug that causes onEnd to be called twice
+    if (c.state.callNext) {
+      c.props.dispatch(nextVideo());
+    }
+    c.setState({callNext: !c.state.callNext});
   }
 
   function logout() {
