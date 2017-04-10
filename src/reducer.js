@@ -5,7 +5,8 @@ import {
   GET_PLAYLISTS,
   RESET_STATE,
   GET_PLAYLIST_ITEMS,
-  NEXT_VIDEO
+  NEXT_VIDEO,
+  GOTO_VIDEO
 } from './actionCreators';
 
 // import { REHYDRATE } from 'redux-persist/constants';
@@ -33,6 +34,10 @@ function incrementPlaylistIndex(state) {
   return state.set('playlistIndex', state.get('playlistIndex') + 1);
 }
 
+function setVideoIndex(state, index) {
+  return state.set('playlistIndex', Number(index));
+}
+
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case RESET_STATE:
@@ -45,6 +50,8 @@ export default function reducer(state = initialState, action) {
       return setPlaylistItems(state, action.payload);
     case NEXT_VIDEO:
       return incrementPlaylistIndex(state);
+    case GOTO_VIDEO:
+      return setVideoIndex(state, action.index);
     default:
       return state;
   }

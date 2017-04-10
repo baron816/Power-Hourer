@@ -3,7 +3,9 @@ import { fromJS, Map, List } from 'immutable';
 import {
   SET_ACCESS_TOKEN,
   GET_PLAYLISTS,
-  GET_PLAYLIST_ITEMS
+  GET_PLAYLIST_ITEMS,
+  GOTO_VIDEO,
+  NEXT_VIDEO
 } from './actionCreators';
 
 import reducer from './reducer';
@@ -83,5 +85,38 @@ describe('reducer', function () {
         playlistItems: List([{id: '2gdfgae'}, {id: 'eawoh29t'}, {id: '8t9ghs2'}])
       }));
     });
+  });
+
+  describe('GOTO_VIDEO', function () {
+    const initialState = fromJS({
+      playlistIndex: 0
+    });
+
+    const action = {
+      type: GOTO_VIDEO,
+      index: 2
+    };
+
+    const nextState = reducer(initialState, action);
+
+    expect(nextState).toEqual(Map({
+      playlistIndex: 2
+    }));
+  });
+
+  describe('NEXT_VIDEO', function () {
+    const initialState = fromJS({
+      playlistIndex: 1
+    });
+
+    const action = {
+      type: NEXT_VIDEO
+    };
+
+    const nextState = reducer(initialState, action);
+
+    expect(nextState).toEqual(Map({
+      playlistIndex: 2
+    }));
   });
 });
