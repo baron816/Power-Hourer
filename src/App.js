@@ -13,50 +13,30 @@ import {
   fetchPlaylists,
   resetState,
   changeVideoLength,
-  incrementTime,
 } from './actions';
 
-function App(props) {
-  const c = new React.Component(props);
+function App({accessToken, videoLength, getPlaylists, logout, changeVidLen}) {
+  return (
+    <div className="App">
 
-  c.state = {
-    intervalId: 0
-  };
+    <button onClick={getPlaylists}>Click Me</button>
 
-  c.componentDidMount = function () {
-    const intervalId = setInterval(() => c.props.moveClock(), 1000);
-    c.setState({intervalId});
-  };
+    {!accessToken.length ?
+      <Login /> : <button onClick={logout}>Logout</button>
+    }
 
-  c.componentWillUnmount = function () {
-    clearInterval(c.state.intervalId);
-  };
+    <Playlists />
 
-  c.render = function () {
-    return (
-      <div className="App">
-
-      <button onClick={c.props.getPlaylists}>Click Me</button>
-
-      {!c.props.accessToken.length ?
-        <Login /> : <button onClick={c.props.logout}>Logout</button>
-      }
-
-      <Playlists />
-
-      <PlaylistItems />
+    <PlaylistItems />
 
 
-      <Clock />
+    <Clock />
 
-      <input type="number" min={10} max={120} step={10} onChange={c.props.changeVidLen} value={c.props.videoLength}/>
+    <input type="number" min={10} max={120} step={10} onChange={changeVidLen} value={videoLength}/>
 
-      <Video />
-      </div>
-    );
-  };
-
-  return c;
+    <Video />
+    </div>
+  );
 }
 
 function mapStateToProps(state) {
@@ -80,16 +60,10 @@ function mapDispatchToProps(dispatch) {
     dispatch(resetState());
   }
 
-
-  function moveClock() {
-    dispatch(incrementTime());
-  }
-
   return {
     changeVidLen,
     getPlaylists,
-    logout,
-    moveClock
+    logout
   };
 }
 
