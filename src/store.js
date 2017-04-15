@@ -16,7 +16,7 @@ const rootEpic = combineEpics(
 
 const epicMiddleWare = createEpicMiddleware(rootEpic);
 
-const store = createStore(reducer, undefined, compose(applyMiddleware(epicMiddleWare), autoRehydrate()));
+const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), compose(applyMiddleware(epicMiddleWare), autoRehydrate()));
 
 export const persistor = persistStore(store);
 export default store;
