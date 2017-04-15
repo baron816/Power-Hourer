@@ -4,7 +4,12 @@ import {
   RESET_STATE,
   FETCH_PLAYLIST_ITEMS,
   NEXT_VIDEO,
-  GOTO_VIDEO
+  GOTO_VIDEO,
+  CHANGE_PLAY_STATE,
+  INCREMENT_TIME,
+  RESET_CLOCK,
+  CHANGE_VIDEO_LENGTH,
+  FLIP_NEXT
 } from './actionCreators';
 
 //Redux
@@ -31,6 +36,38 @@ export function goToVideo(index) {
   return {
     type: GOTO_VIDEO,
     index
+  };
+}
+
+export function changePlayState(bool) {
+  return {
+      type: CHANGE_PLAY_STATE,
+      bool
+  };
+}
+
+export function incrementTime() {
+  return {
+    type: INCREMENT_TIME
+  };
+}
+
+export function resetClock() {
+  return {
+    type: RESET_CLOCK
+  };
+}
+
+export function changeVideoLength(length) {
+  return {
+    type: CHANGE_VIDEO_LENGTH,
+    length
+  };
+}
+
+export function flipNext() {
+  return {
+   type: FLIP_NEXT
   };
 }
 
