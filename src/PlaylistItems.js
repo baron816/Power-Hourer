@@ -1,15 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { goToVideo, resetClock, changePlayState } from './actions';
+import { goToVideo, resetClock, changePlayState, changeVideoStart } from './actions';
 
-function PlaylistItems({playlistItems, setVideoIndex}) {
+function PlaylistItems({playlistItems, setVideoIndex, changeVidStart}) {
   return (
     <div className="PlaylistItems">
       <ul>
         {playlistItems.map(function (item, index) {
           return(
-            <li key={item.id} data-index={index} onClick={setVideoIndex}>{item.snippet.title}</li>
+            <li key={item.get('id')}  >
+              <button data-index={index} onClick={setVideoIndex} >Go To</button>
+              {item.get('snippet').get('title')}
+              <input type="number" min={0} max={600} step={10} onChange={changeVidStart(index)} value={item.get('startTime') || 30}/>
+            </li>
           );
         })}
       </ul>
@@ -33,8 +37,16 @@ function mapDispatchToProps(dispatch) {
     dispatch(goToVideo(index));
   }
 
+  function changeVidStart(index) {
+    return function (event) {
+      const time = event.target.value;
+      dispatch(changeVideoStart(index, time));
+    };
+  }
+
   return {
-    setVideoIndex
+    setVideoIndex,
+    changeVidStart
   };
 }
 
