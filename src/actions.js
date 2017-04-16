@@ -9,7 +9,8 @@ import {
   INCREMENT_TIME,
   RESET_CLOCK,
   CHANGE_VIDEO_LENGTH,
-  FLIP_NEXT
+  FLIP_NEXT,
+  CHANGE_VIDEO_START
 } from './actionCreators';
 
 //Redux
@@ -68,6 +69,14 @@ export function changeVideoLength(length) {
 export function flipNext() {
   return {
    type: FLIP_NEXT
+  };
+}
+
+export function changeVideoStart(index, time) {
+  return {
+    type: CHANGE_VIDEO_START,
+    index,
+    time
   };
 }
 
