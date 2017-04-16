@@ -10,7 +10,8 @@ import {
   INCREMENT_TIME,
   RESET_CLOCK,
   CHANGE_VIDEO_LENGTH,
-  FLIP_NEXT
+  FLIP_NEXT,
+  CHANGE_VIDEO_START
 } from './actionCreators';
 
 import reducer from './reducer';
@@ -70,7 +71,7 @@ describe('reducer', function () {
       const nextState = reducer(initialState, action);
 
       expect(nextState).toEqual(Map({
-        playlistItems: List([{id: 'asr3q212'}, {id: 'benoauhe2'}])
+        playlistItems: List([Map({id: 'asr3q212'}), Map({id: 'benoauhe2'})])
       }));
     });
 
@@ -87,7 +88,7 @@ describe('reducer', function () {
       const nextState = reducer(initialState, action);
 
       expect(nextState).toEqual(Map({
-        playlistItems: List([{id: '2gdfgae'}, {id: 'eawoh29t'}, {id: '8t9ghs2'}])
+        playlistItems: List([Map({id: '2gdfgae'}), Map({id: 'eawoh29t'}), Map({id: '8t9ghs2'})])
       }));
     });
   });
@@ -242,6 +243,26 @@ describe('reducer', function () {
 
       expect(nextState).toEqual(Map({
         callNext: true
+      }));
+    });
+  });
+
+  describe('CHANGE_VIDEO_START', function () {
+    it('sets the start time of a video at an index', function () {
+      const initialState = fromJS({
+        playlistItems: [{id: 'aegvae'}, {id: 'ibnaieubn'}, {id: 'vuiab3ta'}]
+      });
+
+      const action = {
+        type: CHANGE_VIDEO_START,
+        index: 1,
+        time: 45
+      };
+
+      const nextState = reducer(initialState, action);
+
+      expect(nextState).toEqual(Map({
+        playlistItems: List([Map({id: 'aegvae'}), Map({id: 'ibnaieubn', startTime: 45}), Map({id: 'vuiab3ta'})])
       }));
     });
   });
