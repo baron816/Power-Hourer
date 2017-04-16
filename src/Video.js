@@ -10,7 +10,7 @@ function Video({playlistIndex, playlistItems, handleVideoEnd, changePlay, callNe
       {playlistItems.size &&
         <YouTube
           videoId={videoId()}
-          opts={{playerVars: {start: 30, end: videoEnd(), autoplay: autoplay(), rel: 0}}}
+          opts={{playerVars: {start: videoStart(), end: videoEnd(), autoplay: autoplay(), rel: 0}}}
           onEnd={handleVideoEnd(callNext)}
           onPlay={changePlay(true)}
           onPause={changePlay(false)}
@@ -20,7 +20,15 @@ function Video({playlistIndex, playlistItems, handleVideoEnd, changePlay, callNe
   );
 
   function videoId() {
-    return playlistItems.get(playlistIndex).snippet.resourceId.videoId;
+    return getVideo().get('snippet').get('resourceId').get('videoId');
+  }
+
+  function getVideo() {
+    return playlistItems.get(playlistIndex);
+  }
+
+  function videoStart() {
+    return getVideo().get('startTime') || 30;
   }
 
   function autoplay() {
@@ -28,7 +36,7 @@ function Video({playlistIndex, playlistItems, handleVideoEnd, changePlay, callNe
   }
 
   function videoEnd() {
-    return videoLength + 30;
+    return videoLength + videoStart();
   }
 }
 
@@ -54,11 +62,11 @@ function mapDispatchToProps(dispatch) {
   }
 
 
-    function changePlay(bool) {
-      return function () {
-        dispatch(changePlayState(bool));
-      };
-    }
+  function changePlay(bool) {
+    return function () {
+      dispatch(changePlayState(bool));
+    };
+  }
 
   return {
     handleVideoEnd,
