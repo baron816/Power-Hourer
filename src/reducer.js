@@ -13,7 +13,8 @@ import {
   CHANGE_VIDEO_LENGTH,
   FLIP_NEXT,
   CHANGE_VIDEO_START,
-  SHOW_MODAL
+  SHOW_MODAL,
+  SET_PLAYLIST_NAME
 } from './actionCreators';
 
 // import { REHYDRATE } from 'redux-persist/constants';
@@ -27,7 +28,8 @@ const initialState = fromJS({
   time: 0,
   videoLength: 60,
   callNext: true,
-  showModal: false
+  showModal: false,
+  currentPlaylistName: ''
 });
 
 function setToken(state, token) {
@@ -84,6 +86,10 @@ function setModalState(state) {
   return state.set('showModal', !state.get('showModal'));
 }
 
+function setPlaylistName(state, name) {
+  return state.set('currentPlaylistName', name);
+}
+
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case RESET_STATE:
@@ -112,6 +118,8 @@ export default function reducer(state = initialState, action) {
       return changeVideoStart(state, action.index, action.time);
     case SHOW_MODAL:
       return setModalState(state);
+    case SET_PLAYLIST_NAME:
+      return setPlaylistName(state, action.name);
     default:
       return state;
   }

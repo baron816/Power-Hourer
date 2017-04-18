@@ -11,7 +11,8 @@ import {
   CHANGE_VIDEO_LENGTH,
   FLIP_NEXT,
   CHANGE_VIDEO_START,
-  SHOW_MODAL
+  SHOW_MODAL,
+  SET_PLAYLIST_NAME
 } from './actionCreators';
 
 //Redux
@@ -84,6 +85,13 @@ export function changeVideoStart(index, time) {
 export function invertModalState() {
   return {
     type: SHOW_MODAL
+  };
+}
+
+export function setPlaylistName(name) {
+  return {
+    type: SET_PLAYLIST_NAME,
+    name
   };
 }
 

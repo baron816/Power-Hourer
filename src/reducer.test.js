@@ -12,7 +12,8 @@ import {
   CHANGE_VIDEO_LENGTH,
   FLIP_NEXT,
   CHANGE_VIDEO_START,
-  SHOW_MODAL
+  SHOW_MODAL,
+  SET_PLAYLIST_NAME
 } from './actionCreators';
 
 import reducer from './reducer';
@@ -278,6 +279,25 @@ describe('reducer', function () {
 
       expect(nextState).toEqual(Map({
         showModal: true
+      }));
+    });
+  });
+
+  describe('SET_PLAYLIST_NAME', function () {
+    it('correctly sets the currentPlaylistName', function () {
+      const initialState = fromJS({
+        currentPlaylistName: ''
+      });
+
+      const action = {
+        type: SET_PLAYLIST_NAME,
+        name: 'Cheezy-Tunez'
+      };
+
+      const nextState = reducer(initialState, action);
+
+      expect(nextState).toEqual(Map({
+        currentPlaylistName: 'Cheezy-Tunez'
       }));
     });
   });
