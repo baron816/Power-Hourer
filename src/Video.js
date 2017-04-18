@@ -1,12 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import YouTube from 'react-youtube';
+import { Card } from 'material-ui/Card'
 
+import Clock from './Clock';
 import { changePlayState, nextVideo, flipNext } from './actions';
+import './Video.css';
 
 function Video({playlistIndex, playlistItems, handleVideoEnd, changePlay, callNext, videoLength}) {
+
+
   return (
-    <div className="currentVideo">
+    <Card id="video">
+      <Clock />
       {playlistItems.size &&
         <YouTube
           videoId={videoId()}
@@ -16,7 +22,7 @@ function Video({playlistIndex, playlistItems, handleVideoEnd, changePlay, callNe
           onPause={changePlay(false)}
         />
       }
-    </div>
+    </Card>
   );
 
   function videoId() {
@@ -45,7 +51,8 @@ function mapStateToProps(state) {
     playlistIndex: state.get('playlistIndex'),
     playlistItems: state.get('playlistItems'),
     callNext: state.get('callNext'),
-    videoLength: state.get('videoLength')
+    videoLength: state.get('videoLength'),
+    showModal: state.get('showModal')
   };
 }
 
@@ -60,7 +67,6 @@ function mapDispatchToProps(dispatch) {
       dispatch(changePlayState(false));
     };
   }
-
 
   function changePlay(bool) {
     return function () {
