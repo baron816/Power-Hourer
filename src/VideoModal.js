@@ -9,7 +9,7 @@ import { invertModalState } from './actions';
 
 import './VideoModal.css';
 
-function VideoModal({showModal, invertModal}) {
+function VideoModal({showModal, invertModal, currentPlaylistName}) {
   const actions = [
     <FlatButton
       label='Close'
@@ -19,7 +19,7 @@ function VideoModal({showModal, invertModal}) {
 
   return (
       <Dialog
-        title="A Video"
+        title={currentPlaylistName}
         modal={true}
         open={showModal}
         actions={actions}
@@ -35,7 +35,8 @@ function VideoModal({showModal, invertModal}) {
 
 function mapStateToProps(state) {
   return {
-    showModal: state.get('showModal')
+    showModal: state.get('showModal'),
+    currentPlaylistName: state.get('currentPlaylistName')
   };
 }
 
