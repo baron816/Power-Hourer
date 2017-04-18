@@ -1,41 +1,38 @@
 import React from 'react';
 import './App.css';
 import { connect } from 'react-redux';
-import { persistor } from './store';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import AppBar from 'material-ui/AppBar';
 
+import { persistor } from './store';
 import Login from './Login/Login';
-import Clock from './Clock';
 import Playlists from './Playlists';
-import PlaylistItems from './PlaylistItems';
-import Video from './Video';
+import VideoModal from './VideoModal';
 
 import {
   fetchPlaylists,
   resetState,
   changeVideoLength,
+  invertModalState
 } from './actions';
 
-function App({accessToken, videoLength, getPlaylists, logout, changeVidLen}) {
+function App({accessToken, videoLength, getPlaylists, logout, changeVidLen, invertModal}) {
   return (
-    <div className="App">
+    <MuiThemeProvider>
+      <div className="App">
+        <AppBar title="Power Hourer" />
+        <button onClick={getPlaylists}>Click Me</button>
 
-    <button onClick={getPlaylists}>Click Me</button>
+        {!accessToken.length ?
+          <Login /> : <button onClick={logout}>Logout</button>
+        }
+        <button onClick={invertModal}>Go To Video</button>
+        <Playlists />
 
-    {!accessToken.length ?
-      <Login /> : <button onClick={logout}>Logout</button>
-    }
-
-    <Playlists />
-
-    <PlaylistItems />
-
-
-    <Clock />
-
-    <input type="number" min={10} max={120} step={10} onChange={changeVidLen} value={videoLength}/>
-
-    <Video />
-    </div>
+        <input type="number" min={10} max={120} step={10} onChange={changeVidLen} value={videoLength}/>
+        <VideoModal />
+      </div>
+    </MuiThemeProvider>
   );
 }
 
@@ -60,10 +57,15 @@ function mapDispatchToProps(dispatch) {
     dispatch(resetState());
   }
 
+  function invertModal() {
+    dispatch(invertModalState());
+  }
+
   return {
     changeVidLen,
     getPlaylists,
-    logout
+    logout,
+    invertModal
   };
 }
 
