@@ -12,11 +12,10 @@ import VideoModal from './VideoModal';
 import {
   fetchPlaylists,
   resetState,
-  changeVideoLength,
-  invertModalState
+  changeVideoLength
 } from './actions';
 
-function App({accessToken, videoLength, getPlaylists, logout, changeVidLen, invertModal}) {
+function App({accessToken, videoLength, getPlaylists, logout, changeVidLen}) {
   return (
     <MuiThemeProvider>
       <div className="App">
@@ -26,7 +25,7 @@ function App({accessToken, videoLength, getPlaylists, logout, changeVidLen, inve
         {!accessToken.length ?
           <Login /> : <button onClick={logout}>Logout</button>
         }
-        <button onClick={invertModal}>Go To Video</button>
+
         <Playlists />
 
         <input type="number" min={10} max={120} step={10} onChange={changeVidLen} value={videoLength}/>
@@ -57,15 +56,10 @@ function mapDispatchToProps(dispatch) {
     dispatch(resetState());
   }
 
-  function invertModal() {
-    dispatch(invertModalState());
-  }
-
   return {
     changeVidLen,
     getPlaylists,
-    logout,
-    invertModal
+    logout
   };
 }
 
