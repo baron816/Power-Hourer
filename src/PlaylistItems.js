@@ -12,9 +12,8 @@ function PlaylistItems({playlistItems, setVideoIndex, changeVidStart}) {
       <List id="playlistItems">
         {playlistItems.map(function (item, index) {
           return(
-            <ListItem key={item.get('id')}  >
-              <button data-index={index} onClick={setVideoIndex} >Go To</button>
-              {item.get('snippet').get('title')}
+            <ListItem key={item.get('id')} data-index={index} onClick={setVideoIndex(index)} >
+              {item.getIn(['snippet', 'title'])}
               <input type="number" min={0} max={600} step={10} onChange={changeVidStart(index)} value={item.get('startTime') || 30}/>
             </ListItem>
           );
@@ -31,17 +30,19 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  function setVideoIndex(event) {
-    const index = event.target.dataset.index;
-    if (index === '0') {
-      dispatch(changePlayState(false));
-      dispatch(resetClock());
-    }
-    dispatch(goToVideo(index));
+  function setVideoIndex(index) {
+    return function () {
+      if (index === '0') {
+        dispatch(changePlayState(false));
+        dispatch(resetClock());
+      }
+      dispatch(goToVideo(index));
+    };
   }
 
   function changeVidStart(index) {
     return function (event) {
+      event.stopPropagation();
       const time = event.target.value;
       dispatch(changeVideoStart(index, time));
     };
