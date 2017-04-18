@@ -11,6 +11,7 @@ export const RESET_CLOCK = 'RESET_CLOCK';
 export const CHANGE_VIDEO_LENGTH = 'CHANGE_VIDEO_LENGTH';
 export const FLIP_NEXT = 'FLIP_NEXT';
 export const CHANGE_VIDEO_START = 'CHANGE_VIDEO_START';
+export const SHOW_MODAL = 'SHOW_MODAL';
 
 //Epic
 export const FETCH_PLAYLISTS = 'FETCH_PLAYLISTS';

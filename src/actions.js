@@ -10,7 +10,8 @@ import {
   RESET_CLOCK,
   CHANGE_VIDEO_LENGTH,
   FLIP_NEXT,
-  CHANGE_VIDEO_START
+  CHANGE_VIDEO_START,
+  SHOW_MODAL
 } from './actionCreators';
 
 //Redux
@@ -77,6 +78,12 @@ export function changeVideoStart(index, time) {
     type: CHANGE_VIDEO_START,
     index,
     time
+  };
+}
+
+export function invertModalState() {
+  return {
+    type: SHOW_MODAL
   };
 }
 
