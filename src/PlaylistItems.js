@@ -1,23 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { List, ListItem } from 'material-ui/List';
+import Paper from 'material-ui/Paper';
+import './PlaylistItems.css';
 
 import { goToVideo, resetClock, changePlayState, changeVideoStart } from './actions';
 
 function PlaylistItems({playlistItems, setVideoIndex, changeVidStart}) {
   return (
-    <div className="PlaylistItems">
-      <ul>
+    <Paper zDepth={3}>
+      <List id="playlistItems">
         {playlistItems.map(function (item, index) {
           return(
-            <li key={item.get('id')}  >
+            <ListItem key={item.get('id')}  >
               <button data-index={index} onClick={setVideoIndex} >Go To</button>
               {item.get('snippet').get('title')}
               <input type="number" min={0} max={600} step={10} onChange={changeVidStart(index)} value={item.get('startTime') || 30}/>
-            </li>
+            </ListItem>
           );
         })}
-      </ul>
-    </div>
+      </List>
+    </Paper>
   );
 }
 
