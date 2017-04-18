@@ -1,19 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { List, ListItem } from 'material-ui/List';
+import Paper from 'material-ui/Paper';
+import './Playlists.css'
 
 import { fetchPlaylistItems, goToVideo, changePlayState, resetClock } from './actions';
 
 function Playlists({playlists, getPlaylists}) {
   return (
-    <div className="Playlists">
-      <ul>
+    <Paper zDepth={3} id="playlists">
+      <List>
         {playlists.map(function (list) {
           return(
-            <li key={list.id} onClick={getPlaylists(list.id)}>{list.snippet.title}</li>
+            <ListItem key={list.id} onClick={getPlaylists(list.id)}>{list.snippet.title}</ListItem>
           );
         })}
-      </ul>
-    </div>
+      </List>
+    </Paper>
   );
 }
 
