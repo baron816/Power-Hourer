@@ -11,7 +11,8 @@ import {
   RESET_CLOCK,
   CHANGE_VIDEO_LENGTH,
   FLIP_NEXT,
-  CHANGE_VIDEO_START
+  CHANGE_VIDEO_START,
+  SHOW_MODAL
 } from './actionCreators';
 
 import reducer from './reducer';
@@ -263,6 +264,20 @@ describe('reducer', function () {
 
       expect(nextState).toEqual(Map({
         playlistItems: List([Map({id: 'aegvae'}), Map({id: 'ibnaieubn', startTime: 45}), Map({id: 'vuiab3ta'})])
+      }));
+    });
+  });
+
+  describe('SHOW_MODAL', function () {
+    it('switches on and off', function () {
+      const initialState = fromJS({
+        showModal: false
+      });
+
+      const nextState = reducer(initialState, { type: SHOW_MODAL });
+
+      expect(nextState).toEqual(Map({
+        showModal: true
       }));
     });
   });

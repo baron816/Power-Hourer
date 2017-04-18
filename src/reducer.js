@@ -12,7 +12,8 @@ import {
   RESET_CLOCK,
   CHANGE_VIDEO_LENGTH,
   FLIP_NEXT,
-  CHANGE_VIDEO_START
+  CHANGE_VIDEO_START,
+  SHOW_MODAL
 } from './actionCreators';
 
 // import { REHYDRATE } from 'redux-persist/constants';
@@ -25,7 +26,8 @@ const initialState = fromJS({
   playing: false,
   time: 0,
   videoLength: 60,
-  callNext: true
+  callNext: true,
+  showModal: false
 });
 
 function setToken(state, token) {
@@ -78,6 +80,10 @@ function changeVideoStart(state, index, time) {
   return state.updateIn(['playlistItems'], list => list.updateIn([Number(index)], map => map.set('startTime', Number(time))));
 }
 
+function setModalState(state) {
+  return state.set('showModal', !state.get('showModal'));
+}
+
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case RESET_STATE:
@@ -104,6 +110,8 @@ export default function reducer(state = initialState, action) {
       return flipNext(state);
     case CHANGE_VIDEO_START:
       return changeVideoStart(state, action.index, action.time);
+    case SHOW_MODAL:
+      return setModalState(state);
     default:
       return state;
   }
