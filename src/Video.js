@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import YouTube from 'react-youtube';
-import { Card } from 'material-ui/Card'
+import { Card, CardHeader, CardMedia } from 'material-ui/Card';
 
 import Clock from './Clock';
 import { changePlayState, nextVideo, flipNext } from './actions';
@@ -12,21 +12,23 @@ function Video({playlistIndex, playlistItems, handleVideoEnd, changePlay, callNe
 
   return (
     <Card id="video">
-      <Clock />
-      {playlistItems.size &&
-        <YouTube
-          videoId={videoId()}
-          opts={{playerVars: {start: videoStart(), end: videoEnd(), autoplay: autoplay(), rel: 0}}}
-          onEnd={handleVideoEnd(callNext)}
-          onPlay={changePlay(true)}
-          onPause={changePlay(false)}
-        />
-      }
+      <CardHeader title={getVideo().getIn(['snippet', 'title'])} subtitle={<Clock />} />
+      <CardMedia>
+        {playlistItems.size &&
+          <YouTube
+            videoId={videoId()}
+            opts={{playerVars: {start: videoStart(), end: videoEnd(), autoplay: autoplay(), rel: 0}}}
+            onEnd={handleVideoEnd(callNext)}
+            onPlay={changePlay(true)}
+            onPause={changePlay(false)}
+          />
+        }
+      </CardMedia>
     </Card>
   );
 
   function videoId() {
-    return getVideo().get('snippet').get('resourceId').get('videoId');
+    return getVideo().getIn(['snippet','resourceId','videoId']);
   }
 
   function getVideo() {
