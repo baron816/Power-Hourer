@@ -36,7 +36,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   function setVideoIndex(index) {
     return function () {
-      if (index === '0') {
+      if (index === 0) {
         dispatch(changePlayState(false));
         dispatch(resetClock());
       }
