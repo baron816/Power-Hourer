@@ -6,17 +6,35 @@ import reducer from './reducer';
 
 import {
   fetchPlaylistsEpic,
-  fetchPlaylistItemsEpic
+  fetchPlaylistItemsEpic,
+  startTimeEpic
 } from './epics';
 
 const rootEpic = combineEpics(
   fetchPlaylistsEpic,
-  fetchPlaylistItemsEpic
+  fetchPlaylistItemsEpic,
+  startTimeEpic
 );
 
 const epicMiddleWare = createEpicMiddleware(rootEpic);
 
+function addLoggingToDispatch(store) {
+  if (true) {
+    const rawDispatch = store.dispatch;
+    return function (action) {
+      console.group(action.type);
+      console.log('%c prev state', 'color: red', store.getState().toJS());
+      console.log('%c action', 'color: blue', action);
+      const returnValue = rawDispatch(action);
+      console.log('%c next state', 'color: green', store.getState().toJS());
+      console.groupEnd(action.type);
+      return returnValue;
+    };
+  }
+}
+
 const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), compose(applyMiddleware(epicMiddleWare), autoRehydrate()));
+store.dispatch = addLoggingToDispatch(store);
 
 export const persistor = persistStore(store);
 export default store;
