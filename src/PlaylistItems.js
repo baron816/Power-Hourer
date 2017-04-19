@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { List, ListItem } from 'material-ui/List';
+import Avatar from 'material-ui/Avatar';
 import Paper from 'material-ui/Paper';
 import './PlaylistItems.css';
 
@@ -12,7 +13,10 @@ function PlaylistItems({playlistItems, setVideoIndex, changeVidStart}) {
       <List id="playlistItems">
         {playlistItems.map(function (item, index) {
           return(
-            <ListItem key={item.get('id')} data-index={index} onClick={setVideoIndex(index)} >
+            <ListItem key={item.get('id')}
+              data-index={index}
+              onClick={setVideoIndex(index)}
+              leftAvatar={<Avatar src={item.getIn(['snippet', 'thumbnails', 'default', 'url'])} />}>
               {item.getIn(['snippet', 'title'])}
               <input type="number" min={0} max={600} step={10} onChange={changeVidStart(index)} value={item.get('startTime') || 30}/>
             </ListItem>

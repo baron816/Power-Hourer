@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { List, ListItem } from 'material-ui/List';
+import Avatar from 'material-ui/Avatar';
 import Paper from 'material-ui/Paper';
 import './Playlists.css';
 
@@ -21,7 +22,12 @@ function Playlists({playlists, getPlaylists}) {
           const id = list.get('id');
           const title = list.getIn(['snippet', 'title']);
           return(
-            <ListItem key={id} onClick={getPlaylists(id, title)}>{title}</ListItem>
+            <ListItem
+              key={id}
+              onClick={getPlaylists(id, title)}
+              leftAvatar={ <Avatar src={list.getIn(['snippet', 'thumbnails', 'default', 'url'])} /> }>
+              {title}
+            </ListItem>
           );
         })}
       </List>
