@@ -11,20 +11,22 @@ function Video({playlistIndex, playlistItems, handleVideoEnd, changePlay, callNe
 
 
   return (
-    <Card id="video">
-      <CardHeader title={getVideo().getIn(['snippet', 'title'])} subtitle={<Clock />} />
-      <CardMedia>
+      <div>
         {playlistItems.size &&
-          <YouTube
-            videoId={videoId()}
-            opts={{playerVars: {start: videoStart(), end: videoEnd(), autoplay: autoplay(), rel: 0}}}
-            onEnd={handleVideoEnd(callNext)}
-            onPlay={changePlay(true)}
-            onPause={changePlay(false)}
-          />
+          <Card id="video">
+          <CardHeader title={getVideo().getIn(['snippet', 'title'])} subtitle={<Clock />} />
+          <CardMedia>
+            <YouTube
+              videoId={videoId()}
+              opts={{playerVars: {start: videoStart(), end: videoEnd(), autoplay: autoplay(), rel: 0}}}
+              onEnd={handleVideoEnd(callNext)}
+              onPlay={changePlay(true)}
+              onPause={changePlay(false)}
+            />
+          </CardMedia>
+          </Card>
         }
-      </CardMedia>
-    </Card>
+      </div>
   );
 
   function videoId() {
