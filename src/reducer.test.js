@@ -54,7 +54,7 @@ describe('reducer', function () {
 
       expect(nextState).toEqual(Map({
         accessToken: '',
-        playlists: List([{name: 'Cheezy-Tunez'}, {name: 'Hot Girl'}])
+        playlists: List([Map({name: 'Cheezy-Tunez'}), Map({name: 'Hot Girl'})])
       }));
     });
   });

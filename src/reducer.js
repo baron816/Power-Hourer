@@ -37,7 +37,7 @@ function setToken(state, token) {
 }
 
 function setPlaylists(state, payload) {
-  return state.updateIn(['playlists'], (list) => list.concat(payload));
+  return state.updateIn(['playlists'], (list) => list.concat(fromJS(payload)));
 }
 
 function setPlaylistItems(state, payload) {
