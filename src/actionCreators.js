@@ -13,7 +13,9 @@ export const FLIP_NEXT = 'FLIP_NEXT';
 export const CHANGE_VIDEO_START = 'CHANGE_VIDEO_START';
 export const SHOW_MODAL = 'SHOW_MODAL';
 export const SET_PLAYLIST_NAME = 'SET_PLAYLIST_NAME';
+export const END_TIME = 'END_TIME';
 
 //Epic
 export const FETCH_PLAYLISTS = 'FETCH_PLAYLISTS';
 export const FETCH_PLAYLIST_ITEMS = 'FETCH_PLAYLIST_ITEMS';
+export const START_TIME = 'START_TIME';

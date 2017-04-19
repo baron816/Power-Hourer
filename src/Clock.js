@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { incrementTime } from './actions';
+import { startTime, endTime } from './actions';
 
 function Clock(props) {
   const c = new React.Component(props);
@@ -11,12 +11,11 @@ function Clock(props) {
   };
 
   c.componentDidMount = function () {
-    const intervalId = setInterval(() => c.props.moveClock(), 1000);
-    c.setState({intervalId});
+    c.props.moveClock();
   };
-
+  //
   c.componentWillUnmount = function () {
-    clearInterval(c.state.intervalId);
+    c.props.stopClock();
   };
 
   c.render = function () {
@@ -46,11 +45,16 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   function moveClock() {
-    dispatch(incrementTime());
+    dispatch(startTime());
+  }
+
+  function stopClock() {
+    dispatch(endTime());
   }
 
   return {
-    moveClock
+    moveClock,
+    stopClock
   };
 }
 

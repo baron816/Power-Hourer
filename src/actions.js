@@ -6,13 +6,14 @@ import {
   NEXT_VIDEO,
   GOTO_VIDEO,
   CHANGE_PLAY_STATE,
-  INCREMENT_TIME,
   RESET_CLOCK,
   CHANGE_VIDEO_LENGTH,
   FLIP_NEXT,
   CHANGE_VIDEO_START,
   SHOW_MODAL,
-  SET_PLAYLIST_NAME
+  SET_PLAYLIST_NAME,
+  START_TIME,
+  END_TIME
 } from './actionCreators';
 
 //Redux
@@ -46,12 +47,6 @@ export function changePlayState(bool) {
   return {
       type: CHANGE_PLAY_STATE,
       bool
-  };
-}
-
-export function incrementTime() {
-  return {
-    type: INCREMENT_TIME
   };
 }
 
@@ -102,9 +97,22 @@ export function fetchPlaylists() {
   };
 }
 
-export function fetchPlaylistItems(playlistId) {
+export function fetchPlaylistItems(playlistId, nextPageToken) {
   return {
     type: FETCH_PLAYLIST_ITEMS,
-    playlistId
+    playlistId,
+    nextPageToken
+  };
+}
+
+export function startTime() {
+  return {
+    type: START_TIME
+  };
+}
+
+export function endTime() {
+  return {
+    type: END_TIME
   };
 }
