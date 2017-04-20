@@ -2,6 +2,7 @@ import { ajax } from 'rxjs/observable/dom/ajax';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/timeInterval';
+import 'rxjs/add/operator/concat';
 import 'rxjs/add/observable/timer';
 import { Observable } from 'rxjs';
 
@@ -28,7 +29,7 @@ function fetchPlaylistFulfilled(payload) {
 function fetchPlaylistItemsFulfilled(payload) {
   return {
     type: GET_PLAYLIST_ITEMS,
-    payload: payload.items
+    payload: payload
   };
 }
 
@@ -45,19 +46,27 @@ export function fetchPlaylistsEpic(action$, store) {
     return ajax.getJSON(BASE_URL + 'playlists?part=snippet%2C+contentDetails&mine=true', {
       Authorization: 'Bearer ' + accessToken
     })
-    .map(response => fetchPlaylistFulfilled(response.items));
+    .map(({items}) => fetchPlaylistFulfilled(items));
   });
 }
 
-export function fetchPlaylistItemsEpic(action$) {
+export function fetchPlaylistItemsEpic(action$, store) {
   return action$.ofType(FETCH_PLAYLIST_ITEMS)
-  .mergeMap(function (action) {
-    return ajax.getJSON(`${BASE_URL}playlistItems?part=snippet%2C+contentDetails&playlistId=${action.playlistId}&maxResults=15&key=${YOUTUBE_API_KEY}`)
-    .map(function (response) {
-      return fetchPlaylistItemsFulfilled(response);
-    });
+  .switchMap(function (action) {
+    const nextPageToken = action.nextPageToken ? `&pageToken=${action.nextPageToken}` : '';
+     const url = `${BASE_URL}playlistItems?part=snippet%2C+contentDetails&playlistId=${action.playlistId}&maxResults=50&key=${YOUTUBE_API_KEY}${nextPageToken}`;
+
+     return ajax.getJSON(url)
+     .map(({items, nextPageToken}) => {
+       const nextItems = action.items.concat(items);
+       if (nextPageToken) {
+         return store.dispatch({type: FETCH_PLAYLIST_ITEMS, playlistId: action.playlistId, nextPageToken, items: nextItems});
+       }
+       return fetchPlaylistItemsFulfilled(nextItems);
+     });
   });
 }
+
 
 export function startTimeEpic(action$) {
   return action$.ofType(START_TIME)
