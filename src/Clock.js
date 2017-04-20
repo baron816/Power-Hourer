@@ -13,7 +13,7 @@ function Clock(props) {
   c.componentDidMount = function () {
     c.props.moveClock();
   };
-  //
+  
   c.componentWillUnmount = function () {
     c.props.stopClock();
   };
