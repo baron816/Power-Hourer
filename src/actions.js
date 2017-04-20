@@ -97,11 +97,11 @@ export function fetchPlaylists() {
   };
 }
 
-export function fetchPlaylistItems(playlistId, nextPageToken) {
+export function fetchPlaylistItems(playlistId) {
   return {
     type: FETCH_PLAYLIST_ITEMS,
     playlistId,
-    nextPageToken
+    items: []
   };
 }
 
