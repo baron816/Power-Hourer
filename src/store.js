@@ -19,7 +19,7 @@ const rootEpic = combineEpics(
 const epicMiddleWare = createEpicMiddleware(rootEpic);
 
 function addLoggingToDispatch(store) {
-  if (true) {
+  if (false) {
     const rawDispatch = store.dispatch;
     return function (action) {
       console.group(action.type);
@@ -31,6 +31,7 @@ function addLoggingToDispatch(store) {
       return returnValue;
     };
   }
+  return store.dispatch;
 }
 
 const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), compose(applyMiddleware(epicMiddleWare), autoRehydrate()));
