@@ -3,6 +3,9 @@ import './App.css';
 import { connect } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
+import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton'
+import MusicNote from 'material-ui/svg-icons/image/music-note';
 
 import { persistor } from './store';
 import Login from './Login/Login';
@@ -10,21 +13,20 @@ import Playlists from './Playlists';
 import VideoModal from './VideoModal';
 
 import {
-  fetchPlaylists,
+
   resetState,
   changeVideoLength
 } from './actions';
 
-function App({accessToken, videoLength, getPlaylists, logout, changeVidLen}) {
+function App({accessToken, videoLength, logout, changeVidLen}) {
   return (
     <MuiThemeProvider>
       <div className="App">
-        <AppBar title="Power Hourer" />
-        <button onClick={getPlaylists}>Click Me</button>
-
-        {!accessToken.length ?
-          <Login /> : <button onClick={logout}>Logout</button>
-        }
+        <AppBar
+          title="Power Hourer"
+          iconElementRight={accessToken.length ? <FlatButton onClick={logout} label="Logout" /> : <Login />}
+          iconElementLeft={<IconButton><MusicNote /></IconButton>}
+          />
 
         <Playlists />
 
@@ -47,9 +49,7 @@ function mapDispatchToProps(dispatch) {
     dispatch(changeVideoLength(event.target.value));
   }
 
-  function getPlaylists() {
-    dispatch(fetchPlaylists());
-  }
+
 
   function logout() {
     persistor.purge();
@@ -58,7 +58,6 @@ function mapDispatchToProps(dispatch) {
 
   return {
     changeVidLen,
-    getPlaylists,
     logout
   };
 }
