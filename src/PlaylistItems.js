@@ -7,28 +7,42 @@ import './PlaylistItems.css';
 
 import { goToVideo, resetClock, changePlayState } from './actions';
 
-function PlaylistItems({playlistItems, setVideoIndex}) {
-  return (
-    <Paper zDepth={3}>
-      <List id="playlistItems">
-        {playlistItems.map(function (item, index) {
-          return(
-            <ListItem key={item.get('id')}
-              data-index={index}
-              onClick={setVideoIndex(index)}
-              leftAvatar={<Avatar src={item.getIn(['snippet', 'thumbnails', 'default', 'url'])} />}>
-              {item.getIn(['snippet', 'title'])}
-            </ListItem>
-          );
-        })}
-      </List>
-    </Paper>
-  );
+function PlaylistItems(props) {
+  const c = new React.Component(props);
+
+  c.componentWillUpdate = function () {
+    document.querySelector('#playlistItems').children[c.props.playlistIndex].scrollIntoView();
+  };
+
+  c.render = function () {
+    const {playlistItems, setVideoIndex, playlistIndex} = c.props;
+    
+    return (
+      <Paper zDepth={3}>
+        <List id="playlistItems">
+          {playlistItems.map(function (item, index) {
+            return(
+              <ListItem key={item.get('id')}
+                style={playlistIndex === index ? { backgroundColor: 'rgba(0,0,0, 0.2)' } : {}}
+                data-index={index}
+                onClick={setVideoIndex(index)}
+                leftAvatar={<Avatar src={item.getIn(['snippet', 'thumbnails', 'default', 'url'])} />}>
+                {item.getIn(['snippet', 'title'])}
+              </ListItem>
+            );
+          })}
+        </List>
+      </Paper>
+    );
+  };
+
+  return c;
 }
 
 function mapStateToProps(state) {
   return {
-    playlistItems: state.get('playlistItems')
+    playlistItems: state.get('playlistItems'),
+    playlistIndex: state.get('playlistIndex')
   };
 }
 
