@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
-import IconButton from 'material-ui/IconButton'
+import IconButton from 'material-ui/IconButton';
 import MusicNote from 'material-ui/svg-icons/image/music-note';
 
 import { persistor } from './store';
@@ -13,12 +13,10 @@ import Playlists from './Playlists';
 import VideoModal from './VideoModal';
 
 import {
-
   resetState,
-  changeVideoLength
 } from './actions';
 
-function App({accessToken, videoLength, logout, changeVidLen}) {
+function App({accessToken, logout}) {
   return (
     <MuiThemeProvider>
       <div className="App">
@@ -30,7 +28,7 @@ function App({accessToken, videoLength, logout, changeVidLen}) {
 
         <Playlists />
 
-        <input type="number" min={10} max={120} step={10} onChange={changeVidLen} value={videoLength}/>
+
         <VideoModal />
       </div>
     </MuiThemeProvider>
@@ -39,25 +37,17 @@ function App({accessToken, videoLength, logout, changeVidLen}) {
 
 function mapStateToProps(state) {
   return {
-    accessToken: state.get('accessToken'),
-    videoLength: state.get('videoLength'),
+    accessToken: state.get('accessToken')
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  function changeVidLen(event) {
-    dispatch(changeVideoLength(event.target.value));
-  }
-
-
-
   function logout() {
     persistor.purge();
     dispatch(resetState());
   }
 
   return {
-    changeVidLen,
     logout
   };
 }

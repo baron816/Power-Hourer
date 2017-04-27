@@ -5,9 +5,9 @@ import Avatar from 'material-ui/Avatar';
 import Paper from 'material-ui/Paper';
 import './PlaylistItems.css';
 
-import { goToVideo, resetClock, changePlayState, changeVideoStart } from './actions';
+import { goToVideo, resetClock, changePlayState } from './actions';
 
-function PlaylistItems({playlistItems, setVideoIndex, changeVidStart}) {
+function PlaylistItems({playlistItems, setVideoIndex}) {
   return (
     <Paper zDepth={3}>
       <List id="playlistItems">
@@ -18,7 +18,6 @@ function PlaylistItems({playlistItems, setVideoIndex, changeVidStart}) {
               onClick={setVideoIndex(index)}
               leftAvatar={<Avatar src={item.getIn(['snippet', 'thumbnails', 'default', 'url'])} />}>
               {item.getIn(['snippet', 'title'])}
-              <input type="number" min={0} max={600} step={10} onChange={changeVidStart(index)} value={item.get('startTime') || 30}/>
             </ListItem>
           );
         })}
@@ -44,17 +43,8 @@ function mapDispatchToProps(dispatch) {
     };
   }
 
-  function changeVidStart(index) {
-    return function (event) {
-      event.stopPropagation();
-      const time = event.target.value;
-      dispatch(changeVideoStart(index, time));
-    };
-  }
-
   return {
-    setVideoIndex,
-    changeVidStart
+    setVideoIndex
   };
 }
 
