@@ -19,15 +19,6 @@ function Video(props) {
 
 
   c.render = function () {
-    const opts = {
-      playerVars: {
-        start: videoStart(),
-        end: videoEnd(),
-        autoplay: autoplay(),
-        rel: 0
-      }
-    };
-
     const {
       playlistIndex,
       playlistItems,
@@ -52,7 +43,14 @@ function Video(props) {
               <CardMedia>
                 <YouTube
                   videoId={videoId()}
-                  opts={opts}
+                  opts={{
+                    playerVars: {
+                      start: videoStart(),
+                      end: videoEnd(),
+                      autoplay: autoplay(),
+                      rel: 0
+                    }
+                  }}
                   onEnd={handleVideoEnd(callNext)}
                   onPlay={changePlay(true)}
                   onPause={changePlay(false)}
