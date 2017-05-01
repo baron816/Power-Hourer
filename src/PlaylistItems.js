@@ -11,12 +11,13 @@ function PlaylistItems(props) {
   const c = new React.Component(props);
 
   c.componentWillUpdate = function () {
-    document.querySelector('#playlistItems').children[c.props.playlistIndex].scrollIntoView();
+    const {playlistIndex} = c.props;
+    playlistIndex && document.querySelector('#playlistItems').children[playlistIndex].scrollIntoView();
   };
 
   c.render = function () {
     const {playlistItems, setVideoIndex, playlistIndex} = c.props;
-    
+
     return (
       <Paper zDepth={3}>
         <List id="playlistItems">
