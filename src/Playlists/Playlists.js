@@ -20,12 +20,12 @@ function Playlists({playlists, getPlaylists}) {
       <List>
         {playlists.map(function (list, index) {
           const id = list.get('id');
-          const title = list.getIn(['snippet', 'title']);
+          const title = list.get('title');
           return(
             <ListItem
               key={id}
               onClick={getPlaylists(id, index)}
-              leftAvatar={ <Avatar src={list.getIn(['snippet', 'thumbnails', 'default', 'url'])} /> }>
+              leftAvatar={ <Avatar src={list.get('thumbnail')} /> }>
               {title}
             </ListItem>
           );
@@ -37,7 +37,7 @@ function Playlists({playlists, getPlaylists}) {
 
 function mapStateToProps(state) {
   return {
-    playlists: state.get('playlists').get('playlists')
+    playlists: state.getIn(['playlists', 'playlists'])
   };
 }
 

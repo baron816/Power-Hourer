@@ -27,8 +27,8 @@ function PlaylistItems(props) {
                 style={playlistIndex === index ? { backgroundColor: 'rgba(0,0,0, 0.2)' } : {}}
                 data-index={index}
                 onClick={setVideoIndex(index)}
-                leftAvatar={<Avatar src={item.getIn(['snippet', 'thumbnails', 'default', 'url'])} />}>
-                {item.getIn(['snippet', 'title'])}
+                leftAvatar={<Avatar src={item.get('thumbnail')} />}>
+                {item.get('title')}
               </ListItem>
             );
           })}
@@ -42,8 +42,8 @@ function PlaylistItems(props) {
 
 function mapStateToProps(state) {
   return {
-    playlistItems: state.get('playlistItems').get('playlistItems'),
-    playlistIndex: state.get('playlistItems').get('playlistItemsIndex')
+    playlistItems: state.getIn(['playlistItems', 'playlistItems']),
+    playlistIndex: state.getIn(['playlistItems', 'playlistItemsIndex'])
   };
 }
 

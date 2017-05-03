@@ -37,15 +37,15 @@ function VideoModal({showModal, invertModal, playlistIndex, playlist}) {
   );
 
   function playlistName() {
-    return playlist.get(playlistIndex).get('snippet').get('title');
+    return playlist.get(playlistIndex).get('title');
   }
 }
 
 function mapStateToProps(state) {
   return {
-    showModal: state.get('root').get('showModal'),
-    playlistIndex: state.get('playlists').get('playlistIndex'),
-    playlist: state.get('playlists').get('playlists')
+    showModal: state.getIn(['root', 'showModal']),
+    playlistIndex: state.getIn(['playlists', 'playlistIndex']),
+    playlist: state.getIn(['playlists', 'playlists'])
   };
 }
 

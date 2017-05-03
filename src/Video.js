@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import YouTube from 'react-youtube';
 import { Card, CardHeader, CardMedia, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
-import NumberInput from 'material-ui-number-input';
+import TextField from 'material-ui/TextField';
 
 import Clock from './Clock';
 import { changePlayState, nextVideo, flipNext, changeVideoLength, changeVideoStart } from './actions';
@@ -36,7 +36,7 @@ function Video(props) {
           {playlistItems.size &&
             <Card id="video">
               <CardHeader
-                title={getVideo().getIn(['snippet', 'title'])}
+                title={getVideo().get('title')}
                 subtitle={<Clock />}
                 actAsExpander={true}
                 showExpandableButton={true}/>
@@ -60,22 +60,19 @@ function Video(props) {
                 />
               </CardMedia>
               <CardText expandable={true}>
-                <NumberInput
-                  inputMode='numeric'
+                <TextField
                   floatingLabelText="Videos length"
                   value={String(videoLength)}
                   onChange={changeVidLen}
-                  strategy="allow"
-                  min={10}
-                  max={300}
+                  type="number"
+                  step={10}
                 /> <br/>
-                <NumberInput
-                  inputMode='numeric'
+                <TextField
                   floatingLabelText="Video start time"
                   value={String(getVideo().get('startTime') || 30)}
                   onChange={changeVidStart(playlistItemsIndex)}
-                  strategy="allow"
-                  min={10}
+                  type="number"
+                  step={10}
                 /><br/>
                 <RaisedButton onClick={startNow} label="Set video start to now" primary={true}/>
               </CardText>
@@ -92,7 +89,7 @@ function Video(props) {
   }
 
   function videoId() {
-    return getVideo().getIn(['snippet','resourceId','videoId']);
+    return getVideo().get('videoId');
   }
 
   function getVideo() {
@@ -117,11 +114,11 @@ function Video(props) {
 
 function mapStateToProps(state) {
   return {
-    playlistItemsIndex: state.get('playlistItems').get('playlistItemsIndex'),
-    playlistItems: state.get('playlistItems').get('playlistItems'),
-    callNext: state.get('root').get('callNext'),
-    videoLength: state.get('root').get('videoLength'),
-    showModal: state.get('root').get('showModal')
+    playlistItemsIndex: state.getIn(['playlistItems', 'playlistItemsIndex']),
+    playlistItems: state.getIn(['playlistItems', 'playlistItems']),
+    callNext: state.getIn(['root', 'callNext']),
+    videoLength: state.getIn(['root', 'videoLength']),
+    showModal: state.getIn(['root', 'showModal'])
   };
 }
 

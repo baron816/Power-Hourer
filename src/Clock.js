@@ -39,7 +39,7 @@ function Clock(props) {
 
 function mapStateToProps(state) {
   return {
-    time: state.get('root').get('time')
+    time: state.getIn(['root', 'time'])
   };
 }
 
