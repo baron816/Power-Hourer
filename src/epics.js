@@ -42,7 +42,7 @@ export function incrementTime() {
 export function fetchPlaylistsEpic(action$, store) {
   return action$.ofType(FETCH_PLAYLISTS)
   .mergeMap(function () {
-    const accessToken = store.getState().get('accessToken');
+    const accessToken = store.getState().get('root').get('accessToken');
     return ajax.getJSON(BASE_URL + 'playlists?part=snippet%2C+contentDetails&mine=true', {
       Authorization: 'Bearer ' + accessToken
     })
