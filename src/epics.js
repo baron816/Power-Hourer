@@ -42,14 +42,14 @@ export function incrementTime() {
 export function fetchPlaylistsEpic(action$, store) {
   return action$.ofType(FETCH_PLAYLISTS)
   .mergeMap(function () {
-    const accessToken = store.getState().get('root').get('accessToken');
+    const accessToken = store.getState().getIn(['root', 'accessToken']);
     return ajax.getJSON(BASE_URL + 'playlists?part=snippet&mine=true', {
       Authorization: 'Bearer ' + accessToken
     })
     .map(function ({items}) {
       return items.map(function (item) {
         return {
-          id: item.id,
+          playlistId: item.id,
           title: item.snippet.title,
           thumbnail: item.snippet.thumbnails.default.url
         };
