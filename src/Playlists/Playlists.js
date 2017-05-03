@@ -11,20 +11,20 @@ import {
   changePlayState,
   resetClock,
   invertModalState,
-  setPlaylistName
-} from './actions';
+  setPlaylistIndex
+} from '../actions';
 
 function Playlists({playlists, getPlaylists}) {
   return (
     <Paper zDepth={3} id="playlists">
       <List>
-        {playlists.map(function (list) {
+        {playlists.map(function (list, index) {
           const id = list.get('id');
           const title = list.getIn(['snippet', 'title']);
           return(
             <ListItem
               key={id}
-              onClick={getPlaylists(id, title)}
+              onClick={getPlaylists(id, index)}
               leftAvatar={ <Avatar src={list.getIn(['snippet', 'thumbnails', 'default', 'url'])} /> }>
               {title}
             </ListItem>
@@ -37,14 +37,14 @@ function Playlists({playlists, getPlaylists}) {
 
 function mapStateToProps(state) {
   return {
-    playlists: state.get('playlists')
+    playlists: state.get('playlists').get('playlists')
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  function getPlaylists(listId, title) {
+  function getPlaylists(listId, index) {
     return function () {
-      dispatch(setPlaylistName(title));
+      dispatch(setPlaylistIndex(index));
       dispatch(fetchPlaylistItems(listId));
       dispatch(goToVideo(0));
       dispatch(changePlayState(false));

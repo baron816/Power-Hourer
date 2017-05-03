@@ -5,12 +5,12 @@ import Avatar from 'material-ui/Avatar';
 import Paper from 'material-ui/Paper';
 import './PlaylistItems.css';
 
-import { goToVideo, resetClock, changePlayState } from './actions';
+import { goToVideo, resetClock, changePlayState } from '../actions';
 
 function PlaylistItems(props) {
   const c = new React.Component(props);
 
-  c.componentWillUpdate = function () {
+  c.componentDidUpdate = function () {
     const {playlistIndex} = c.props;
     playlistIndex && document.querySelector('#playlistItems').children[playlistIndex].scrollIntoView();
   };
@@ -42,8 +42,8 @@ function PlaylistItems(props) {
 
 function mapStateToProps(state) {
   return {
-    playlistItems: state.get('playlistItems'),
-    playlistIndex: state.get('playlistIndex')
+    playlistItems: state.get('playlistItems').get('playlistItems'),
+    playlistIndex: state.get('playlistItems').get('playlistItemsIndex')
   };
 }
 
