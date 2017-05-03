@@ -23,7 +23,7 @@ function PlaylistItems(props) {
         <List id="playlistItems">
           {playlistItems.map(function (item, index) {
             return(
-              <ListItem key={item.get('id')}
+              <ListItem key={item.get('videoId')}
                 style={playlistIndex === index ? { backgroundColor: 'rgba(0,0,0, 0.2)' } : {}}
                 data-index={index}
                 onClick={setVideoIndex(index)}

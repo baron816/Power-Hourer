@@ -19,7 +19,7 @@ function Playlists({playlists, getPlaylists}) {
     <Paper zDepth={3} id="playlists">
       <List>
         {playlists.map(function (list, index) {
-          const id = list.get('id');
+          const id = list.get('playlistId');
           const title = list.get('title');
           return(
             <ListItem
