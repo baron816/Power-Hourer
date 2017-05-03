@@ -20,7 +20,7 @@ function Video(props) {
 
   c.render = function () {
     const {
-      playlistIndex,
+      playlistItemsIndex,
       playlistItems,
       handleVideoEnd,
       changePlay,
@@ -73,7 +73,7 @@ function Video(props) {
                   inputMode='numeric'
                   floatingLabelText="Video start time"
                   value={String(getVideo().get('startTime') || 30)}
-                  onChange={changeVidStart(playlistIndex)}
+                  onChange={changeVidStart(playlistItemsIndex)}
                   strategy="allow"
                   min={10}
                 /><br/>
@@ -86,9 +86,9 @@ function Video(props) {
   };
 
   function startNow() {
-    const { changeStartToNow, playlistIndex } = c.props;
+    const { changeStartToNow, playlistItemsIndex } = c.props;
     const time = c.state.video.target.getCurrentTime();
-    changeStartToNow(playlistIndex, Math.floor(time));
+    changeStartToNow(playlistItemsIndex, Math.floor(time));
   }
 
   function videoId() {
@@ -96,8 +96,8 @@ function Video(props) {
   }
 
   function getVideo() {
-    const { playlistItems, playlistIndex } = c.props;
-    return playlistItems.get(playlistIndex);
+    const { playlistItems, playlistItemsIndex } = c.props;
+    return playlistItems.get(playlistItemsIndex);
   }
 
   function videoStart() {
@@ -105,7 +105,7 @@ function Video(props) {
   }
 
   function autoplay() {
-    return c.props.playlistIndex === 0 ? 0 : 1;
+    return c.props.playlistItemsIndex === 0 ? 0 : 1;
   }
 
   function videoEnd() {
@@ -117,11 +117,11 @@ function Video(props) {
 
 function mapStateToProps(state) {
   return {
-    playlistIndex: state.get('playlistIndex'),
-    playlistItems: state.get('playlistItems'),
-    callNext: state.get('callNext'),
-    videoLength: state.get('videoLength'),
-    showModal: state.get('showModal')
+    playlistItemsIndex: state.get('playlistItems').get('playlistItemsIndex'),
+    playlistItems: state.get('playlistItems').get('playlistItems'),
+    callNext: state.get('root').get('callNext'),
+    videoLength: state.get('root').get('videoLength'),
+    showModal: state.get('root').get('showModal')
   };
 }
 
