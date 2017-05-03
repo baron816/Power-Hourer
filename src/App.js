@@ -38,7 +38,7 @@ function App({accessToken, logout}) {
 
 function mapStateToProps(state) {
   return {
-    accessToken: state.get('root').get('accessToken')
+    accessToken: state.getIn(['root', 'accessToken'])
   };
 }
 

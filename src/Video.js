@@ -5,7 +5,7 @@ import { Card, CardHeader, CardMedia, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
-import Clock from './Clock';
+import Clock from './Clock/Clock';
 import { changePlayState, nextVideo, flipNext, changeVideoLength, changeVideoStart } from './actions';
 import './Video.css';
 

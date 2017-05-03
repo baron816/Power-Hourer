@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { startTime, endTime } from './actions';
+import { startTime, endTime } from '../actions';
 
 function Clock(props) {
   const c = new React.Component(props);
@@ -39,7 +39,7 @@ function Clock(props) {
 
 function mapStateToProps(state) {
   return {
-    time: state.getIn(['root', 'time'])
+    time: state.getIn(['clock', 'time'])
   };
 }
 
