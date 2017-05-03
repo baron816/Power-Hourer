@@ -18,22 +18,26 @@ function VideoModal({showModal, invertModal, playlistIndex, playlist}) {
   ];
 
   return (
-      <Dialog
-        title={playlistName()}
-        modal={true}
-        open={showModal}
-        actions={actions}
-        contentStyle={{width: '90%', maxWidth: '90%'}}>
+    <div>
+      {playlist.size &&
+        <Dialog
+          title={playlistName()}
+          modal={true}
+          open={showModal}
+          actions={actions}
+          contentStyle={{width: '90%', maxWidth: '90%'}}>
 
-        <div id="modalContent">
-          <PlaylistItems />
-          <Video />
-        </div>
-      </Dialog>
+          <div id="modalContent">
+            <PlaylistItems />
+            <Video />
+          </div>
+        </Dialog>
+      }
+    </div>
   );
 
   function playlistName() {
-    return playlist.get([playlistIndex], 'title');
+    return playlist.get(playlistIndex).get('snippet').get('title');
   }
 }
 
