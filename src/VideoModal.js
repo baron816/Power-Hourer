@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import PlaylistItems from './PlaylistItems';
+import PlaylistItems from './PlaylistItems/PlaylistItems';
 import Video from './Video';
 import { invertModalState } from './actions';
 
 import './VideoModal.css';
 
-function VideoModal({showModal, invertModal, currentPlaylistName}) {
+function VideoModal({showModal, invertModal, playlistIndex, playlist}) {
   const actions = [
     <FlatButton
       label='Close'
@@ -19,7 +19,7 @@ function VideoModal({showModal, invertModal, currentPlaylistName}) {
 
   return (
       <Dialog
-        title={currentPlaylistName}
+        title={playlistName()}
         modal={true}
         open={showModal}
         actions={actions}
@@ -31,12 +31,17 @@ function VideoModal({showModal, invertModal, currentPlaylistName}) {
         </div>
       </Dialog>
   );
+
+  function playlistName() {
+    return playlist.get([playlistIndex], 'title');
+  }
 }
 
 function mapStateToProps(state) {
   return {
-    showModal: state.get('showModal'),
-    currentPlaylistName: state.get('currentPlaylistName')
+    showModal: state.get('root').get('showModal'),
+    playlistIndex: state.get('playlists').get('playlistIndex'),
+    playlist: state.get('playlists').get('playlists')
   };
 }
 
