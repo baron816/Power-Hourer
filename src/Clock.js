@@ -13,7 +13,7 @@ function Clock(props) {
   c.componentDidMount = function () {
     c.props.moveClock();
   };
-  
+
   c.componentWillUnmount = function () {
     c.props.stopClock();
   };
@@ -39,7 +39,7 @@ function Clock(props) {
 
 function mapStateToProps(state) {
   return {
-    time: state.get('time')
+    time: state.get('root').get('time')
   };
 }
 
