@@ -43,10 +43,19 @@ export function fetchPlaylistsEpic(action$, store) {
   return action$.ofType(FETCH_PLAYLISTS)
   .mergeMap(function () {
     const accessToken = store.getState().get('root').get('accessToken');
-    return ajax.getJSON(BASE_URL + 'playlists?part=snippet%2C+contentDetails&mine=true', {
+    return ajax.getJSON(BASE_URL + 'playlists?part=snippet&mine=true', {
       Authorization: 'Bearer ' + accessToken
     })
-    .map(({items}) => fetchPlaylistFulfilled(items));
+    .map(function ({items}) {
+      return items.map(function (item) {
+        return {
+          id: item.id,
+          title: item.snippet.title,
+          thumbnail: item.snippet.thumbnails.default.url
+        };
+      });
+    })
+    .map((items) => fetchPlaylistFulfilled(items));
   });
 }
 
@@ -54,9 +63,20 @@ export function fetchPlaylistItemsEpic(action$, store) {
   return action$.ofType(FETCH_PLAYLIST_ITEMS)
   .switchMap(function (action) {
     const nextPageToken = action.nextPageToken ? `&pageToken=${action.nextPageToken}` : '';
-     const url = `${BASE_URL}playlistItems?part=snippet%2C+contentDetails&playlistId=${action.playlistId}&maxResults=50&key=${YOUTUBE_API_KEY}${nextPageToken}`;
+     const url = `${BASE_URL}playlistItems?part=snippet&playlistId=${action.playlistId}&maxResults=50&key=${YOUTUBE_API_KEY}${nextPageToken}`;
 
      return ajax.getJSON(url)
+     .map(function ({items, nextPageToken}) {
+       const normalizedItems = items.map(function ({snippet}) {
+         return {
+           videoId: snippet.resourceId.videoId,
+           thumbnail: snippet.thumbnails.default.url,
+           title: snippet.title
+         };
+       });
+
+       return {items: normalizedItems, nextPageToken};
+     })
      .map(({items, nextPageToken}) => {
        const nextItems = action.items.concat(items);
        if (nextPageToken) {
