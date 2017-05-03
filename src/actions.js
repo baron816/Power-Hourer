@@ -11,7 +11,7 @@ import {
   FLIP_NEXT,
   CHANGE_VIDEO_START,
   SHOW_MODAL,
-  SET_PLAYLIST_NAME,
+  SET_PLAYLIST_INDEX,
   START_TIME,
   END_TIME
 } from './actionCreators';
@@ -83,10 +83,10 @@ export function invertModalState() {
   };
 }
 
-export function setPlaylistName(name) {
+export function setPlaylistIndex(index) {
   return {
-    type: SET_PLAYLIST_NAME,
-    name
+    type: SET_PLAYLIST_INDEX,
+    index
   };
 }
 
