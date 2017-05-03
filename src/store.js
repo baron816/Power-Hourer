@@ -2,7 +2,7 @@ import { createStore, compose, applyMiddleware } from 'redux';
 import { persistStore, autoRehydrate } from 'redux-persist-immutable';
 import { combineEpics, createEpicMiddleware } from 'redux-observable';
 
-import reducer from './reducer';
+import reducer from './reducers';
 
 import {
   fetchPlaylistsEpic,

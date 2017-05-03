@@ -3,20 +3,16 @@ import { fromJS, Map, List } from 'immutable';
 import {
   SET_ACCESS_TOKEN,
   GET_PLAYLISTS,
-  GET_PLAYLIST_ITEMS,
-  NEXT_VIDEO,
-  GOTO_VIDEO,
   CHANGE_PLAY_STATE,
   INCREMENT_TIME,
   RESET_CLOCK,
   CHANGE_VIDEO_LENGTH,
   FLIP_NEXT,
-  CHANGE_VIDEO_START,
   SHOW_MODAL,
   SET_PLAYLIST_NAME
 } from './actionCreators';
 
-import reducer from './reducer';
+import reducer from './rootReducer';
 
 describe('reducer', function () {
   describe('SET_ACCESS_TOKEN', function () {
@@ -34,120 +30,6 @@ describe('reducer', function () {
 
       expect(nextState).toEqual(Map({
         accessToken: 'somelongstringherewithrandomchars'
-      }));
-    });
-  });
-
-  describe('GET_PLAYLISTS', function () {
-    const initialState = fromJS({
-      accessToken: '',
-      playlists: []
-    });
-
-    it('sets the state with the playlists', function () {
-      const action = {
-        type: GET_PLAYLISTS,
-        payload: [{name: 'Cheezy-Tunez'}, {name: 'Hot Girl'}]
-      };
-
-      const nextState = reducer(initialState, action);
-
-      expect(nextState).toEqual(Map({
-        accessToken: '',
-        playlists: List([Map({name: 'Cheezy-Tunez'}), Map({name: 'Hot Girl'})])
-      }));
-    });
-  });
-
-  describe('GET_PLAYLIST_ITEMS', function () {
-    it('sets the playlistItems state when blank', function () {
-      const initialState = fromJS({
-        playlistItems: []
-      });
-
-      const action = {
-        type: GET_PLAYLIST_ITEMS,
-        payload: [{id: 'asr3q212'}, {id: 'benoauhe2'}]
-      };
-
-      const nextState = reducer(initialState, action);
-
-      expect(nextState).toEqual(Map({
-        playlistItems: List([Map({id: 'asr3q212'}), Map({id: 'benoauhe2'})])
-      }));
-    });
-
-    it('resets the playlistItems if not blank', function () {
-      const initialState = fromJS({
-        playlistItems: [{id: 'asr3q212'}, {id: 'benoauhe2'}]
-      });
-
-      const action = {
-        type: GET_PLAYLIST_ITEMS,
-        payload: [{id: '2gdfgae'}, {id: 'eawoh29t'}, {id: '8t9ghs2'}]
-      };
-
-      const nextState = reducer(initialState, action);
-
-      expect(nextState).toEqual(Map({
-        playlistItems: List([Map({id: '2gdfgae'}), Map({id: 'eawoh29t'}), Map({id: '8t9ghs2'})])
-      }));
-    });
-  });
-
-  describe('GOTO_VIDEO', function () {
-    it('goes to the selected video', function () {
-      const initialState = fromJS({
-        playlistIndex: 0
-      });
-
-      const action = {
-        type: GOTO_VIDEO,
-        index: 2
-      };
-
-      const nextState = reducer(initialState, action);
-
-      expect(nextState).toEqual(Map({
-        playlistIndex: 2
-      }));
-    });
-  });
-
-  describe('NEXT_VIDEO', function () {
-    it('goes to the next video', function () {
-      const initialState = fromJS({
-        playlistIndex: 1,
-        playlistItems: [{id: 'asdgew'}, {id: '32srfrg'}, {id: 'ydfbsbm2'}]
-      });
-
-      const action = {
-        type: NEXT_VIDEO
-      };
-
-      const nextState = reducer(initialState, action);
-
-      expect(nextState).toEqual(Map({
-        playlistIndex: 2,
-        playlistItems: List([Map({id: 'asdgew'}), Map({id: '32srfrg'}), Map({id: 'ydfbsbm2'})])
-      }));
-    });
-
-    it('does not go to the next if it is at the end', function () {
-      const initialState = fromJS({
-        playlistIndex: 2,
-        playlistItems: [{id: 'asdgew'}, {id: '32srfrg'}, {id: 'ydfbsbm2'}]
-      });
-
-      const action = {
-        type: NEXT_VIDEO
-      };
-
-      const nextState = reducer(initialState, action);
-
-      expect(nextState).toEqual(Map({
-        playlistIndex: 2,
-        playlistItems: List([Map({id: 'asdgew'}), Map({id: '32srfrg'}), Map({id: 'ydfbsbm2'})])
       }));
     });
   });
@@ -249,25 +131,6 @@ describe('reducer', function () {
     });
   });
 
-  describe('CHANGE_VIDEO_START', function () {
-    it('sets the start time of a video at an index', function () {
-      const initialState = fromJS({
-        playlistItems: [{id: 'aegvae'}, {id: 'ibnaieubn'}, {id: 'vuiab3ta'}]
-      });
-
-      const action = {
-        type: CHANGE_VIDEO_START,
-        index: 1,
-        time: 45
-      };
-
-      const nextState = reducer(initialState, action);
-
-      expect(nextState).toEqual(Map({
-        playlistItems: List([Map({id: 'aegvae'}), Map({id: 'ibnaieubn', startTime: 45}), Map({id: 'vuiab3ta'})])
-      }));
-    });
-  });
 
   describe('SHOW_MODAL', function () {
     it('switches on and off', function () {
@@ -283,22 +146,4 @@ describe('reducer', function () {
     });
   });
 
-  describe('SET_PLAYLIST_NAME', function () {
-    it('correctly sets the currentPlaylistName', function () {
-      const initialState = fromJS({
-        currentPlaylistName: ''
-      });
-
-      const action = {
-        type: SET_PLAYLIST_NAME,
-        name: 'Cheezy-Tunez'
-      };
-
-      const nextState = reducer(initialState, action);
-
-      expect(nextState).toEqual(Map({
-        currentPlaylistName: 'Cheezy-Tunez'
-      }));
-    });
-  });
 });
