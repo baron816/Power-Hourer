@@ -9,7 +9,7 @@ import MusicNote from 'material-ui/svg-icons/image/music-note';
 
 import { persistor } from './store';
 import Login from './Login/Login';
-import Playlists from './Playlists';
+import Playlists from './Playlists/Playlists';
 import VideoModal from './VideoModal';
 
 import {
@@ -30,6 +30,7 @@ function App({accessToken, logout}) {
 
 
         <VideoModal />
+
       </div>
     </MuiThemeProvider>
   );
@@ -37,7 +38,7 @@ function App({accessToken, logout}) {
 
 function mapStateToProps(state) {
   return {
-    accessToken: state.get('accessToken')
+    accessToken: state.get('root').get('accessToken')
   };
 }
 
