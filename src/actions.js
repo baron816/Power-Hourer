@@ -13,7 +13,9 @@ import {
   SHOW_MODAL,
   SET_PLAYLIST_INDEX,
   START_TIME,
-  END_TIME
+  END_TIME,
+  FLIP_SHOW_DIALOG,
+  CHANGE_USERNAME
 } from './actionCreators';
 
 //Redux
@@ -87,6 +89,19 @@ export function setPlaylistIndex(index) {
   return {
     type: SET_PLAYLIST_INDEX,
     index
+  };
+}
+
+export function showCreateDialog() {
+  return {
+    type: FLIP_SHOW_DIALOG
+  };
+}
+
+export function setUsername(username) {
+  return {
+    type: CHANGE_USERNAME,
+    username
   };
 }
 
