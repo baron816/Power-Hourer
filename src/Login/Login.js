@@ -7,7 +7,7 @@ function Login({signIn}) {
   return (
     <GoogleLogin
       clientId="727985332451-et0hhrtnpccevvstmjm1e11vv7kc16pd.apps.googleusercontent.com"
-      buttonText="Login"
+      buttonText="Login To YouTube"
       discoveryDocs="https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest"
       scope="https://www.googleapis.com/auth/youtube.readonly"
       onSuccess={signIn}
@@ -21,8 +21,8 @@ function mapStateToProps() {
 }
 
 function mapDispatchToProps(dispatch) {
-  function signIn({accessToken}) {
-    dispatch(setAccessToken(accessToken));
+  function signIn({accessToken, googleId}) {
+    dispatch(setAccessToken(accessToken, googleId));
     dispatch(fetchPlaylists());
   }
 

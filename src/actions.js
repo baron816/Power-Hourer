@@ -15,14 +15,16 @@ import {
   START_TIME,
   END_TIME,
   FLIP_SHOW_DIALOG,
-  CHANGE_USERNAME
+  CHANGE_USERNAME,
+  CREATE_USER
 } from './actionCreators';
 
 //Redux
-export function setAccessToken(token) {
+export function setAccessToken(token, googleId) {
   return {
     type: SET_ACCESS_TOKEN,
-    token
+    token,
+    googleId
   };
 }
 
@@ -129,5 +131,11 @@ export function startTime() {
 export function endTime() {
   return {
     type: END_TIME
+  };
+}
+
+export function createUser() {
+  return {
+    type: CREATE_USER
   };
 }

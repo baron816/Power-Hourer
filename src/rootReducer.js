@@ -2,7 +2,6 @@ import { fromJS } from 'immutable';
 
 import {
   SET_ACCESS_TOKEN,
-  RESET_STATE,
   CHANGE_VIDEO_LENGTH,
   FLIP_NEXT,
   SHOW_MODAL
@@ -12,13 +11,14 @@ import {
 
 const initialState = fromJS({
   accessToken: '',
+  googleId: '',
   videoLength: 60,
   callNext: true,
   showModal: false
 });
 
-function setToken(state, token) {
-  return state.set('accessToken', token);
+function setToken(state, token, id) {
+  return state.withMutations(map => map.set('accessToken', token).set('googleId', id));
 }
 
 function changeVideoLength(state, length) {
@@ -35,10 +35,8 @@ function setModalState(state) {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case RESET_STATE:
-      return initialState;
     case SET_ACCESS_TOKEN:
-      return setToken(state, action.token);
+      return setToken(state, action.token, action.googleId);
     case CHANGE_VIDEO_LENGTH:
       return changeVideoLength(state, action.length);
     case FLIP_NEXT:
