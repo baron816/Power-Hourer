@@ -7,13 +7,15 @@ import reducer from './reducers';
 import {
   fetchPlaylistsEpic,
   fetchPlaylistItemsEpic,
-  startTimeEpic
+  startTimeEpic,
+  createUserEpic
 } from './epics';
 
 const rootEpic = combineEpics(
   fetchPlaylistsEpic,
   fetchPlaylistItemsEpic,
-  startTimeEpic
+  startTimeEpic,
+  createUserEpic
 );
 
 const epicMiddleWare = createEpicMiddleware(rootEpic);
