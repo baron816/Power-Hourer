@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { List, ListItem } from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
 import Avatar from 'material-ui/Avatar';
 import Paper from 'material-ui/Paper';
 import './Playlists.css';
@@ -18,6 +19,7 @@ function Playlists({playlists, getPlaylists}) {
   return (
     <Paper zDepth={3} id="playlists">
       <List>
+        <Subheader inset={true}>YouTube Playlists</Subheader>
         {playlists.map(function (list, index) {
           const id = list.get('playlistId');
           const title = list.get('title');
