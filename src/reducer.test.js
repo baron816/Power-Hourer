@@ -2,9 +2,6 @@ import { fromJS, Map, List } from 'immutable';
 
 import {
   SET_ACCESS_TOKEN,
-  CHANGE_PLAY_STATE,
-  INCREMENT_TIME,
-  RESET_CLOCK,
   CHANGE_VIDEO_LENGTH,
   FLIP_NEXT,
   SHOW_MODAL
@@ -15,19 +12,22 @@ import reducer from './rootReducer';
 describe('reducer', function () {
   describe('SET_ACCESS_TOKEN', function () {
     const initialState = fromJS({
-      accessToken: ''
+      accessToken: '',
+      googleId: ''
     });
 
     it('sets the state with the token', function () {
       const action = {
         type: SET_ACCESS_TOKEN,
-        token: 'somelongstringherewithrandomchars'
+        token: 'somelongstringherewithrandomchars',
+        googleId: 'mygoogleid'
       };
 
       const nextState = reducer(initialState, action);
 
       expect(nextState).toEqual(Map({
-        accessToken: 'somelongstringherewithrandomchars'
+        accessToken: 'somelongstringherewithrandomchars',
+        googleId: 'mygoogleid'
       }));
     });
   });
