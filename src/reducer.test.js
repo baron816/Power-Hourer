@@ -1,4 +1,4 @@
-import { fromJS, Map, List } from 'immutable';
+import { fromJS, Map } from 'immutable';
 
 import {
   SET_ACCESS_TOKEN,
@@ -79,5 +79,4 @@ describe('reducer', function () {
       }));
     });
   });
-
 });
