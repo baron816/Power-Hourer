@@ -16,7 +16,9 @@ import {
   END_TIME,
   FLIP_SHOW_DIALOG,
   CHANGE_USERNAME,
-  CREATE_USER
+  CREATE_USER,
+  SAVE_PLAYLIST,
+  GET_SERVER_PLAYLISTS
 } from './actionCreators';
 
 //Redux
@@ -137,5 +139,17 @@ export function endTime() {
 export function createUser() {
   return {
     type: CREATE_USER
+  };
+}
+
+export function savePlaylist() {
+  return {
+    type: SAVE_PLAYLIST
+  };
+}
+
+export function getServerPlaylists() {
+  return {
+    type: GET_SERVER_PLAYLISTS
   };
 }
