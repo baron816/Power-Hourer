@@ -3,7 +3,7 @@ import { fromJS } from 'immutable';
 import { GET_PLAYLISTS, SET_PLAYLIST_INDEX, SET_SERVER_PLAYLISTS } from '../actionCreators';
 
 const initialState = fromJS({
-    playlists: [],
+    youtubePlaylists: [],
     serverPlaylists: [],
     playlistIndex: 0
 });
@@ -19,7 +19,7 @@ function playlistSetter(type) {
 }
 
 const setServerPlaylists = playlistSetter('serverPlaylists');
-const setYouTubePlaylists = playlistSetter('playlists');
+const setYouTubePlaylists = playlistSetter('youtubePlaylists');
 
 export default function playlistsReducer(state = initialState, action) {
   switch (action.type) {
