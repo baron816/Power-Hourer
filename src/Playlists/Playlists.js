@@ -7,7 +7,6 @@ import Paper from 'material-ui/Paper';
 import './Playlists.css';
 
 import {
-  fetchPlaylistItems,
   goToVideo,
   changePlayState,
   resetClock,
@@ -15,18 +14,18 @@ import {
   setPlaylistIndex
 } from '../actions';
 
-function Playlists({playlists, getPlaylists}) {
+function Playlists({name, playlists, getPlaylist}) {
   return (
     <Paper zDepth={3} id="playlists">
       <List>
-        <Subheader inset={true}>YouTube Playlists</Subheader>
+        <Subheader inset={true}>{name} Playlists</Subheader>
         {playlists.map(function (list, index) {
-          const id = list.get('playlistId');
+          const id = list.get('_id') || list.get('playlistId');
           const title = list.get('title');
           return(
             <ListItem
               key={id}
-              onClick={getPlaylists(id, index)}
+              onClick={getPlaylist(id, index)}
               leftAvatar={ <Avatar src={list.get('thumbnail')} /> }>
               {title}
             </ListItem>
@@ -37,14 +36,12 @@ function Playlists({playlists, getPlaylists}) {
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    playlists: state.getIn(['playlists', 'playlists'])
-  };
+function mapStateToProps() {
+  return {};
 }
 
-function mapDispatchToProps(dispatch) {
-  function getPlaylists(listId, index) {
+function mapDispatchToProps(dispatch, {fetchPlaylistItems}) {
+  function getPlaylist(listId, index) {
     return function () {
       dispatch(setPlaylistIndex(index));
       dispatch(fetchPlaylistItems(listId));
@@ -56,7 +53,7 @@ function mapDispatchToProps(dispatch) {
   }
 
   return {
-    getPlaylists
+    getPlaylist
   };
 }
 
