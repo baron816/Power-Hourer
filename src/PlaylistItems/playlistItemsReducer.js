@@ -1,6 +1,11 @@
 import { fromJS } from 'immutable';
 
-import { GET_PLAYLIST_ITEMS, NEXT_VIDEO, GOTO_VIDEO, CHANGE_VIDEO_START } from '../actionCreators';
+import {
+  GET_PLAYLIST_ITEMS,
+  NEXT_VIDEO,
+  GOTO_VIDEO,
+  CHANGE_VIDEO_START
+} from '../actionCreators';
 
 const initialState = fromJS({
     playlistItems: [],
