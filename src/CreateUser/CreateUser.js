@@ -4,9 +4,15 @@ import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import { connect } from 'react-redux';
 
-import { setUsername, showCreateDialog } from '../actions';
+import { setUsername, showCreateDialog, createUser } from '../actions';
 
-function CreateUser({username, changeUsername, showCreateDialog, toggle}) {
+function CreateUser({
+  username,
+  changeUsername,
+  showCreateDialog,
+  toggle,
+  handleCreateUser
+}) {
   const actions = [
     <FlatButton
       label="Cancel"
@@ -17,6 +23,7 @@ function CreateUser({username, changeUsername, showCreateDialog, toggle}) {
       label="Submit"
       primary={true}
       keyboardFocused={true}
+      onTouchTap={handleCreateUser}
     />
   ];
 
@@ -53,9 +60,15 @@ function mapDispatchToProps(dispatch) {
     dispatch(showCreateDialog());
   }
 
+  function handleCreateUser() {
+    dispatch(createUser());
+    dispatch(showCreateDialog());
+  }
+
   return {
     changeUsername,
-    toggle
+    toggle,
+    handleCreateUser
   };
 }
 
