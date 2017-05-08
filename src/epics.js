@@ -16,7 +16,12 @@ import {
   GET_PLAYLIST_ITEMS,
   START_TIME,
   INCREMENT_TIME,
-  END_TIME
+  END_TIME,
+  CREATE_USER,
+  SAVE_PLAYLIST,
+  SET_SERVER_ID,
+  GET_SERVER_PLAYLISTS,
+  SET_SERVER_PLAYLISTS
 } from './actionCreators';
 
 function fetchPlaylistFulfilled(payload) {
@@ -36,6 +41,20 @@ function fetchPlaylistItemsFulfilled(payload) {
 export function incrementTime() {
   return {
     type: INCREMENT_TIME
+  };
+}
+
+export function setServerId(id) {
+  return {
+    type: SET_SERVER_ID,
+    id
+  };
+}
+
+export function fetchServerPlaylistsFulfilled(playlists) {
+  return {
+    type: SET_SERVER_PLAYLISTS,
+    playlists
   };
 }
 
@@ -87,7 +106,6 @@ export function fetchPlaylistItemsEpic(action$, store) {
   });
 }
 
-
 export function startTimeEpic(action$) {
   return action$.ofType(START_TIME)
     .mergeMap(function () {
@@ -95,5 +113,51 @@ export function startTimeEpic(action$) {
       .timeInterval()
       .map(() => incrementTime())
       .takeUntil(action$.ofType(END_TIME));
+    });
+}
+
+export function createUserEpic(action$, store) {
+  return action$.ofType(CREATE_USER)
+    .mergeMap(function () {
+      const state = store.getState();
+      const user = JSON.stringify({
+        googleId: state.getIn(['root', 'googleId']),
+        username: state.getIn(['createUser', 'username'])
+      });
+      return ajax.post('http://localhost:3001/users', user, {'Content-Type': 'application/json'})
+        .map(({response}) => setServerId(response._id));
+    });
+}
+
+export function savePlaylistEpic(action$, store) {
+  return action$.ofType(SAVE_PLAYLIST)
+    .mergeMap(function () {
+      const state = store.getState();
+      const playlists = state.getIn(['playlists', 'playlists']);
+      const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
+      const playlist = playlists.get(playlistIndex);
+      const playlistItems = state.getIn(['playlistItems', 'playlistItems']);
+      const owner = state.getIn(['root', 'serverId']);
+
+
+      const newPlaylist = JSON.stringify({
+        owner,
+        playlistItems,
+        playlistId: playlist.get('playlistId'),
+        title: playlist.get('title'),
+        thumbnail: playlist.get('thumbnail')
+      });
+      return ajax.post('http://localhost:3001/playlists', newPlaylist, {'Content-Type': 'application/json'})
+        .map((response) => response);
+    });
+}
+
+export function getUserPlaylistsEpic(action$, store) {
+  return action$.ofType(GET_SERVER_PLAYLISTS)
+    .mergeMap(function () {
+      const state = store.getState();
+      const googleId = state.getIn(['root', 'googleId']);
+      return ajax.getJSON(`http://localhost:3001/users/${googleId}/playlists`)
+        .map((response) => fetchServerPlaylistsFulfilled(response));
     });
 }
