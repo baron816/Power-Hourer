@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import PlaylistItems from './PlaylistItems/PlaylistItems';
-import Video from './Video';
-import { invertModalState } from './actions';
+import PlaylistItems from '../PlaylistItems/PlaylistItems';
+import Video from '../Video/Video';
+import { invertModalState, savePlaylist } from '../actions';
 
 import './VideoModal.css';
 
-function VideoModal({showModal, invertModal, playlistIndex, playlist}) {
+function VideoModal({showModal, invertModal, playlistIndex, playlist, savePl}) {
   const actions = [
     <FlatButton
       label='Close'
@@ -21,7 +21,7 @@ function VideoModal({showModal, invertModal, playlistIndex, playlist}) {
     <div>
       {playlist.size &&
         <Dialog
-          title={playlistName()}
+          title={<PlaylistHead />}
           modal={true}
           open={showModal}
           actions={actions}
@@ -36,8 +36,17 @@ function VideoModal({showModal, invertModal, playlistIndex, playlist}) {
     </div>
   );
 
-  function playlistName() {
-    return playlist.get(playlistIndex).get('title');
+  function PlaylistHead() {
+    return (
+      <div>
+        {playlist.get(playlistIndex).get('title')}
+        <FlatButton
+          label='Save Playlist'
+          primary={true}
+          onTouchTap={savePl}
+        />
+      </div>
+    );
   }
 }
 
@@ -45,7 +54,7 @@ function mapStateToProps(state) {
   return {
     showModal: state.getIn(['root', 'showModal']),
     playlistIndex: state.getIn(['playlists', 'playlistIndex']),
-    playlist: state.getIn(['playlists', 'playlists'])
+    playlist: state.getIn(['playlists', 'youtubePlaylists'])
   };
 }
 
@@ -54,8 +63,13 @@ function mapDispatchToProps(dispatch) {
     dispatch(invertModalState());
   }
 
+  function savePl() {
+    dispatch(savePlaylist());
+  }
+
   return {
-    invertModal
+    invertModal,
+    savePl
   };
 }
 
