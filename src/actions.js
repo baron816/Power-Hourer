@@ -18,7 +18,8 @@ import {
   CHANGE_USERNAME,
   CREATE_USER,
   SAVE_PLAYLIST,
-  GET_SERVER_PLAYLISTS
+  GET_SERVER_PLAYLISTS,
+  FETCH_SERVER_PLAYLIST_ITEMS
 } from './actionCreators';
 
 //Redux
@@ -116,7 +117,7 @@ export function fetchPlaylists() {
   };
 }
 
-export function fetchPlaylistItems(playlistId) {
+export function fetchYoutubePlaylistItems(playlistId) {
   return {
     type: FETCH_PLAYLIST_ITEMS,
     playlistId,
@@ -151,5 +152,12 @@ export function savePlaylist() {
 export function getServerPlaylists() {
   return {
     type: GET_SERVER_PLAYLISTS
+  };
+}
+
+export function fetchServerPlaylistItems(_id) {
+  return {
+    type: FETCH_SERVER_PLAYLIST_ITEMS,
+    _id
   };
 }

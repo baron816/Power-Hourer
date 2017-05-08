@@ -8,14 +8,20 @@ import {
   fetchPlaylistsEpic,
   fetchPlaylistItemsEpic,
   startTimeEpic,
-  createUserEpic
+  createUserEpic,
+  savePlaylistEpic,
+  getUserPlaylistsEpic,
+  fetchServerPlaylistItemsEpic
 } from './epics';
 
 const rootEpic = combineEpics(
   fetchPlaylistsEpic,
   fetchPlaylistItemsEpic,
   startTimeEpic,
-  createUserEpic
+  createUserEpic,
+  savePlaylistEpic,
+  getUserPlaylistsEpic,
+  fetchServerPlaylistItemsEpic
 );
 
 const epicMiddleWare = createEpicMiddleware(rootEpic);

@@ -21,7 +21,8 @@ import {
   SAVE_PLAYLIST,
   SET_SERVER_ID,
   GET_SERVER_PLAYLISTS,
-  SET_SERVER_PLAYLISTS
+  SET_SERVER_PLAYLISTS,
+  FETCH_SERVER_PLAYLIST_ITEMS
 } from './actionCreators';
 
 function fetchPlaylistFulfilled(payload) {
@@ -34,7 +35,7 @@ function fetchPlaylistFulfilled(payload) {
 function fetchPlaylistItemsFulfilled(payload) {
   return {
     type: GET_PLAYLIST_ITEMS,
-    payload: payload
+    payload
   };
 }
 
@@ -57,6 +58,7 @@ export function fetchServerPlaylistsFulfilled(playlists) {
     playlists
   };
 }
+
 
 export function fetchPlaylistsEpic(action$, store) {
   return action$.ofType(FETCH_PLAYLISTS)
@@ -159,5 +161,13 @@ export function getUserPlaylistsEpic(action$, store) {
       const googleId = state.getIn(['root', 'googleId']);
       return ajax.getJSON(`http://localhost:3001/users/${googleId}/playlists`)
         .map((response) => fetchServerPlaylistsFulfilled(response));
+    });
+}
+
+export function fetchServerPlaylistItemsEpic(action$) {
+  return action$.ofType(FETCH_SERVER_PLAYLIST_ITEMS)
+    .mergeMap(function (action) {
+      return ajax.getJSON(`http://localhost:3001/playlists/${action._id}/playlistItems`)
+        .map((items) => fetchPlaylistItemsFulfilled(items));
     });
 }
