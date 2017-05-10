@@ -1,30 +1,11 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import { persistStore, autoRehydrate } from 'redux-persist-immutable';
-import { combineEpics, createEpicMiddleware } from 'redux-observable';
+import { createEpicMiddleware } from 'redux-observable';
 
 import reducer from './reducers';
+import epic from './epics';
 
-import {
-  fetchPlaylistsEpic,
-  fetchPlaylistItemsEpic,
-  startTimeEpic,
-  createUserEpic,
-  savePlaylistEpic,
-  getUserPlaylistsEpic,
-  fetchServerPlaylistItemsEpic
-} from './epics';
-
-const rootEpic = combineEpics(
-  fetchPlaylistsEpic,
-  fetchPlaylistItemsEpic,
-  startTimeEpic,
-  createUserEpic,
-  savePlaylistEpic,
-  getUserPlaylistsEpic,
-  fetchServerPlaylistItemsEpic
-);
-
-const epicMiddleWare = createEpicMiddleware(rootEpic);
+const epicMiddleWare = createEpicMiddleware(epic);
 
 function addLoggingToDispatch(store) {
   if (false) {
