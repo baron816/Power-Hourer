@@ -11,16 +11,18 @@ import MusicNote from 'material-ui/svg-icons/image/music-note';
 
 import { persistor } from './store';
 import Login from './Login/Login';
-import Playlists from './Playlists/Playlists';
-import VideoModal from './VideoModal';
+import ServerPlaylists from './Playlists/ServerPlaylists';
+import YouTubePlaylists from './Playlists/YouTubePlaylists';
+import VideoModal from './VideoModal/VideoModal';
 import CreateUser from './CreateUser/CreateUser';
 
 import {
   resetState,
   showCreateDialog,
+  getServerPlaylists
 } from './actions';
 
-function App({accessToken, logout, showCreateUser}) {
+function App({accessToken, logout, showCreateUser, fetchServerUser}) {
 
   return (
     <MuiThemeProvider>
@@ -29,9 +31,12 @@ function App({accessToken, logout, showCreateUser}) {
           title="Power Hourer"
           iconElementRight={accessToken.length ? <Logged /> : <Login />}
           iconElementLeft={<IconButton><MusicNote /></IconButton>}
-          />
+        />
 
-        <Playlists />
+        <div id="playlistLists">
+          <ServerPlaylists />
+          <YouTubePlaylists />
+        </div>
 
         <VideoModal />
         <CreateUser />
@@ -51,6 +56,7 @@ function App({accessToken, logout, showCreateUser}) {
       >
         <MenuItem onClick={showCreateUser} primaryText="Create Account" />
         <MenuItem onClick={logout} primaryText="Logout" />
+        <MenuItem onClick={fetchServerUser} primaryText="get user" />
       </IconMenu>
     );
   }
@@ -72,9 +78,14 @@ function mapDispatchToProps(dispatch) {
     dispatch(showCreateDialog());
   }
 
+  function fetchServerUser() {
+    dispatch(getServerPlaylists());
+  }
+
   return {
     logout,
-    showCreateUser
+    showCreateUser,
+    fetchServerUser
   };
 }
 
