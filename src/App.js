@@ -18,11 +18,10 @@ import CreateUser from './CreateUser/CreateUser';
 
 import {
   resetState,
-  showCreateDialog,
-  getServerPlaylists
+  showCreateDialog
 } from './actions';
 
-function App({accessToken, logout, showCreateUser, fetchServerUser}) {
+function App({accessToken, logout, showCreateUser, serverId}) {
 
   return (
     <MuiThemeProvider>
@@ -54,17 +53,27 @@ function App({accessToken, logout, showCreateUser, fetchServerUser}) {
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
-        <MenuItem onClick={showCreateUser} primaryText="Create Account" />
+        <CreateItem />
         <MenuItem onClick={logout} primaryText="Logout" />
-        <MenuItem onClick={fetchServerUser} primaryText="get user" />
       </IconMenu>
+    );
+  }
+
+  function CreateItem() {
+    return (
+      <div>
+        {!serverId.length &&
+          <MenuItem onClick={showCreateUser} primaryText="Create Account" />
+        }
+      </div>
     );
   }
 }
 
 function mapStateToProps(state) {
   return {
-    accessToken: state.getIn(['root', 'accessToken'])
+    accessToken: state.getIn(['root', 'accessToken']),
+    serverId: state.getIn(['root', 'serverId'])
   };
 }
 
@@ -78,14 +87,9 @@ function mapDispatchToProps(dispatch) {
     dispatch(showCreateDialog());
   }
 
-  function fetchServerUser() {
-    dispatch(getServerPlaylists());
-  }
-
   return {
     logout,
-    showCreateUser,
-    fetchServerUser
+    showCreateUser
   };
 }
 
