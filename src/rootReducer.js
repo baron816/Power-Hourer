@@ -23,34 +23,27 @@ function setToken(state, token, id) {
   return state.withMutations(map => map.set('accessToken', token).set('googleId', id));
 }
 
-function changeVideoLength(state, length) {
-  return state.set('videoLength', Number(length));
+function flipState(key) {
+  return function (state) {
+    return state.set(key, !state.get(key));
+  };
 }
 
-function flipNext(state) {
-  return state.set('callNext', !state.get('callNext'));
-}
-
-function setModalState(state) {
-  return state.set('showModal', !state.get('showModal'));
-}
-
-function setServerId(state, id) {
-  return state.set('serverId', id);
-}
+const flipModal = flipState('showModal');
+const flipNext = flipState('callNext');
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_ACCESS_TOKEN:
       return setToken(state, action.token, action.googleId);
     case CHANGE_VIDEO_LENGTH:
-      return changeVideoLength(state, action.length);
+      return state.set('videoLength', Number(action.length));
     case FLIP_NEXT:
       return flipNext(state);
     case SHOW_MODAL:
-      return setModalState(state);
+      return flipModal(state);
     case SET_SERVER_ID:
-      return setServerId(state, action.id);
+      return state.set('serverId', action.id);
     default:
       return state;
   }

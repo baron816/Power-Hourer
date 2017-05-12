@@ -7,20 +7,12 @@ const initialState = fromJS({
   showCreateDialog: false
 });
 
-function flipShowDialog(state) {
-  return state.set('showCreateDialog', !state.get('showCreateDialog'));
-}
-
-function changeUsername(state, username) {
-  return state.set('username', username);
-}
-
 export default function createUserReducer(state = initialState, action) {
   switch (action.type) {
     case FLIP_SHOW_DIALOG:
-      return flipShowDialog(state);
+      return state.set('showCreateDialog', !state.get('showCreateDialog'));
     case CHANGE_USERNAME:
-      return changeUsername(state, action.username);
+      return state.set('username', action.username);
     default:
       return state;
   }

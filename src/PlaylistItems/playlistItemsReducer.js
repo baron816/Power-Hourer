@@ -12,19 +12,11 @@ const initialState = fromJS({
     playlistItemsIndex: 0
 });
 
-function setPlaylistItems(state, payload) {
-  return state.set('playlistItems', fromJS(payload));
-}
-
 function incrementPlaylistIndex(state) {
   if (state.get('playlistItemsIndex') < state.get('playlistItems').size - 1) {
     return state.set('playlistItemsIndex', state.get('playlistItemsIndex') + 1);
   }
   return state;
-}
-
-function setVideoIndex(state, index) {
-  return state.set('playlistItemsIndex', Number(index));
 }
 
 function changeVideoStart(state, index, time) {
@@ -34,11 +26,11 @@ function changeVideoStart(state, index, time) {
 export default function playlistItemsReducer(state = initialState, action) {
   switch (action.type) {
     case GET_PLAYLIST_ITEMS:
-      return setPlaylistItems(state, action.payload);
+      return state.set('playlistItems', fromJS(action.payload));
     case NEXT_VIDEO:
       return incrementPlaylistIndex(state);
     case GOTO_VIDEO:
-      return setVideoIndex(state, action.index);
+      return state.set('playlistItemsIndex', Number(action.index));
     case CHANGE_VIDEO_START:
       return changeVideoStart(state, action.index, action.time);
     default:
