@@ -1,6 +1,7 @@
 import { ajax } from 'rxjs/observable/dom/ajax';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs';
 
 import {
   FETCH_PLAYLISTS,
@@ -8,6 +9,7 @@ import {
   SAVE_PLAYLIST,
   GET_SERVER_PLAYLISTS,
   SET_SERVER_PLAYLISTS,
+  SET_SERVER_ID,
 } from '../actionCreators';
 
 import { YOUTUBE_URL, SERVER_URL } from '../epics';
@@ -19,7 +21,7 @@ function fetchPlaylistFulfilled(payload) {
   };
 }
 
-export function fetchServerPlaylistsFulfilled(playlists) {
+function fetchServerPlaylistsFulfilled(playlists) {
   return {
     type: SET_SERVER_PLAYLISTS,
     playlists
@@ -50,7 +52,7 @@ export function savePlaylistEpic(action$, store) {
   return action$.ofType(SAVE_PLAYLIST)
     .mergeMap(function () {
       const state = store.getState();
-      const playlists = state.getIn(['playlists', 'playlists']);
+      const playlists = state.getIn(['playlists', 'youtubePlaylists']);
       const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
       const playlist = playlists.get(playlistIndex);
       const playlistItems = state.getIn(['playlistItems', 'playlistItems']);
@@ -65,7 +67,7 @@ export function savePlaylistEpic(action$, store) {
         thumbnail: playlist.get('thumbnail')
       });
       return ajax.post(SERVER_URL + 'playlists', newPlaylist, {'Content-Type': 'application/json'})
-        .map((response) => response);
+        .map(({response}) => fetchServerPlaylistsFulfilled([response.playlist]));
     });
 }
 
@@ -75,6 +77,10 @@ export function getUserPlaylistsEpic(action$, store) {
       const state = store.getState();
       const googleId = state.getIn(['root', 'googleId']);
       return ajax.getJSON(`${SERVER_URL}users/${googleId}/playlists`)
-        .map((response) => fetchServerPlaylistsFulfilled(response));
+        .map((response) => fetchServerPlaylistsFulfilled(response))
+        .catch(() => Observable.of({
+          type: SET_SERVER_ID,
+          id: ''
+        }));
     });
 }
