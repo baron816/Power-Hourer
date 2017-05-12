@@ -9,7 +9,9 @@ function YouTubePlaylists({playlists}) {
     <Playlists
       playlists={playlists}
       fetchPlaylistItems={fetchYoutubePlaylistItems}
-      name="YouTube"
+      name='YouTube'
+      idKey='playlistId'
+      playlistName='youtubePlaylists'
     />
   );
 }

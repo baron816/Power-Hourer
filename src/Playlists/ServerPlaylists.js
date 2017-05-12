@@ -9,7 +9,9 @@ function ServerPlaylists({playlists}) {
   return (
     <Playlists
       playlists={playlists}
-      name="Saved"
+      name='Saved'
+      idKey='_id'
+      playlistName='serverPlaylists'
       fetchPlaylistItems={fetchServerPlaylistItems}
     />
   );
