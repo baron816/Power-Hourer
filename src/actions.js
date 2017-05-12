@@ -19,7 +19,8 @@ import {
   CREATE_USER,
   SAVE_PLAYLIST,
   GET_SERVER_PLAYLISTS,
-  FETCH_SERVER_PLAYLIST_ITEMS
+  FETCH_SERVER_PLAYLIST_ITEMS,
+  SET_CURRENT_PLAYLIST
 } from './actionCreators';
 
 //Redux
@@ -107,6 +108,13 @@ export function setUsername(username) {
   return {
     type: CHANGE_USERNAME,
     username
+  };
+}
+
+export function setCurrentPlaylist(playlistName) {
+  return {
+    type: SET_CURRENT_PLAYLIST,
+    playlistName
   };
 }
 
