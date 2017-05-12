@@ -73,10 +73,11 @@ function VideoModal({showModal, invertModal, playlistIndex, playlist, savePl}) {
 }
 
 function mapStateToProps(state) {
+  const playlistName = state.getIn(['playlists', 'currentPlaylist']);
   return {
     showModal: state.getIn(['root', 'showModal']),
     playlistIndex: state.getIn(['playlists', 'playlistIndex']),
-    playlist: state.getIn(['playlists', 'youtubePlaylists'])
+    playlist: state.getIn(['playlists', playlistName], [])
   };
 }
 
