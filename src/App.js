@@ -18,10 +18,12 @@ import CreateUser from './CreateUser/CreateUser';
 
 import {
   resetState,
-  showCreateDialog
+  showCreateDialog,
+  fetchYoutubePlaylists,
+  fetchServerPlaylists
 } from './actions';
 
-function App({accessToken, logout, showCreateUser, serverId}) {
+function App({accessToken, logout, showCreateUser, serverId, getPlaylists}) {
 
   return (
     <MuiThemeProvider>
@@ -54,6 +56,7 @@ function App({accessToken, logout, showCreateUser, serverId}) {
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
         <CreateItem />
+        <MenuItem onClick={getPlaylists} primaryText="Reload Playlists" />
         <MenuItem onClick={logout} primaryText="Logout" />
       </IconMenu>
     );
@@ -87,9 +90,15 @@ function mapDispatchToProps(dispatch) {
     dispatch(showCreateDialog());
   }
 
+  function getPlaylists() {
+    dispatch(fetchYoutubePlaylists());
+    dispatch(fetchServerPlaylists());
+  }
+
   return {
     logout,
-    showCreateUser
+    showCreateUser,
+    getPlaylists
   };
 }
 
