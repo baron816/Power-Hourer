@@ -7,16 +7,10 @@ import {
 } from '../epics';
 
 import {
-  SET_SERVER_ID,
   CREATE_USER,
 } from '../actionCreators';
 
-export function setServerId(id) {
-  return {
-    type: SET_SERVER_ID,
-    id
-  };
-}
+import { setServerId } from '../actions';
 
 export function createUserEpic(action$, store) {
   return action$.ofType(CREATE_USER)

@@ -4,32 +4,17 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs';
 
 import {
-  FETCH_PLAYLISTS,
-  GET_PLAYLISTS,
+  FETCH_YOUTUBE_PLAYLISTS,
+  FETCH_SERVER_PLAYLISTS,
   SAVE_PLAYLIST,
-  GET_SERVER_PLAYLISTS,
-  SET_SERVER_PLAYLISTS,
   SET_SERVER_ID,
 } from '../actionCreators';
 
 import { YOUTUBE_URL, SERVER_URL } from '../epics';
-
-function fetchPlaylistFulfilled(payload) {
-  return {
-    type: GET_PLAYLISTS,
-    payload
-  };
-}
-
-function fetchServerPlaylistsFulfilled(playlists) {
-  return {
-    type: SET_SERVER_PLAYLISTS,
-    playlists
-  };
-}
+import { fetchYoutubePlaylistFulfilled, fetchServerPlaylistsFulfilled, createServerPlaylistFulfilled } from '../actions';
 
 export function fetchPlaylistsEpic(action$, store) {
-  return action$.ofType(FETCH_PLAYLISTS)
+  return action$.ofType(FETCH_YOUTUBE_PLAYLISTS)
   .mergeMap(function () {
     const accessToken = store.getState().getIn(['root', 'accessToken']);
     return ajax.getJSON(YOUTUBE_URL + 'playlists?part=snippet&mine=true', {
@@ -44,7 +29,7 @@ export function fetchPlaylistsEpic(action$, store) {
         };
       });
     })
-    .map((items) => fetchPlaylistFulfilled(items));
+    .map((items) => fetchYoutubePlaylistFulfilled(items));
   });
 }
 
@@ -67,12 +52,12 @@ export function savePlaylistEpic(action$, store) {
         thumbnail: playlist.get('thumbnail')
       });
       return ajax.post(SERVER_URL + 'playlists', newPlaylist, {'Content-Type': 'application/json'})
-        .map(({response}) => fetchServerPlaylistsFulfilled([response.playlist]));
+        .map(({response}) => createServerPlaylistFulfilled([response.playlist]));
     });
 }
 
 export function getUserPlaylistsEpic(action$, store) {
-  return action$.ofType(GET_SERVER_PLAYLISTS)
+  return action$.ofType(FETCH_SERVER_PLAYLISTS)
     .mergeMap(function () {
       const state = store.getState();
       const googleId = state.getIn(['root', 'googleId']);

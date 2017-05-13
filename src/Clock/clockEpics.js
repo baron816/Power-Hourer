@@ -6,15 +6,10 @@ import { Observable } from 'rxjs';
 
 import {
   START_TIME,
-  INCREMENT_TIME,
   END_TIME,
 } from '../actionCreators';
 
-export function incrementTime() {
-  return {
-    type: INCREMENT_TIME
-  };
-}
+import { incrementTime } from '../actions';
 
 export function startTimeEpic(action$) {
   return action$.ofType(START_TIME)
