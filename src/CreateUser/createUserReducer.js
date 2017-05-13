@@ -12,7 +12,7 @@ export default function createUserReducer(state = initialState, action) {
     case FLIP_SHOW_DIALOG:
       return state.set('showCreateDialog', !state.get('showCreateDialog'));
     case CHANGE_USERNAME:
-      return state.set('username', action.username);
+      return state.set('username', action.payload);
     default:
       return state;
   }

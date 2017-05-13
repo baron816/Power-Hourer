@@ -1,9 +1,10 @@
 import { fromJS } from 'immutable';
 
 import {
-  GET_PLAYLISTS,
-  SET_PLAYLIST_INDEX,
   SET_SERVER_PLAYLISTS,
+  SET_YOUTUBE_PLAYLISTS,
+  ADD_SERVER_PLAYLIST,
+  SET_PLAYLIST_INDEX,
   SET_CURRENT_PLAYLIST
 } from '../actionCreators';
 
@@ -20,19 +21,20 @@ function playlistSetter(type) {
   };
 }
 
-const setServerPlaylists = playlistSetter('serverPlaylists');
-const setYouTubePlaylists = playlistSetter('youtubePlaylists');
+const addServerPlaylist = playlistSetter('serverPlaylists');
 
 export default function playlistsReducer(state = initialState, action) {
   switch (action.type) {
-    case GET_PLAYLISTS:
-      return setYouTubePlaylists(state, action.payload);
-    case SET_PLAYLIST_INDEX:
-      return state.set('playlistIndex', action.index);
+    case SET_YOUTUBE_PLAYLISTS:
+      return state.set('youtubePlaylists', fromJS(action.payload));
     case SET_SERVER_PLAYLISTS:
-      return setServerPlaylists(state, action.playlists);
+      return state.set('serverPlaylists', fromJS(action.payload));
+    case ADD_SERVER_PLAYLIST:
+      return addServerPlaylist(state, action.payload);
+    case SET_PLAYLIST_INDEX:
+      return state.set('playlistIndex', action.payload);
     case SET_CURRENT_PLAYLIST:
-      return state.set('currentPlaylist', action.playlistName);
+      return state.set('currentPlaylist', action.payload);
     default:
       return state;
   }

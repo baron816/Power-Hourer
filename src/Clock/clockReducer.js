@@ -17,7 +17,7 @@ function incrementTime(state) {
 export default function clockReducer(state = initialState, action) {
   switch (action.type) {
     case CHANGE_PLAY_STATE:
-      return state.set('playing', action.bool);
+      return state.set('playing', action.payload);
     case INCREMENT_TIME:
       return incrementTime(state);
     case RESET_CLOCK:

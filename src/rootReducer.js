@@ -19,8 +19,8 @@ const initialState = fromJS({
   serverId: ''
 });
 
-function setToken(state, token, id) {
-  return state.withMutations(map => map.set('accessToken', token).set('googleId', id));
+function setToken(state, {token, googleId}) {
+  return state.withMutations(map => map.set('accessToken', token).set('googleId', googleId));
 }
 
 function flipState(key) {
@@ -35,15 +35,15 @@ const flipNext = flipState('callNext');
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_ACCESS_TOKEN:
-      return setToken(state, action.token, action.googleId);
+      return setToken(state, action.payload);
     case CHANGE_VIDEO_LENGTH:
-      return state.set('videoLength', Number(action.length));
+      return state.set('videoLength', Number(action.payload));
     case FLIP_NEXT:
       return flipNext(state);
     case SHOW_MODAL:
       return flipModal(state);
     case SET_SERVER_ID:
-      return state.set('serverId', action.id);
+      return state.set('serverId', action.payload);
     default:
       return state;
   }

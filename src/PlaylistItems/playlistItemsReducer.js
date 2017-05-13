@@ -1,7 +1,7 @@
 import { fromJS } from 'immutable';
 
 import {
-  GET_PLAYLIST_ITEMS,
+  SET_PLAYLIST_ITEMS,
   NEXT_VIDEO,
   GOTO_VIDEO,
   CHANGE_VIDEO_START
@@ -19,20 +19,20 @@ function incrementPlaylistIndex(state) {
   return state;
 }
 
-function changeVideoStart(state, index, time) {
+function changeVideoStart(state, {index, time}) {
   return state.updateIn(['playlistItems'], list => list.updateIn([Number(index)], map => map.set('startTime', Number(time))));
 }
 
 export default function playlistItemsReducer(state = initialState, action) {
   switch (action.type) {
-    case GET_PLAYLIST_ITEMS:
+    case SET_PLAYLIST_ITEMS:
       return state.set('playlistItems', fromJS(action.payload));
     case NEXT_VIDEO:
       return incrementPlaylistIndex(state);
     case GOTO_VIDEO:
-      return state.set('playlistItemsIndex', Number(action.index));
+      return state.set('playlistItemsIndex', Number(action.payload));
     case CHANGE_VIDEO_START:
-      return changeVideoStart(state, action.index, action.time);
+      return changeVideoStart(state, action.payload);
     default:
       return state;
   }
