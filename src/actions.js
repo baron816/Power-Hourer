@@ -1,171 +1,52 @@
-import {
-  SET_ACCESS_TOKEN,
-  FETCH_PLAYLISTS,
-  RESET_STATE,
-  FETCH_PLAYLIST_ITEMS,
-  NEXT_VIDEO,
-  GOTO_VIDEO,
-  CHANGE_PLAY_STATE,
-  RESET_CLOCK,
-  CHANGE_VIDEO_LENGTH,
-  FLIP_NEXT,
-  CHANGE_VIDEO_START,
-  SHOW_MODAL,
-  SET_PLAYLIST_INDEX,
-  START_TIME,
-  END_TIME,
-  FLIP_SHOW_DIALOG,
-  CHANGE_USERNAME,
-  CREATE_USER,
-  SAVE_PLAYLIST,
-  GET_SERVER_PLAYLISTS,
-  FETCH_SERVER_PLAYLIST_ITEMS,
-  SET_CURRENT_PLAYLIST
-} from './actionCreators';
+import { createAction } from 'redux-actions';
+
+import * as ac from './actionCreators';
 
 //Redux
-export function setAccessToken(token, googleId) {
-  return {
-    type: SET_ACCESS_TOKEN,
-    token,
-    googleId
-  };
-}
+//root
+export const setAccessToken = createAction(ac.SET_ACCESS_TOKEN, (token, googleId) => ({token, googleId}));
+export const changeVideoLength = createAction(ac.CHANGE_VIDEO_LENGTH, length => length);
+export const flipNext = createAction(ac.FLIP_NEXT);
+export const invertModalState = createAction(ac.SHOW_MODAL);
+export const resetState = createAction(ac.RESET_STATE);
 
-export function resetState() {
-  return {
-    type: RESET_STATE
-  };
-}
+//playlistItems
+export const fetchPlaylistItemsFulfilled = createAction(ac.SET_PLAYLIST_ITEMS, items => items);
+export const nextVideo = createAction(ac.NEXT_VIDEO);
+export const goToVideo = createAction(ac.GOTO_VIDEO, index => index);
+export const changeVideoStart = createAction(ac.CHANGE_VIDEO_START, (index, time) => ({index, time}));
 
-export function nextVideo() {
-  return {
-    type: NEXT_VIDEO
-  };
-}
 
-export function goToVideo(index) {
-  return {
-    type: GOTO_VIDEO,
-    index
-  };
-}
+//playlists
+export const setCurrentPlaylist = createAction(ac.SET_CURRENT_PLAYLIST, playlistName => playlistName);
+export const setPlaylistIndex = createAction(ac.SET_PLAYLIST_INDEX, index => index);
+export const fetchYoutubePlaylistFulfilled = createAction(ac.SET_YOUTUBE_PLAYLISTS, playlists => playlists);
+export const fetchServerPlaylistsFulfilled = createAction(ac.SET_SERVER_PLAYLISTS, playlists => playlists);
+export const createServerPlaylistFulfilled = createAction(ac.ADD_SERVER_PLAYLIST, playlist => playlist);
 
-export function changePlayState(bool) {
-  return {
-      type: CHANGE_PLAY_STATE,
-      bool
-  };
-}
+//clock
+export const resetClock = createAction(ac.RESET_CLOCK);
+export const incrementTime = createAction(ac.INCREMENT_TIME);
+export const changePlayState = createAction(ac.CHANGE_PLAY_STATE, bool => bool);
 
-export function resetClock() {
-  return {
-    type: RESET_CLOCK
-  };
-}
-
-export function changeVideoLength(length) {
-  return {
-    type: CHANGE_VIDEO_LENGTH,
-    length
-  };
-}
-
-export function flipNext() {
-  return {
-   type: FLIP_NEXT
-  };
-}
-
-export function changeVideoStart(index, time) {
-  return {
-    type: CHANGE_VIDEO_START,
-    index,
-    time
-  };
-}
-
-export function invertModalState() {
-  return {
-    type: SHOW_MODAL
-  };
-}
-
-export function setPlaylistIndex(index) {
-  return {
-    type: SET_PLAYLIST_INDEX,
-    index
-  };
-}
-
-export function showCreateDialog() {
-  return {
-    type: FLIP_SHOW_DIALOG
-  };
-}
-
-export function setUsername(username) {
-  return {
-    type: CHANGE_USERNAME,
-    username
-  };
-}
-
-export function setCurrentPlaylist(playlistName) {
-  return {
-    type: SET_CURRENT_PLAYLIST,
-    playlistName
-  };
-}
+//createUser
+export const showCreateDialog = createAction(ac.FLIP_SHOW_DIALOG);
+export const setUsername = createAction(ac.CHANGE_USERNAME, username => username);
+export const setServerId = createAction(ac.SET_SERVER_ID, id => id);
 
 //Epic
-export function fetchPlaylists() {
-  return {
-    type: FETCH_PLAYLISTS
-  };
-}
+//playlists
+export const fetchYoutubePlaylists = createAction(ac.FETCH_YOUTUBE_PLAYLISTS);
+export const fetchServerPlaylists = createAction(ac.FETCH_SERVER_PLAYLISTS);
+export const savePlaylist = createAction(ac.SAVE_PLAYLIST);
 
-export function fetchYoutubePlaylistItems(playlistId) {
-  return {
-    type: FETCH_PLAYLIST_ITEMS,
-    playlistId,
-    items: []
-  };
-}
+//playlistItems
+export const fetchYoutubePlaylistItems = createAction(ac.FETCH_YOUTUBE_PLAYLIST_ITEMS, (playlistId, items = [], nextPageToken) => ({playlistId, items, nextPageToken}));
+export const fetchServerPlaylistItems = createAction(ac.FETCH_SERVER_PLAYLIST_ITEMS, _id => _id);
 
-export function startTime() {
-  return {
-    type: START_TIME
-  };
-}
+//clock
+export const startTime = createAction(ac.START_TIME);
+export const endTime = createAction(ac.END_TIME);
 
-export function endTime() {
-  return {
-    type: END_TIME
-  };
-}
-
-export function createUser() {
-  return {
-    type: CREATE_USER
-  };
-}
-
-export function savePlaylist() {
-  return {
-    type: SAVE_PLAYLIST
-  };
-}
-
-export function getServerPlaylists() {
-  return {
-    type: GET_SERVER_PLAYLISTS
-  };
-}
-
-export function fetchServerPlaylistItems(_id) {
-  return {
-    type: FETCH_SERVER_PLAYLIST_ITEMS,
-    _id
-  };
-}
+//createUser
+export const createUser = createAction(ac.CREATE_USER);
