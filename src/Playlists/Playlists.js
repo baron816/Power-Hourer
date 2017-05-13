@@ -40,7 +40,7 @@ function Playlists({name, playlists, getPlaylist, idKey, playlistIndex, currentP
 function mapStateToProps(state) {
   return {
     playlistIndex: state.getIn(['playlists', 'playlistIndex']),
-    currentPlaylist: state.getIn(['playlists', 'playlistIndex'])
+    currentPlaylist: state.getIn(['playlists', 'currentPlaylist'])
   };
 }
 
