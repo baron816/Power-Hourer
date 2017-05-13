@@ -32,9 +32,9 @@ function Video(props) {
     } = c.props;
 
     return (
-        <div>
+        <div id="video">
           {playlistItems.size &&
-            <Card id="video">
+            <Card >
               <CardHeader
                 title={getVideo().get('title')}
                 subtitle={<Clock />}
