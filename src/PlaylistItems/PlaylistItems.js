@@ -19,8 +19,8 @@ function PlaylistItems(props) {
     const {playlistItems, setVideoIndex, playlistIndex} = c.props;
 
     return (
-      <Paper zDepth={3}>
-        <List id="playlistItems">
+      <Paper zDepth={3} id='playlistPaper'>
+        <List id='playlistItems'>
           {playlistItems.map(function (item, index) {
             return(
               <ListItem key={item.get('videoId')}

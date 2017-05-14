@@ -1,5 +1,9 @@
 #playlistItems {
-  flex: 4;
   height: 600px;
   overflow: scroll;
+}
+
+#playlistPaper {
+  flex: 4;
+  margin-top: 5px;
 }
