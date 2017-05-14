@@ -4,6 +4,7 @@ import YouTube from 'react-youtube';
 import { Card, CardHeader, CardMedia, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import { List } from 'immutable';
 
 import Clock from '../Clock/Clock';
 import { changePlayState, nextVideo, flipNext, changeVideoLength, changeVideoStart } from '../actions';
@@ -21,7 +22,7 @@ function Video(props) {
   c.render = function () {
     const {
       playlistItemsIndex,
-      playlistItems,
+      video,
       handleVideoEnd,
       changePlay,
       callNext,
@@ -32,53 +33,51 @@ function Video(props) {
     } = c.props;
 
     return (
-        <div id="video">
-          {playlistItems.size &&
-            <Card >
-              <CardHeader
-                title={getVideo().get('title')}
-                subtitle={<Clock />}
-                actAsExpander={true}
-                showExpandableButton={true}/>
-              <CardMedia>
-                <YouTube
-                  videoId={videoId()}
-                  opts={{
-                    playerVars: {
-                      start: videoStart(),
-                      end: videoEnd(),
-                      autoplay: autoplay(),
-                      rel: 0
-                    }
-                  }}
-                  onEnd={handleVideoEnd(callNext)}
-                  onPlay={changePlay(true)}
-                  onPause={changePlay(false)}
-                  onError={handleVideoError}
-                  id="main-video"
-                  onReady={(vid) => c.setState({video: vid})}
-                />
-              </CardMedia>
-              <CardText expandable={true}>
-                <TextField
-                  floatingLabelText="Videos length"
-                  value={String(videoLength)}
-                  onChange={changeVidLen}
-                  type="number"
-                  step={10}
-                /> <br/>
-                <TextField
-                  floatingLabelText="Video start time"
-                  value={String(getVideo().get('startTime') || 30)}
-                  onChange={changeVidStart(playlistItemsIndex)}
-                  type="number"
-                  step={10}
-                /><br/>
-                <RaisedButton onClick={startNow} label="Set video start to now" primary={true}/>
-              </CardText>
-            </Card>
-          }
-        </div>
+      <Card id="video">
+        <CardHeader
+          title={video.get('title')}
+          subtitle={<Clock />}
+          actAsExpander={true}
+          showExpandableButton={true}/>
+        <CardMedia style={{justifyContent: 'center', display: 'flex'}}>
+          <YouTube
+            videoId={video.get('videoId')}
+            opts={{
+              height: '420',
+              width: '670',
+              playerVars: {
+                start: videoStart(),
+                end: videoEnd(),
+                autoplay: autoplay(),
+                rel: 0
+              }
+            }}
+            onEnd={handleVideoEnd(callNext)}
+            onPlay={changePlay(true)}
+            onPause={changePlay(false)}
+            onError={handleVideoError}
+            id="main-video"
+            onReady={(vid) => c.setState({video: vid})}
+          />
+        </CardMedia>
+        <CardText expandable={true}>
+          <TextField
+            floatingLabelText="Videos length"
+            value={String(videoLength)}
+            onChange={changeVidLen}
+            type="number"
+            step={10}
+          /> <br/>
+          <TextField
+            floatingLabelText="Video start time"
+            value={String(videoStart)}
+            onChange={changeVidStart(playlistItemsIndex)}
+            type="number"
+            step={10}
+          /><br/>
+          <RaisedButton onClick={startNow} label="Set video start to now" primary={true}/>
+        </CardText>
+      </Card>
     );
   };
 
@@ -88,17 +87,8 @@ function Video(props) {
     changeStartToNow(playlistItemsIndex, Math.floor(time));
   }
 
-  function videoId() {
-    return getVideo().get('videoId');
-  }
-
-  function getVideo() {
-    const { playlistItems, playlistItemsIndex } = c.props;
-    return playlistItems.get(playlistItemsIndex);
-  }
-
   function videoStart() {
-    return getVideo().get('startTime') || 30;
+    return c.props.video.get('startTime', 30);
   }
 
   function autoplay() {
@@ -113,9 +103,12 @@ function Video(props) {
 }
 
 function mapStateToProps(state) {
+  const playlistItemsIndex = state.getIn(['playlistItems', 'playlistItemsIndex']);
+  const playlistItems = state.getIn(['playlistItems', 'playlistItems']);
+  const video = playlistItems.get(playlistItemsIndex, List());
   return {
-    playlistItemsIndex: state.getIn(['playlistItems', 'playlistItemsIndex']),
-    playlistItems: state.getIn(['playlistItems', 'playlistItems']),
+    playlistItemsIndex,
+    video,
     callNext: state.getIn(['root', 'callNext']),
     videoLength: state.getIn(['root', 'videoLength']),
     showModal: state.getIn(['root', 'showModal'])
