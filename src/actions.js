@@ -9,7 +9,8 @@ export const changeVideoLength = createAction(ac.CHANGE_VIDEO_LENGTH, length => 
 export const flipNext = createAction(ac.FLIP_NEXT);
 export const invertModalState = createAction(ac.SHOW_MODAL);
 export const resetState = createAction(ac.RESET_STATE);
-export const restCallNext = createAction(ac.RESET_CALL_NEXT);
+export const resetCallNext = createAction(ac.RESET_CALL_NEXT);
+export const setServerId = createAction(ac.SET_SERVER_ID, id => id);
 
 //playlistItems
 export const fetchPlaylistItemsFulfilled = createAction(ac.SET_PLAYLIST_ITEMS, items => items);
@@ -33,7 +34,6 @@ export const changePlayState = createAction(ac.CHANGE_PLAY_STATE, bool => bool);
 //createUser
 export const showCreateDialog = createAction(ac.FLIP_SHOW_DIALOG);
 export const setUsername = createAction(ac.CHANGE_USERNAME, username => username);
-export const setServerId = createAction(ac.SET_SERVER_ID, id => id);
 
 //Epic
 //playlists
