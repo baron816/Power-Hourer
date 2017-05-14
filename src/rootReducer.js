@@ -5,7 +5,8 @@ import {
   CHANGE_VIDEO_LENGTH,
   FLIP_NEXT,
   SHOW_MODAL,
-  SET_SERVER_ID
+  SET_SERVER_ID,
+  RESET_CALL_NEXT
 } from './actionCreators';
 
 // import { REHYDRATE } from 'redux-persist/constants';
@@ -44,6 +45,8 @@ export default function reducer(state = initialState, action) {
       return flipModal(state);
     case SET_SERVER_ID:
       return state.set('serverId', action.payload);
+    case RESET_CALL_NEXT:
+      return state.set('callNext', true);
     default:
       return state;
   }

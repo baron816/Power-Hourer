@@ -12,6 +12,7 @@ function ServerPlaylists({playlists}) {
       name='Saved'
       idKey='_id'
       playlistName='serverPlaylists'
+      style={{marginRight: '5px'}}
       fetchPlaylistItems={fetchServerPlaylistItems}
     />
   );

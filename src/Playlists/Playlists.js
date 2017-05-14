@@ -12,12 +12,13 @@ import {
   resetClock,
   invertModalState,
   setPlaylistIndex,
-  setCurrentPlaylist
+  setCurrentPlaylist,
+  restCallNext
 } from '../actions';
 
-function Playlists({name, playlists, getPlaylist, idKey, playlistIndex, currentPlaylist}) {
+function Playlists({name, playlists, getPlaylist, idKey, playlistIndex, currentPlaylist, style}) {
   return (
-    <Paper zDepth={3} id="playlists">
+    <Paper zDepth={3} id="playlists" style={style}>
       <List>
         <Subheader inset={true}>{name} Playlists</Subheader>
         {playlists.map(function (list, index) {
@@ -55,6 +56,7 @@ function mapDispatchToProps(dispatch, {fetchPlaylistItems, playlistName}) {
         dispatch(resetClock());
         dispatch(setCurrentPlaylist(playlistName));
       }
+      dispatch(restCallNext());
       dispatch(invertModalState());
     };
   }

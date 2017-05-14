@@ -5,6 +5,7 @@ export const CHANGE_VIDEO_LENGTH = 'CHANGE_VIDEO_LENGTH';
 export const FLIP_NEXT = 'FLIP_NEXT';
 export const SHOW_MODAL = 'SHOW_MODAL';
 export const RESET_STATE = 'RESET_STATE';
+export const RESET_CALL_NEXT = 'RESET_CALL_NEXT';
 
 //playlistItems
 export const SET_PLAYLIST_ITEMS = 'SET_PLAYLIST_ITEMS';
