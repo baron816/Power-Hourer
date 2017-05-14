@@ -1,25 +1,21 @@
-import { fromJS, Map, List } from 'immutable';
+import { fromJS, Map } from 'immutable';
 
 import {
-  CHANGE_PLAY_STATE,
-  INCREMENT_TIME,
-  RESET_CLOCK,
-} from '../actionCreators';
+  resetClock,
+  incrementTime,
+  changePlayState
+} from '../actions';
 
 import reducer from './clockReducer';
 
 describe('clockReducer', function () {
-  describe('CHANGE_PLAY_STATE', function () {
+  describe('#changePlayState', function () {
     it('switches the play state', function () {
       const initialState = fromJS({
         playing: true
       });
 
-      const action = {
-        type: CHANGE_PLAY_STATE,
-        bool: false
-      };
-
+      const action = changePlayState(false);
 
       const nextState = reducer(initialState, action);
 
@@ -29,14 +25,14 @@ describe('clockReducer', function () {
     });
   });
 
-  describe('INCREMENT_TIME', function () {
+  describe('#incrementTime', function () {
     it('increments the clock when playing', function () {
       const initialState = fromJS({
         playing: true,
         time: 8
       });
 
-      const nextState = reducer(initialState, { type: INCREMENT_TIME });
+      const nextState = reducer(initialState, incrementTime());
 
       expect(nextState).toEqual(Map({
         playing: true,
@@ -50,7 +46,7 @@ describe('clockReducer', function () {
         time: 8
       });
 
-      const nextState = reducer(initialState, { type: INCREMENT_TIME });
+      const nextState = reducer(initialState, incrementTime());
 
       expect(nextState).toEqual(Map({
         playing: false,
@@ -59,13 +55,13 @@ describe('clockReducer', function () {
     });
   });
 
-  describe('RESET_CLOCK', function () {
+  describe('#resetClock', function () {
     it('resets the clock time to zero', function () {
       const initialState = fromJS({
         time: 45
       });
 
-      const nextState = reducer(initialState, { type: RESET_CLOCK });
+      const nextState = reducer(initialState, resetClock());
 
       expect(nextState).toEqual(Map({
         time: 0

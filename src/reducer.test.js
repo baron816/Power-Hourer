@@ -1,27 +1,25 @@
 import { fromJS, Map } from 'immutable';
 
 import {
-  SET_ACCESS_TOKEN,
-  CHANGE_VIDEO_LENGTH,
-  FLIP_NEXT,
-  SHOW_MODAL
-} from './actionCreators';
+  setAccessToken,
+  changeVideoLength,
+  flipNext,
+  invertModalState,
+  resetCallNext,
+  setServerId
+} from './actions';
 
 import reducer from './rootReducer';
 
 describe('reducer', function () {
-  describe('SET_ACCESS_TOKEN', function () {
+  describe('#setAccessToken', function () {
     const initialState = fromJS({
       accessToken: '',
       googleId: ''
     });
 
     it('sets the state with the token', function () {
-      const action = {
-        type: SET_ACCESS_TOKEN,
-        token: 'somelongstringherewithrandomchars',
-        googleId: 'mygoogleid'
-      };
+      const action = setAccessToken('somelongstringherewithrandomchars', 'mygoogleid');
 
       const nextState = reducer(initialState, action);
 
@@ -32,16 +30,13 @@ describe('reducer', function () {
     });
   });
 
-  describe('CHANGE_VIDEO_LENGTH', function () {
+  describe('#changeVideoLength', function () {
     it('sets the video length', function () {
       const initialState = fromJS({
         videoLength: 60
       });
 
-      const action = {
-        type: CHANGE_VIDEO_LENGTH,
-        length: 80
-      };
+      const action = changeVideoLength(80);
 
       const nextState = reducer(initialState, action);
 
@@ -51,13 +46,13 @@ describe('reducer', function () {
     });
   });
 
-  describe('FLIP_NEXT', function () {
+  describe('#flipNext', function () {
     it('reverses callNext', function () {
       const initialState = fromJS({
         callNext: false
       });
 
-      const nextState = reducer(initialState, { type: FLIP_NEXT });
+      const nextState = reducer(initialState, flipNext());
 
       expect(nextState).toEqual(Map({
         callNext: true
@@ -66,16 +61,58 @@ describe('reducer', function () {
   });
 
 
-  describe('SHOW_MODAL', function () {
+  describe('#showModal', function () {
     it('switches on and off', function () {
       const initialState = fromJS({
         showModal: false
       });
 
-      const nextState = reducer(initialState, { type: SHOW_MODAL });
+      const nextState = reducer(initialState, invertModalState());
 
       expect(nextState).toEqual(Map({
         showModal: true
+      }));
+    });
+  });
+
+  describe('#resetCallNext', function () {
+    it('switches callNext to true when false', function () {
+      const initialState = fromJS({
+        callNext: false
+      });
+
+      const nextState = reducer(initialState, resetCallNext());
+
+      expect(nextState).toEqual(Map({
+        callNext: true
+      }));
+    });
+
+    it('remains true if true', function () {
+      const initialState = fromJS({
+        callNext: true
+      });
+
+      const nextState = reducer(initialState, resetCallNext());
+
+      expect(nextState).toEqual(Map({
+        callNext: true
+      }));
+    });
+  });
+
+  describe('#setServerId', function () {
+    it('sets server user id', function () {
+      const initialState = fromJS({
+        serverId: ''
+      });
+
+      const action = setServerId('baueno2uni73h');
+
+      const nextState = reducer(initialState, action);
+
+      expect(nextState).toEqual(Map({
+        serverId: 'baueno2uni73h'
       }));
     });
   });

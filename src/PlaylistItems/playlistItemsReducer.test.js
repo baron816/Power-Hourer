@@ -2,19 +2,21 @@ import { fromJS, List, Map } from 'immutable';
 
 import reducer from './playlistItemsReducer';
 
-import { GET_PLAYLIST_ITEMS, NEXT_VIDEO, GOTO_VIDEO, CHANGE_VIDEO_START } from '../actionCreators';
+import {
+  fetchPlaylistItemsFulfilled,
+  nextVideo,
+  goToVideo,
+  changeVideoStart
+} from '../actions';
 
 describe('playlistItemsReducer', function () {
-  describe('GET_PLAYLIST_ITEMS', function () {
+  describe('#fetchPlaylistItemsFulfilled', function () {
     it('sets the playlistItems state when blank', function () {
       const initialState = fromJS({
         playlistItems: []
       });
 
-      const action = {
-        type: GET_PLAYLIST_ITEMS,
-        payload: [{id: 'asr3q212'}, {id: 'benoauhe2'}]
-      };
+      const action = fetchPlaylistItemsFulfilled([{id: 'asr3q212'}, {id: 'benoauhe2'}]);
 
       const nextState = reducer(initialState, action);
 
@@ -28,10 +30,7 @@ describe('playlistItemsReducer', function () {
         playlistItems: [{id: 'asr3q212'}, {id: 'benoauhe2'}]
       });
 
-      const action = {
-        type: GET_PLAYLIST_ITEMS,
-        payload: [{id: '2gdfgae'}, {id: 'eawoh29t'}, {id: '8t9ghs2'}]
-      };
+      const action = fetchPlaylistItemsFulfilled([{id: '2gdfgae'}, {id: 'eawoh29t'}, {id: '8t9ghs2'}]);
 
       const nextState = reducer(initialState, action);
 
@@ -41,16 +40,13 @@ describe('playlistItemsReducer', function () {
     });
   });
 
-  describe('GOTO_VIDEO', function () {
+  describe('#goToVideo', function () {
     it('goes to the selected video', function () {
       const initialState = fromJS({
         playlistItemsIndex: 0
       });
 
-      const action = {
-        type: GOTO_VIDEO,
-        index: 2
-      };
+      const action = goToVideo(2);
 
       const nextState = reducer(initialState, action);
 
@@ -60,18 +56,14 @@ describe('playlistItemsReducer', function () {
     });
   });
 
-  describe('NEXT_VIDEO', function () {
+  describe('#nextVideo', function () {
     it('goes to the next video', function () {
       const initialState = fromJS({
         playlistItemsIndex: 1,
         playlistItems: [{id: 'asdgew'}, {id: '32srfrg'}, {id: 'ydfbsbm2'}]
       });
 
-      const action = {
-        type: NEXT_VIDEO
-      };
-
-      const nextState = reducer(initialState, action);
+      const nextState = reducer(initialState, nextVideo());
 
       expect(nextState).toEqual(Map({
         playlistItemsIndex: 2,
@@ -85,11 +77,7 @@ describe('playlistItemsReducer', function () {
         playlistItems: [{id: 'asdgew'}, {id: '32srfrg'}, {id: 'ydfbsbm2'}]
       });
 
-      const action = {
-        type: NEXT_VIDEO
-      };
-
-      const nextState = reducer(initialState, action);
+      const nextState = reducer(initialState, nextVideo());
 
       expect(nextState).toEqual(Map({
         playlistItemsIndex: 2,
@@ -98,17 +86,13 @@ describe('playlistItemsReducer', function () {
     });
   });
 
-  describe('CHANGE_VIDEO_START', function () {
+  describe('#changeVideoStart', function () {
     it('sets the start time of a video at an index', function () {
       const initialState = fromJS({
         playlistItems: [{id: 'aegvae'}, {id: 'ibnaieubn'}, {id: 'vuiab3ta'}]
       });
 
-      const action = {
-        type: CHANGE_VIDEO_START,
-        index: 1,
-        time: 45
-      };
+      const action = changeVideoStart(1, 45);
 
       const nextState = reducer(initialState, action);
 

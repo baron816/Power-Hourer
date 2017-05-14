@@ -1,38 +1,39 @@
 import { fromJS, List, Map } from 'immutable';
 
 import reducer from './playlistsReducer';
-import { GET_PLAYLISTS, SET_PLAYLIST_INDEX, SET_SERVER_PLAYLISTS } from '../actionCreators';
 
-describe('playlistsReducer', function () {
-  describe('GET_PLAYLISTS', function () {
+import {
+  setCurrentPlaylist,
+  setPlaylistIndex,
+  fetchYoutubePlaylistFulfilled,
+  fetchServerPlaylistsFulfilled,
+  createServerPlaylistFulfilled
+} from '../actions';
+
+describe('#playlistsReducer', function () {
+  describe('#fetchYoutubePlaylistFulfilled', function () {
     const initialState = fromJS({
-      playlists: []
+      youtubePlaylists: [{name: 'Partytime'}]
     });
 
     it('sets the state with the playlists', function () {
-      const action = {
-        type: GET_PLAYLISTS,
-        payload: [{name: 'Cheezy-Tunez'}, {name: 'Hot Girl'}]
-      };
+      const action = fetchYoutubePlaylistFulfilled([{name: 'Cheezy-Tunez'}, {name: 'Hot Girl'}]);
 
       const nextState = reducer(initialState, action);
 
       expect(nextState).toEqual(Map({
-        playlists: List([Map({name: 'Cheezy-Tunez'}), Map({name: 'Hot Girl'})])
+        youtubePlaylists: List([Map({name: 'Cheezy-Tunez'}), Map({name: 'Hot Girl'})])
       }));
     });
   });
 
-  describe('SET_PLAYLIST_INDEX', function () {
+  describe('#setPlaylistIndex', function () {
     it('correctly sets the currentPlaylistName', function () {
       const initialState = fromJS({
         playlistIndex: 0
       });
 
-      const action = {
-        type: SET_PLAYLIST_INDEX,
-        index: 4
-      };
+      const action = setPlaylistIndex(4);
 
       const nextState = reducer(initialState, action);
 
@@ -42,21 +43,51 @@ describe('playlistsReducer', function () {
     });
   });
 
-  describe('SET_SERVER_PLAYLISTS', function () {
+  describe('#fetchServerPlaylistsFulfilled', function () {
     it('sets the state with playlists from the server', function () {
       const initialState = fromJS({
-        serverPlaylists: []
+        serverPlaylists: [{name: 'Partytime'}]
       });
 
-      const action = {
-        type: SET_SERVER_PLAYLISTS,
-        playlists: [{name: 'TSwift/Jason Durulo'}, {name: 'Jock Jams'}]
-      };
+      const action = fetchServerPlaylistsFulfilled([{name: 'TSwift/Jason Durulo'}, {name: 'Jock Jams'}]);
+
 
       const nextState = reducer(initialState, action);
 
       expect(nextState).toEqual(Map({
         serverPlaylists: List([Map({name: 'TSwift/Jason Durulo'}), Map({name: 'Jock Jams'})])
+      }));
+    });
+  });
+
+  describe('#createServerPlaylistFulfilled', function () {
+    it('adds a playlist to the list of server plalists', function () {
+      const initialState = fromJS({
+        serverPlaylists: [{name: 'Hot girl'}]
+      });
+
+      const action = createServerPlaylistFulfilled([{name: 'funfun'}]);
+
+      const nextState = reducer(initialState, action);
+
+      expect(nextState).toEqual(Map({
+        serverPlaylists: List([Map({name: 'Hot girl'}), Map({name: 'funfun'})])
+      }));
+    });
+  });
+
+  describe('#setCurrentPlaylist', function () {
+    it('sets the currentPlaylist', function () {
+      const initialState = fromJS({
+        currentPlaylist: ''
+      });
+
+      const action = setCurrentPlaylist('serverPlaylists');
+
+      const nextState = reducer(initialState, action);
+
+      expect(nextState).toEqual(Map({
+        currentPlaylist: 'serverPlaylists'
       }));
     });
   });

@@ -1,20 +1,20 @@
 import { fromJS } from 'immutable';
 
-import { CHANGE_USERNAME, FLIP_SHOW_DIALOG } from '../actionCreators';
+import {
+  showCreateDialog,
+  setUsername
+} from '../actions';
 
 import reducer from './createUserReducer';
 
 describe('createUserReducer', function () {
-  describe('CHANGE_USERNAME', function () {
+  describe('#setUsername', function () {
     it('sets the username', function () {
       const initialState = fromJS({
         username: ''
       });
 
-      const action = {
-        type: CHANGE_USERNAME,
-        username: 'baron'
-      };
+      const action = setUsername('baron');
 
       const nextState = reducer(initialState, action);
 
@@ -24,13 +24,13 @@ describe('createUserReducer', function () {
     });
   });
 
-  describe('FLIP_SHOW_DIALOG', function () {
+  describe('#showCreateDialog', function () {
     it('flips the create dialog', function () {
       const initialState = fromJS({
         showCreateDialog: false
       });
 
-      const nextState = reducer(initialState, {type: FLIP_SHOW_DIALOG});
+      const nextState = reducer(initialState, showCreateDialog());
 
       expect(nextState).toEqual(fromJS({
         showCreateDialog: true
