@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import { connect } from 'react-redux';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
@@ -9,7 +8,6 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import MusicNote from 'material-ui/svg-icons/image/music-note';
 
-import { persistor } from './store';
 import Login from './Login/Login';
 import ServerPlaylists from './Playlists/ServerPlaylists';
 import YouTubePlaylists from './Playlists/YouTubePlaylists';
@@ -26,7 +24,6 @@ import {
 function App({accessToken, logout, showCreateUser, serverId, getPlaylists}) {
 
   return (
-    <MuiThemeProvider>
       <div className="App">
         <AppBar
           title="Power Hourer"
@@ -43,7 +40,6 @@ function App({accessToken, logout, showCreateUser, serverId, getPlaylists}) {
         <CreateUser />
 
       </div>
-    </MuiThemeProvider>
   );
 
   function Logged() {
@@ -82,7 +78,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   function logout() {
-    persistor.purge();
     dispatch(resetState());
   }
 
