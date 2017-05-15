@@ -44,6 +44,7 @@ export const savePlaylist = createAction(ac.SAVE_PLAYLIST);
 //playlistItems
 export const fetchYoutubePlaylistItems = createAction(ac.FETCH_YOUTUBE_PLAYLIST_ITEMS, (playlistId, items = [], nextPageToken) => ({playlistId, items, nextPageToken}));
 export const fetchServerPlaylistItems = createAction(ac.FETCH_SERVER_PLAYLIST_ITEMS, _id => _id);
+export const changeServerVideoStart = createAction(ac.CHANGE_SERVER_VIDEO_START, time => time);
 
 //clock
 export const startTime = createAction(ac.START_TIME);
@@ -51,3 +52,5 @@ export const endTime = createAction(ac.END_TIME);
 
 //createUser
 export const createUser = createAction(ac.CREATE_USER);
+
+export const empty = createAction('EMPTY');

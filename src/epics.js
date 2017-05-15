@@ -20,7 +20,8 @@ import {
 
 import {
   fetchPlaylistItemsEpic,
-  fetchServerPlaylistItemsEpic
+  fetchServerPlaylistItemsEpic,
+  changeServerVideoStartEpic
 } from './PlaylistItems/playlistItemsEpics';
 
 export default combineEpics(
@@ -30,5 +31,6 @@ export default combineEpics(
   createUserEpic,
   savePlaylistEpic,
   getUserPlaylistsEpic,
-  fetchServerPlaylistItemsEpic
+  fetchServerPlaylistItemsEpic,
+  changeServerVideoStartEpic
 );

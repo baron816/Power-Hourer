@@ -5,7 +5,8 @@ import 'rxjs/add/operator/concat';
 
 import {
   FETCH_YOUTUBE_PLAYLIST_ITEMS,
-  FETCH_SERVER_PLAYLIST_ITEMS
+  FETCH_SERVER_PLAYLIST_ITEMS,
+  CHANGE_SERVER_VIDEO_START
 } from '../actionCreators';
 
 import {
@@ -13,7 +14,7 @@ import {
   YOUTUBE_URL,
   SERVER_URL,
 } from '../epics';
-import { fetchPlaylistItemsFulfilled } from '../actions';
+import { fetchPlaylistItemsFulfilled, empty } from '../actions';
 
 
 export function fetchPlaylistItemsEpic(action$, store) {
@@ -49,5 +50,21 @@ export function fetchServerPlaylistItemsEpic(action$) {
     .mergeMap(function ({payload}) {
       return ajax.getJSON(`${SERVER_URL}playlists/${payload}/playlistItems`)
         .map((items) => fetchPlaylistItemsFulfilled(items));
+    });
+}
+
+export function changeServerVideoStartEpic(action$, store) {
+  return action$.ofType(CHANGE_SERVER_VIDEO_START)
+    .debounceTime(2000)
+    .switchMap(function ({payload}) {
+      const state = store.getState();
+      const playlistItemsIndex = state.getIn(['playlistItems', 'playlistItemsIndex']);
+      const playlistItems = state.getIn(['playlistItems', 'playlistItems']);
+      const playlistItemId = playlistItems.get(playlistItemsIndex).get('_id');
+
+      const updateData = JSON.stringify({startTime: payload});
+
+      return ajax.put(`${SERVER_URL}playlistItems/${playlistItemId}`, updateData, {'Content-Type': 'application/json'})
+        .map(() => empty());
     });
 }

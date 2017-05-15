@@ -7,7 +7,7 @@ import TextField from 'material-ui/TextField';
 import { Map } from 'immutable';
 
 import Clock from '../Clock/Clock';
-import { changePlayState, nextVideo, flipNext, changeVideoLength, changeVideoStart } from '../actions';
+import { changePlayState, nextVideo, flipNext, changeVideoLength } from '../actions';
 import './Video.css';
 
 function Video({
@@ -131,23 +131,10 @@ function mapDispatchToProps(dispatch) {
     dispatch(changeVideoLength(event.target.value));
   }
 
-  function changeVidStart(index) {
-    return function (event) {
-      const time = event.target.value;
-      dispatch(changeVideoStart(index, time));
-    };
-  }
-
-  function changeStartToNow(index, time) {
-    dispatch(changeVideoStart(index, time));
-  }
-
   return {
     handleVideoEnd,
     handleVideoError,
     changeVidLen,
-    changeVidStart,
-    changeStartToNow,
     changePlay
   };
 }

@@ -12,7 +12,8 @@ import IconMenu from 'material-ui/IconMenu';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 import PlaylistItems from '../PlaylistItems/PlaylistItems';
-import Video from '../Video/Video';
+import ServerVideo from '../Video/ServerVideo';
+import YouTubeVideo from '../Video/YouTubeVideo';
 import { invertModalState, savePlaylist } from '../actions';
 
 import './VideoModal.css';
@@ -21,7 +22,8 @@ function VideoModal({
   showModal,
   invertModal,
   selectedPlaylist,
-  savePl
+  savePl,
+  currentPlaylistName
 }) {
   const actions = [
     <FlatButton
@@ -59,6 +61,17 @@ function VideoModal({
     );
   }
 
+  function Video() {
+    switch (currentPlaylistName) {
+      case 'youtubePlaylists':
+        return <YouTubeVideo />;
+      case 'serverPlaylists':
+        return <ServerVideo />;
+      default:
+        return null;
+    }
+  }
+
   function Settings() {
     return (
       <IconMenu
@@ -82,6 +95,7 @@ function mapStateToProps(state) {
   return {
     showModal: state.getIn(['root', 'showModal']),
     selectedPlaylist,
+    currentPlaylistName
   };
 }
 
