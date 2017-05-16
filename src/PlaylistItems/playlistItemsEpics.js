@@ -55,16 +55,19 @@ export function fetchServerPlaylistItemsEpic(action$) {
 
 export function changeServerVideoStartEpic(action$, store) {
   return action$.ofType(CHANGE_SERVER_VIDEO_START)
-    .debounceTime(2000)
+    .debounceTime(10000)
     .switchMap(function ({payload}) {
       const state = store.getState();
       const playlistItemsIndex = state.getIn(['playlistItems', 'playlistItemsIndex']);
       const playlistItems = state.getIn(['playlistItems', 'playlistItems']);
       const playlistItemId = playlistItems.get(playlistItemsIndex).get('_id');
+      const playlist = state.getIn(['playlists', 'serverPlaylists']);
+      const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
+      const playlistId = playlist.get(playlistIndex).get('_id');
 
       const updateData = JSON.stringify({startTime: payload});
 
-      return ajax.put(`${SERVER_URL}playlistItems/${playlistItemId}`, updateData, {'Content-Type': 'application/json'})
+      return ajax.put(`${SERVER_URL}playlists/${playlistId}/playlistItems/${playlistItemId}`, updateData, {'Content-Type': 'application/json'})
         .map(() => empty());
     });
 }
