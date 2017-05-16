@@ -8,10 +8,16 @@ import {
   FETCH_SERVER_PLAYLISTS,
   SAVE_PLAYLIST,
   SET_SERVER_ID,
+  DELETE_PLAYLIST
 } from '../actionCreators';
 
 import { YOUTUBE_URL, SERVER_URL } from '../epics';
-import { fetchYoutubePlaylistFulfilled, fetchServerPlaylistsFulfilled, createServerPlaylistFulfilled } from '../actions';
+import {
+  fetchYoutubePlaylistFulfilled,
+  fetchServerPlaylistsFulfilled,
+  createServerPlaylistFulfilled,
+  deleteServerPlaylistFulfilled
+} from '../actions';
 
 export function fetchPlaylistsEpic(action$, store) {
   return action$.ofType(FETCH_YOUTUBE_PLAYLISTS)
@@ -67,5 +73,13 @@ export function getUserPlaylistsEpic(action$, store) {
           type: SET_SERVER_ID,
           id: ''
         }));
+    });
+}
+
+export function deleteServerPlaylistEpic(action$) {
+  return action$.ofType(DELETE_PLAYLIST)
+    .mergeMap(function ({payload}) {
+      return ajax.delete(`${SERVER_URL}playlists/${payload.id}`)
+        .map(() => deleteServerPlaylistFulfilled(payload.index));
     });
 }

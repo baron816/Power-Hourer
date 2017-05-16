@@ -5,7 +5,8 @@ import {
   SET_YOUTUBE_PLAYLISTS,
   ADD_SERVER_PLAYLIST,
   SET_PLAYLIST_INDEX,
-  SET_CURRENT_PLAYLIST
+  SET_CURRENT_PLAYLIST,
+  REMOVE_SERVER_PLAYLIST
 } from '../actionCreators';
 
 const initialState = fromJS({
@@ -14,6 +15,10 @@ const initialState = fromJS({
     playlistIndex: 0,
     currentPlaylist: ''
 });
+
+function removeServerItem(state, index) {
+  return state.updateIn(['serverPlaylists'], (list) => list.delete(index));
+}
 
 function playlistSetter(type) {
   return function (state, playlists) {
@@ -35,6 +40,8 @@ export default function playlistsReducer(state = initialState, action) {
       return state.set('playlistIndex', action.payload);
     case SET_CURRENT_PLAYLIST:
       return state.set('currentPlaylist', action.payload);
+    case REMOVE_SERVER_PLAYLIST:
+      return removeServerItem(state, action.payload);
     default:
       return state;
   }

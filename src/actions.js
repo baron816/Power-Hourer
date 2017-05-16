@@ -25,6 +25,7 @@ export const setPlaylistIndex = createAction(ac.SET_PLAYLIST_INDEX, index => ind
 export const fetchYoutubePlaylistFulfilled = createAction(ac.SET_YOUTUBE_PLAYLISTS, playlists => playlists);
 export const fetchServerPlaylistsFulfilled = createAction(ac.SET_SERVER_PLAYLISTS, playlists => playlists);
 export const createServerPlaylistFulfilled = createAction(ac.ADD_SERVER_PLAYLIST, playlist => playlist);
+export const deleteServerPlaylistFulfilled = createAction(ac.REMOVE_SERVER_PLAYLIST, index => index);
 
 //clock
 export const resetClock = createAction(ac.RESET_CLOCK);
@@ -40,6 +41,7 @@ export const setUsername = createAction(ac.CHANGE_USERNAME, username => username
 export const fetchYoutubePlaylists = createAction(ac.FETCH_YOUTUBE_PLAYLISTS);
 export const fetchServerPlaylists = createAction(ac.FETCH_SERVER_PLAYLISTS);
 export const savePlaylist = createAction(ac.SAVE_PLAYLIST);
+export const deletePlaylist = createAction(ac.DELETE_PLAYLIST, (id, index) => ({id, index}));
 
 //playlistItems
 export const fetchYoutubePlaylistItems = createAction(ac.FETCH_YOUTUBE_PLAYLIST_ITEMS, (playlistId, items = [], nextPageToken) => ({playlistId, items, nextPageToken}));
