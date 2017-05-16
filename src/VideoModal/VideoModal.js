@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { List, Map } from 'immutable';
 
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -12,8 +11,6 @@ import IconMenu from 'material-ui/IconMenu';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 import PlaylistItems from '../PlaylistItems/PlaylistItems';
-import ServerVideo from '../Video/ServerVideo';
-import YouTubeVideo from '../Video/YouTubeVideo';
 import { invertModalState, savePlaylist } from '../actions';
 
 import './VideoModal.css';
@@ -23,7 +20,8 @@ function VideoModal({
   invertModal,
   selectedPlaylist,
   savePl,
-  currentPlaylistName
+  settingsItems,
+  Video
 }) {
   const actions = [
     <FlatButton
@@ -44,7 +42,7 @@ function VideoModal({
           iconElementLeft={<CloseButton />}
           iconElementRight={<Settings />}
         />
-        <div id="modalContent">
+        <div id='modalContent'>
           <PlaylistItems />
           <Video />
         </div>
@@ -61,17 +59,6 @@ function VideoModal({
     );
   }
 
-  function Video() {
-    switch (currentPlaylistName) {
-      case 'youtubePlaylists':
-        return <YouTubeVideo />;
-      case 'serverPlaylists':
-        return <ServerVideo />;
-      default:
-        return null;
-    }
-  }
-
   function Settings() {
     return (
       <IconMenu
@@ -81,21 +68,16 @@ function VideoModal({
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
-        <MenuItem primaryText="Save Playlist" onClick={savePl} />
+        {settingsItems}
+        <MenuItem primaryText="Save Playlist Copy" onClick={savePl} />
       </IconMenu>
     );
   }
 }
 
 function mapStateToProps(state) {
-  const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
-  const currentPlaylistName = state.getIn(['playlists', 'currentPlaylist']);
-  const playlist = state.getIn(['playlists', currentPlaylistName], List());
-  const selectedPlaylist = playlist.get(playlistIndex, Map());
   return {
     showModal: state.getIn(['root', 'showModal']),
-    selectedPlaylist,
-    currentPlaylistName
   };
 }
 
@@ -110,7 +92,7 @@ function mapDispatchToProps(dispatch) {
 
   return {
     invertModal,
-    savePl
+    savePl,
   };
 }
 

@@ -11,7 +11,8 @@ import MusicNote from 'material-ui/svg-icons/image/music-note';
 import Login from './Login/Login';
 import ServerPlaylists from './Playlists/ServerPlaylists';
 import YouTubePlaylists from './Playlists/YouTubePlaylists';
-import VideoModal from './VideoModal/VideoModal';
+import ServerModal from './VideoModal/ServerModal';
+import YouTubeModal from './VideoModal/YouTubeModal';
 import CreateUser from './CreateUser/CreateUser';
 
 import {
@@ -21,7 +22,14 @@ import {
   fetchServerPlaylists
 } from './actions';
 
-function App({accessToken, logout, showCreateUser, serverId, getPlaylists}) {
+function App({
+  accessToken,
+  logout,
+  showCreateUser,
+  serverId,
+  getPlaylists,
+  currentPlaylistName
+}) {
 
   return (
       <div className="App">
@@ -58,6 +66,17 @@ function App({accessToken, logout, showCreateUser, serverId, getPlaylists}) {
     );
   }
 
+  function VideoModal() {
+    switch (currentPlaylistName) {
+      case 'youtubePlaylists':
+        return <YouTubeModal />;
+      case 'serverPlaylists':
+        return <ServerModal />;
+      default:
+        return null;
+    }
+  }
+
   function CreateItem() {
     return (
       <div>
@@ -72,7 +91,8 @@ function App({accessToken, logout, showCreateUser, serverId, getPlaylists}) {
 function mapStateToProps(state) {
   return {
     accessToken: state.getIn(['root', 'accessToken']),
-    serverId: state.getIn(['root', 'serverId'])
+    serverId: state.getIn(['root', 'serverId']),
+    currentPlaylistName: state.getIn(['playlists', 'currentPlaylist'])
   };
 }
 
