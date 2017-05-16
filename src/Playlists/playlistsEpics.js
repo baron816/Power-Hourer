@@ -11,19 +11,21 @@ import {
   DELETE_PLAYLIST
 } from '../actionCreators';
 
-import { YOUTUBE_URL, SERVER_URL } from '../epics';
+import { YOUTUBE_API_KEY, YOUTUBE_URL, SERVER_URL } from '../epics';
 import {
   fetchYoutubePlaylistFulfilled,
   fetchServerPlaylistsFulfilled,
   createServerPlaylistFulfilled,
-  deleteServerPlaylistFulfilled
+  deleteServerPlaylistFulfilled,
+  setServerId,
+  invertModalState
 } from '../actions';
 
 export function fetchPlaylistsEpic(action$, store) {
   return action$.ofType(FETCH_YOUTUBE_PLAYLISTS)
   .mergeMap(function () {
     const accessToken = store.getState().getIn(['root', 'accessToken']);
-    return ajax.getJSON(YOUTUBE_URL + 'playlists?part=snippet&mine=true', {
+    return ajax.getJSON(`${YOUTUBE_URL}playlists?part=snippet&mine=true&key=${YOUTUBE_API_KEY}`, {
       Authorization: 'Bearer ' + accessToken
     })
     .map(function ({items}) {
@@ -68,7 +70,8 @@ export function getUserPlaylistsEpic(action$, store) {
       const state = store.getState();
       const googleId = state.getIn(['root', 'googleId']);
       return ajax.getJSON(`${SERVER_URL}users/${googleId}/playlists`)
-        .map((response) => fetchServerPlaylistsFulfilled(response))
+        .mergeMap(({playlists, _id}) => [fetchServerPlaylistsFulfilled(playlists),
+          setServerId(_id)])
         .catch(() => Observable.of({
           type: SET_SERVER_ID,
           id: ''
@@ -80,6 +83,6 @@ export function deleteServerPlaylistEpic(action$) {
   return action$.ofType(DELETE_PLAYLIST)
     .mergeMap(function ({payload}) {
       return ajax.delete(`${SERVER_URL}playlists/${payload.id}`)
-        .map(() => deleteServerPlaylistFulfilled(payload.index));
+        .mergeMap(() => [invertModalState(), deleteServerPlaylistFulfilled(payload.index)]);
     });
 }
