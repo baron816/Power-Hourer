@@ -17,14 +17,12 @@ function ServerModal(props) {
 
 function mapStateToProps(state) {
   const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
-  const currentPlaylistName = state.getIn(['playlists', 'currentPlaylist']);
-  const playlist = state.getIn(['playlists', currentPlaylistName], List());
+  const playlist = state.getIn(['playlists', 'serverPlaylists'], List());
   const selectedPlaylist = playlist.get(playlistIndex, Map());
   const playlistId = selectedPlaylist.get('_id');
 
   return {
     selectedPlaylist,
-    currentPlaylistName,
     playlistId,
     playlistIndex
   };

@@ -12,8 +12,7 @@ function YouTubeModal(props) {
 
 function mapStateToProps(state) {
   const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
-  const currentPlaylistName = state.getIn(['playlists', 'currentPlaylist']);
-  const playlist = state.getIn(['playlists', currentPlaylistName], List());
+  const playlist = state.getIn(['playlists', 'youtubePlaylists'], List());
   const selectedPlaylist = playlist.get(playlistIndex, Map());
   return {
     selectedPlaylist
