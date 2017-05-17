@@ -55,7 +55,7 @@ export function fetchServerPlaylistItemsEpic(action$) {
 
 export function changeServerVideoStartEpic(action$, store) {
   return action$.ofType(CHANGE_SERVER_VIDEO_START)
-    .debounceTime(10000)
+    .debounceTime(5000)
     .switchMap(function ({payload}) {
       const state = store.getState();
       const playlistItemsIndex = state.getIn(['playlistItems', 'playlistItemsIndex']);
