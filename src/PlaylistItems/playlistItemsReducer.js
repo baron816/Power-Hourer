@@ -4,7 +4,8 @@ import {
   SET_PLAYLIST_ITEMS,
   NEXT_VIDEO,
   GOTO_VIDEO,
-  CHANGE_VIDEO_START
+  CHANGE_VIDEO_START,
+  MOVE_ITEM
 } from '../actionCreators';
 
 const initialState = fromJS({
@@ -23,6 +24,11 @@ function changeVideoStart(state, {index, time}) {
   return state.updateIn(['playlistItems'], list => list.updateIn([Number(index)], map => map.set('startTime', Number(time))));
 }
 
+function moveItem(state, {oldIndex, newIndex}) {
+  const oldItem = state.get('playlistItems').get(oldIndex);
+  return state.updateIn(['playlistItems'], list => list.delete(oldIndex).insert(newIndex, oldItem));
+}
+
 export default function playlistItemsReducer(state = initialState, action) {
   switch (action.type) {
     case SET_PLAYLIST_ITEMS:
@@ -33,6 +39,8 @@ export default function playlistItemsReducer(state = initialState, action) {
       return state.set('playlistItemsIndex', Number(action.payload));
     case CHANGE_VIDEO_START:
       return changeVideoStart(state, action.payload);
+    case MOVE_ITEM:
+      return moveItem(state, action.payload);
     default:
       return state;
   }

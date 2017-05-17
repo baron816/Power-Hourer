@@ -4,40 +4,57 @@ import { List, ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import Paper from 'material-ui/Paper';
 import './PlaylistItems.css';
+import Reorder from 'material-ui/svg-icons/action/reorder';
 
-import { goToVideo, resetClock, changePlayState } from '../actions';
+import {
+  SortableContainer,
+  SortableElement,
+  SortableHandle
+} from 'react-sortable-hoc';
 
-function PlaylistItems(props) {
-  const c = new React.Component(props);
+import {
+  goToVideo,
+  resetClock,
+  changePlayState,
+  moveItem
+} from '../actions';
 
-  c.componentDidUpdate = function () {
-    const {playlistIndex} = c.props;
-    playlistIndex && document.querySelector('#playlistItems').children[playlistIndex].scrollIntoView();
-  };
+function PlaylistItems({setVideoIndex, playlistIndex, playlistItems, movePlItem}) {
 
-  c.render = function () {
-    const {playlistItems, setVideoIndex, playlistIndex} = c.props;
+  const DragHandle = SortableHandle(() => <Reorder className='reorder'/>);
 
+  const SortableItem = SortableElement(({value}) => {
+    const {item, index} = value;
     return (
-      <Paper zDepth={3} id='playlistPaper'>
-        <List id='playlistItems'>
-          {playlistItems.map(function (item, index) {
-            return(
-              <ListItem key={item.get('videoId')}
-                style={playlistIndex === index ? { backgroundColor: 'rgba(0,0,0, 0.2)' } : {}}
-                data-index={index}
-                onClick={setVideoIndex(index)}
-                leftAvatar={<Avatar src={item.get('thumbnail')} />}>
-                {item.get('title')}
-              </ListItem>
-            );
-          })}
-        </List>
-      </Paper>
+      <ListItem key={item.get('videoId')}
+        style={playlistIndex === index ? { backgroundColor: 'rgba(0,0,0, 0.2)' } : {}}
+        data-index={index}
+        onClick={setVideoIndex(index)}
+        leftAvatar={<Avatar src={item.get('thumbnail')} />}
+        rightIcon={<DragHandle />}
+      >
+        {item.get('title')}
+      </ListItem>
     );
-  };
+  });
 
-  return c;
+  const SortableList = SortableContainer(() => {
+    return (
+      <List id='playlistItems'>
+      {playlistItems.map(function (item, index) {
+        return(
+          <SortableItem value={{item, index}} index={index} key={`item-${item.get('videoId')}`} />
+        );
+      })}
+      </List>
+    );
+  });
+
+  return (
+    <Paper zDepth={3} id='playlistPaper'>
+      <SortableList useDragHandle={true} onSortEnd={movePlItem} />
+    </Paper>
+  );
 }
 
 function mapStateToProps(state) {
@@ -58,8 +75,13 @@ function mapDispatchToProps(dispatch) {
     };
   }
 
+  function movePlItem(oldIndex, newIndex) {
+    dispatch(moveItem(oldIndex, newIndex));
+  }
+
   return {
-    setVideoIndex
+    setVideoIndex,
+    movePlItem
   };
 }
 

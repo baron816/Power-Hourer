@@ -7,3 +7,12 @@
   flex: 4;
   margin-top: 5px;
 }
+
+.reorder {
+  display: block;
+  fill: rgb(117, 117, 117) !important;
+  position: absolute;
+  top: 4px;
+  margin: 12px;
+  right: 4px;
+}

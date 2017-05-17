@@ -6,7 +6,8 @@ import {
   fetchPlaylistItemsFulfilled,
   nextVideo,
   goToVideo,
-  changeVideoStart
+  changeVideoStart,
+  moveItem
 } from '../actions';
 
 describe('playlistItemsReducer', function () {
@@ -98,6 +99,22 @@ describe('playlistItemsReducer', function () {
 
       expect(nextState).toEqual(Map({
         playlistItems: List([Map({id: 'aegvae'}), Map({id: 'ibnaieubn', startTime: 45}), Map({id: 'vuiab3ta'})])
+      }));
+    });
+  });
+
+  describe('#moveItem', function () {
+    it('move in item in playlistItems', function () {
+      const initialState = fromJS({
+        playlistItems: [{id: 'aveavaeva'}, {id: 'eajvno2i'}, {id: 'b902an'}, {id: 'veiano2in'}]
+      });
+
+      const action = moveItem({oldIndex: 3, newIndex: 1});
+
+      const nextState = reducer(initialState, action);
+
+      expect(nextState).toEqual(Map({
+        playlistItems: List([Map({id: 'aveavaeva'}), Map({id: 'veiano2in'}), Map({id: 'eajvno2i'}), Map({id: 'b902an'})])
       }));
     });
   });

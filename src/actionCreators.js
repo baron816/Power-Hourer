@@ -12,6 +12,7 @@ export const SET_PLAYLIST_ITEMS = 'SET_PLAYLIST_ITEMS';
 export const NEXT_VIDEO = 'NEXT_VIDEO';
 export const GOTO_VIDEO = 'GOTO_VIDEO';
 export const CHANGE_VIDEO_START = 'CHANGE_VIDEO_START';
+export const MOVE_ITEM = 'MOVE_ITEM';
 
 //clock
 export const RESET_CLOCK = 'RESET_CLOCK';
