@@ -21,7 +21,8 @@ function VideoModal({
   selectedPlaylist,
   savePl,
   settingsItems,
-  Video
+  Video,
+  movePlItem
 }) {
   const actions = [
     <FlatButton
@@ -43,7 +44,7 @@ function VideoModal({
           iconElementRight={<Settings />}
         />
         <div id='modalContent'>
-          <PlaylistItems />
+          <PlaylistItems moveItem={movePlItem}/>
           <Video />
         </div>
       </Dialog>

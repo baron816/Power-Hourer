@@ -5,6 +5,10 @@ import { Map, List } from 'immutable';
 import YouTubeVideo from '../Video/YouTubeVideo';
 import VideoModal from './VideoModal';
 
+import {
+  moveItem
+} from '../actions';
+
 function YouTubeModal(props) {
 
   return <VideoModal Video={YouTubeVideo} {...props} />;
@@ -19,4 +23,14 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(YouTubeModal);
+function mapDispatchToProps(dispatch) {
+  function movePlItem(indexes) {
+    dispatch(moveItem(indexes));
+  }
+
+  return {
+    movePlItem
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(YouTubeModal);

@@ -16,7 +16,6 @@ import {
   goToVideo,
   resetClock,
   changePlayState,
-  moveItem
 } from '../actions';
 
 function PlaylistItems(props) {
@@ -55,10 +54,10 @@ function PlaylistItems(props) {
 
 
   c.render = function () {
-    const {movePlItem} = c.props;
+    const {moveItem} = c.props;
     return (
       <Paper zDepth={3} id='playlistPaper'>
-        <SortableList useDragHandle={true} onSortEnd={movePlItem} />
+        <SortableList useDragHandle={true} onSortEnd={moveItem} />
       </Paper>
     );
   };
@@ -84,13 +83,10 @@ function mapDispatchToProps(dispatch) {
     };
   }
 
-  function movePlItem(oldIndex, newIndex) {
-    dispatch(moveItem(oldIndex, newIndex));
-  }
+
 
   return {
-    setVideoIndex,
-    movePlItem
+    setVideoIndex
   };
 }
 

@@ -43,6 +43,7 @@ export const fetchYoutubePlaylists = createAction(ac.FETCH_YOUTUBE_PLAYLISTS);
 export const fetchServerPlaylists = createAction(ac.FETCH_SERVER_PLAYLISTS);
 export const savePlaylist = createAction(ac.SAVE_PLAYLIST);
 export const deletePlaylist = createAction(ac.DELETE_PLAYLIST, (id, index) => ({id, index}));
+export const moveServerItem = createAction(ac.MOVE_SERVER_ITEM, payload => payload);
 
 //playlistItems
 export const fetchYoutubePlaylistItems = createAction(ac.FETCH_YOUTUBE_PLAYLIST_ITEMS, (playlistId, items = [], nextPageToken) => ({playlistId, items, nextPageToken}));

@@ -6,7 +6,8 @@ import 'rxjs/add/operator/concat';
 import {
   FETCH_YOUTUBE_PLAYLIST_ITEMS,
   FETCH_SERVER_PLAYLIST_ITEMS,
-  CHANGE_SERVER_VIDEO_START
+  CHANGE_SERVER_VIDEO_START,
+  MOVE_SERVER_ITEM
 } from '../actionCreators';
 
 import {
@@ -68,6 +69,20 @@ export function changeServerVideoStartEpic(action$, store) {
       const updateData = JSON.stringify({startTime: payload});
 
       return ajax.put(`${SERVER_URL}playlists/${playlistId}/playlistItems/${playlistItemId}`, updateData, {'Content-Type': 'application/json'})
+        .map(() => empty());
+    });
+}
+
+export function moveItemEpic(action$, store) {
+  return action$.ofType(MOVE_SERVER_ITEM)
+    .mergeMap(function ({payload}) {
+      const state = store.getState();
+      const playlist = state.getIn(['playlists', 'serverPlaylists']);
+      const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
+      const playlistId = playlist.get(playlistIndex).get('_id');
+
+
+      return ajax.put(`${SERVER_URL}playlists/${playlistId}/moveItem`, payload, {'Content-Type': 'application/json'})
         .map(() => empty());
     });
 }

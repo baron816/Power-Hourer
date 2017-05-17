@@ -5,7 +5,11 @@ import { Map, List } from 'immutable';
 
 import ServerVideo from '../Video/ServerVideo';
 import VideoModal from './VideoModal';
-import { deletePlaylist } from '../actions';
+import {
+  deletePlaylist,
+  moveItem,
+  moveServerItem
+ } from '../actions';
 
 function ServerModal(props) {
   const settingsItems = [
@@ -35,8 +39,14 @@ function mapDispatchToProps(dispatch) {
     };
   }
 
+  function movePlItem(indexes) {
+    dispatch(moveItem(indexes));
+    dispatch(moveServerItem(indexes));
+  }
+
   return {
-    deletePl
+    deletePl,
+    movePlItem
   };
 }
 
