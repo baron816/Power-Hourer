@@ -25,8 +25,19 @@ function changeVideoStart(state, {index, time}) {
 }
 
 function moveItem(state, {oldIndex, newIndex}) {
+  const playlistItemsIndex = state.get('playlistItemsIndex');
   const oldItem = state.get('playlistItems').get(oldIndex);
-  return state.updateIn(['playlistItems'], list => list.delete(oldIndex).insert(newIndex, oldItem));
+  return state.withMutations((ctx) => {
+    if (oldIndex > playlistItemsIndex && newIndex < playlistItemsIndex) {
+      ctx.set('playlistItemsIndex', playlistItemsIndex + 1);
+    } else if (oldIndex < playlistItemsIndex && newIndex > playlistItemsIndex) {
+      ctx.set('playlistItemsIndex', playlistItemsIndex - 1);
+    } else if (oldIndex === playlistItemsIndex) {
+      ctx.set('playlistItemsIndex', newIndex);
+    }
+
+    ctx.updateIn(['playlistItems'], list => list.delete(oldIndex).insert(newIndex, oldItem));
+  });
 }
 
 export default function playlistItemsReducer(state = initialState, action) {

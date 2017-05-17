@@ -19,11 +19,13 @@ import {
   moveItem
 } from '../actions';
 
-function PlaylistItems({setVideoIndex, playlistIndex, playlistItems, movePlItem}) {
+function PlaylistItems(props) {
+  const c = new React.Component(props);
 
   const DragHandle = SortableHandle(() => <Reorder className='reorder'/>);
 
   const SortableItem = SortableElement(({value}) => {
+    const {setVideoIndex, playlistIndex} = c.props;
     const {item, index} = value;
     return (
       <ListItem key={item.get('videoId')}
@@ -39,6 +41,7 @@ function PlaylistItems({setVideoIndex, playlistIndex, playlistItems, movePlItem}
   });
 
   const SortableList = SortableContainer(() => {
+    const {playlistItems} = c.props;
     return (
       <List id='playlistItems'>
       {playlistItems.map(function (item, index) {
@@ -50,11 +53,17 @@ function PlaylistItems({setVideoIndex, playlistIndex, playlistItems, movePlItem}
     );
   });
 
-  return (
-    <Paper zDepth={3} id='playlistPaper'>
-      <SortableList useDragHandle={true} onSortEnd={movePlItem} />
-    </Paper>
-  );
+
+  c.render = function () {
+    const {movePlItem} = c.props;
+    return (
+      <Paper zDepth={3} id='playlistPaper'>
+        <SortableList useDragHandle={true} onSortEnd={movePlItem} />
+      </Paper>
+    );
+  };
+
+  return c;
 }
 
 function mapStateToProps(state) {

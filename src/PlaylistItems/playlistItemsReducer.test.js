@@ -104,18 +104,53 @@ describe('playlistItemsReducer', function () {
   });
 
   describe('#moveItem', function () {
-    it('move in item in playlistItems', function () {
-      const initialState = fromJS({
-        playlistItems: [{id: 'aveavaeva'}, {id: 'eajvno2i'}, {id: 'b902an'}, {id: 'veiano2in'}]
-      });
+    const initialState = fromJS({
+      playlistItems: [{id: 'aveavaeva'}, {id: 'eajvno2i'}, {id: 'b902an'}, {id: 'veiano2in'}],
+      playlistItemsIndex: 2
+    });
 
-      const action = moveItem({oldIndex: 3, newIndex: 1});
+    it('moves item in playlistItems and doesnt change the playlist index', function () {
+      const action = moveItem({oldIndex: 1, newIndex: 0});
 
       const nextState = reducer(initialState, action);
 
-      expect(nextState).toEqual(Map({
-        playlistItems: List([Map({id: 'aveavaeva'}), Map({id: 'veiano2in'}), Map({id: 'eajvno2i'}), Map({id: 'b902an'})])
+      expect(nextState).toEqual(fromJS({
+        playlistItems: [{id: 'eajvno2i'}, {id: 'aveavaeva'}, {id: 'b902an'}, {id: 'veiano2in'}],
+        playlistItemsIndex: 2
       }));
+    });
+
+    it('moves item to before current index and increases index', function () {
+      const action = moveItem({oldIndex: 3, newIndex: 0});
+
+      const nextState = reducer(initialState, action);
+
+      expect(nextState).toEqual(fromJS({
+        playlistItems: [{id: 'veiano2in'}, {id: 'aveavaeva'}, {id: 'eajvno2i'}, {id: 'b902an'}],
+        playlistItemsIndex: 3
+      }));
+    });
+
+    it('moves item to after current index and decrease index', function () {
+      const action = moveItem({oldIndex: 0, newIndex: 3});
+
+      const nextState = reducer(initialState, action);
+
+      expect(nextState).toEqual(fromJS({
+        playlistItems: [{id: 'eajvno2i'}, {id: 'b902an'}, {id: 'veiano2in'}, {id: 'aveavaeva'}],
+        playlistItemsIndex: 1
+      }));
+
+      it('moves current item and adjusts index to be same', function () {
+        const action = moveItem({oldIndex: 2, newIndex: 0});
+
+        const nextState = reducer(initialState, action);
+
+        expect(nextState).toEqual(fromJS({
+          playlistItems: [{id: 'b902an'}, {id: 'aveavaeva'}, {id: 'eajvno2i'}, {id: 'veiano2in'}],
+          playlistItemsIndex: 0
+        }));
+      });
     });
   });
 });
