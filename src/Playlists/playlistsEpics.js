@@ -8,7 +8,8 @@ import {
   FETCH_SERVER_PLAYLISTS,
   SAVE_PLAYLIST,
   SET_SERVER_ID,
-  DELETE_PLAYLIST
+  DELETE_PLAYLIST,
+  UPDATE_PLAYLIST
 } from '../actionCreators';
 
 import { YOUTUBE_API_KEY, YOUTUBE_URL, SERVER_URL } from '../epics';
@@ -18,7 +19,8 @@ import {
   createServerPlaylistFulfilled,
   deleteServerPlaylistFulfilled,
   setServerId,
-  invertModalState
+  invertModalState,
+  updatePlaylistFulfilled
 } from '../actions';
 
 export function fetchPlaylistsEpic(action$, store) {
@@ -84,5 +86,13 @@ export function deleteServerPlaylistEpic(action$) {
     .mergeMap(function ({payload}) {
       return ajax.delete(`${SERVER_URL}playlists/${payload.id}`)
         .mergeMap(() => [invertModalState(), deleteServerPlaylistFulfilled(payload.index)]);
+    });
+}
+
+export function updatePlaylistEpic(action$) {
+  return action$.ofType(UPDATE_PLAYLIST)
+    .mergeMap(function ({payload}) {
+      return ajax.put(`${SERVER_URL}playlists/${payload.id}`, JSON.stringify(payload.updateData), {'Content-Type': 'application/json'})
+        .map(({response}) => updatePlaylistFulfilled(response));
     });
 }

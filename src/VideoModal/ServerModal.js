@@ -8,15 +8,23 @@ import VideoModal from './VideoModal';
 import {
   deletePlaylist,
   moveItem,
-  moveServerItem
+  moveServerItem,
+  updatePlaylist
  } from '../actions';
 
 function ServerModal(props) {
   const settingsItems = [
+    <ExposureItem key='exposure' />,
     <MenuItem primaryText='Delete Playlist' onClick={props.deletePl(props.playlistId, props.playlistIndex)} key='delete'/>
   ];
 
   return <VideoModal Video={ServerVideo} settingsItems={settingsItems} {...props} />;
+
+  function ExposureItem() {
+    const {playlistExposed, changeExposure, playlistId} = props;
+
+    return playlistExposed ? <MenuItem primaryText='Make Playlist Private' onClick={changeExposure(playlistId, playlistExposed)} /> : <MenuItem primaryText='Make Playlist Public' onClick={changeExposure(playlistId, playlistExposed)} />;
+  }
 }
 
 function mapStateToProps(state) {
@@ -24,11 +32,13 @@ function mapStateToProps(state) {
   const playlist = state.getIn(['playlists', 'serverPlaylists'], List());
   const selectedPlaylist = playlist.get(playlistIndex, Map());
   const playlistId = selectedPlaylist.get('_id');
+  const playlistExposed = selectedPlaylist.get('exposed');
 
   return {
     selectedPlaylist,
     playlistId,
-    playlistIndex
+    playlistIndex,
+    playlistExposed
   };
 }
 
@@ -44,9 +54,16 @@ function mapDispatchToProps(dispatch) {
     dispatch(moveServerItem(indexes));
   }
 
+  function changeExposure(id, exposure) {
+    return function () {
+      dispatch(updatePlaylist(id, {exposed: !exposure}));
+    };
+  }
+
   return {
     deletePl,
-    movePlItem
+    movePlItem,
+    changeExposure
   };
 }
 
