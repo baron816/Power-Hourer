@@ -10,7 +10,7 @@ const initialState = fromJS({
 export default function createUserReducer(state = initialState, action) {
   switch (action.type) {
     case FLIP_SHOW_DIALOG:
-      return state.set('showCreateDialog', !state.get('showCreateDialog'));
+      return state.update('showCreateDialog', bool => !bool);
     case CHANGE_USERNAME:
       return state.set('username', action.payload);
     default:

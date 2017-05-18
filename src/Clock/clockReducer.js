@@ -9,7 +9,7 @@ const initialState = fromJS({
 
 function incrementTime(state) {
   if (state.get('playing')) {
-    return state.set('time', state.get('time') + 1);
+    return state.update('time', time => time + 1);
   }
   return state;
 }

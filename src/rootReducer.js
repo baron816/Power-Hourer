@@ -26,7 +26,7 @@ function setToken(state, {token, googleId}) {
 
 function flipState(key) {
   return function (state) {
-    return state.set(key, !state.get(key));
+    return state.update(key, bool => !bool);
   };
 }
 

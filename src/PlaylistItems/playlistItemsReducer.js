@@ -15,7 +15,7 @@ const initialState = fromJS({
 
 function incrementPlaylistIndex(state) {
   if (state.get('playlistItemsIndex') < state.get('playlistItems').size - 1) {
-    return state.set('playlistItemsIndex', state.get('playlistItemsIndex') + 1);
+    return state.update('playlistItemsIndex', index => index + 1);
   }
   return state;
 }
