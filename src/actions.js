@@ -47,6 +47,7 @@ export const deletePlaylist = createAction(ac.DELETE_PLAYLIST, (id, index) => ({
 export const moveServerItem = createAction(ac.MOVE_SERVER_ITEM, payload => payload);
 export const updatePlaylist = createAction(ac.UPDATE_PLAYLIST, (id, updateData) => ({id, updateData}));
 
+
 //playlistItems
 export const fetchYoutubePlaylistItems = createAction(ac.FETCH_YOUTUBE_PLAYLIST_ITEMS, (playlistId, items = [], nextPageToken) => ({playlistId, items, nextPageToken}));
 export const fetchServerPlaylistItems = createAction(ac.FETCH_SERVER_PLAYLIST_ITEMS, _id => _id);
@@ -57,6 +58,6 @@ export const startTime = createAction(ac.START_TIME);
 export const endTime = createAction(ac.END_TIME);
 
 //createUser
-export const createUser = createAction(ac.CREATE_USER);
+export const loginUser = createAction(ac.LOGIN_USER, googleId => googleId);
 
 export const empty = createAction('EMPTY');

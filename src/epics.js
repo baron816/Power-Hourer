@@ -14,7 +14,7 @@ import {
 
 import {
   createUserEpic,
-} from './CreateUser/createUserEpics';
+} from './Login/loginEpics';
 
 import {
   startTimeEpic,

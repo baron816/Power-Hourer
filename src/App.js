@@ -13,11 +13,9 @@ import ServerPlaylists from './Playlists/ServerPlaylists';
 import YouTubePlaylists from './Playlists/YouTubePlaylists';
 import ServerModal from './VideoModal/ServerModal';
 import YouTubeModal from './VideoModal/YouTubeModal';
-import CreateUser from './CreateUser/CreateUser';
 
 import {
   resetState,
-  showCreateDialog,
   fetchYoutubePlaylists,
   fetchServerPlaylists
 } from './actions';
@@ -25,8 +23,6 @@ import {
 function App({
   accessToken,
   logout,
-  showCreateUser,
-  serverId,
   getPlaylists,
   currentPlaylistName
 }) {
@@ -45,8 +41,6 @@ function App({
         </div>
 
         <VideoModal />
-        <CreateUser />
-
       </div>
   );
 
@@ -59,7 +53,6 @@ function App({
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
-        <CreateItem />
         <MenuItem onClick={getPlaylists} primaryText="Reload Playlists" />
         <MenuItem onClick={logout} primaryText="Logout" />
       </IconMenu>
@@ -76,16 +69,6 @@ function App({
         return null;
     }
   }
-
-  function CreateItem() {
-    return (
-      <div>
-        {!serverId.length &&
-          <MenuItem onClick={showCreateUser} primaryText="Create Account" />
-        }
-      </div>
-    );
-  }
 }
 
 function mapStateToProps(state) {
@@ -101,10 +84,6 @@ function mapDispatchToProps(dispatch) {
     dispatch(resetState());
   }
 
-  function showCreateUser() {
-    dispatch(showCreateDialog());
-  }
-
   function getPlaylists() {
     dispatch(fetchYoutubePlaylists());
     dispatch(fetchServerPlaylists());
@@ -112,7 +91,6 @@ function mapDispatchToProps(dispatch) {
 
   return {
     logout,
-    showCreateUser,
     getPlaylists
   };
 }

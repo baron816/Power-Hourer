@@ -4,7 +4,6 @@ import root from './rootReducer';
 import playlistItems from './PlaylistItems/playlistItemsReducer';
 import playlists from './Playlists/playlistsReducer';
 import clock from './Clock/clockReducer';
-import createUser from './CreateUser/createUserReducer';
 import { RESET_STATE } from './actionCreators';
 
 const appReducer = combineReducers({
@@ -12,7 +11,6 @@ const appReducer = combineReducers({
   playlistItems,
   playlists,
   clock,
-  createUser
 });
 
 export default function reducers(state, action) {

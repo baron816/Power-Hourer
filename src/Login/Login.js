@@ -1,7 +1,7 @@
 import React from 'react';
 import GoogleLogin from 'react-google-login';
 import { connect } from 'react-redux';
-import { setAccessToken, fetchYoutubePlaylists, fetchServerPlaylists } from '../actions';
+import { setAccessToken, fetchYoutubePlaylists, loginUser } from '../actions';
 
 function Login({signIn}) {
   return (
@@ -24,7 +24,7 @@ function mapDispatchToProps(dispatch) {
   function signIn({accessToken, googleId}) {
     dispatch(setAccessToken(accessToken, googleId));
     dispatch(fetchYoutubePlaylists());
-    dispatch(fetchServerPlaylists());
+    dispatch(loginUser(googleId));
   }
 
   return {

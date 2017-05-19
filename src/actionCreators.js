@@ -51,5 +51,5 @@ export const CHANGE_SERVER_VIDEO_START = 'CHANGE_SERVER_VIDEO_START';
 export const START_TIME = 'START_TIME';
 export const END_TIME = 'END_TIME';
 
-//createUser
-export const CREATE_USER = 'CREATE_USER';
+//login
+export const LOGIN_USER = 'LOGIN_USER';
