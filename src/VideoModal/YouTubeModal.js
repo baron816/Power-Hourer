@@ -1,17 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Map, List } from 'immutable';
+import MenuItem from 'material-ui/MenuItem';
 
 import YouTubeVideo from '../Video/YouTubeVideo';
 import VideoModal from './VideoModal';
 
 import {
-  moveItem
+  moveItem,
+  fetchYoutubePlaylistItems
 } from '../actions';
 
 function YouTubeModal(props) {
+  const settingsItems = [
+    <MenuItem primaryText='Reload Playlist' onClick={props.fetchPlaylist(props.selectedPlaylist)} key='reload'/>
+  ];
 
-  return <VideoModal Video={YouTubeVideo} {...props} />;
+  return <VideoModal Video={YouTubeVideo} settingsItems={settingsItems} {...props} />;
 }
 
 function mapStateToProps(state) {
@@ -28,8 +33,15 @@ function mapDispatchToProps(dispatch) {
     dispatch(moveItem(indexes));
   }
 
+  function fetchPlaylist(selectedPlaylist) {
+    return function () {
+      dispatch(fetchYoutubePlaylistItems(selectedPlaylist.get('playlistId')));
+    };
+  }
+
   return {
-    movePlItem
+    movePlItem,
+    fetchPlaylist
   };
 }
 
