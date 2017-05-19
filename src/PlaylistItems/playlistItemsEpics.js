@@ -17,6 +17,7 @@ import {
   SERVER_URL,
 } from '../epics';
 import {
+  fetchYoutubePlaylistItems,
   fetchPlaylistItemsFulfilled,
   setError,
   empty
@@ -44,7 +45,7 @@ export function fetchPlaylistItemsEpic(action$, store) {
      .map(({items, nextPageToken}) => {
        const nextItems = payload.items.concat(items);
        if (nextPageToken) {
-         return store.dispatch({type: FETCH_YOUTUBE_PLAYLIST_ITEMS, payload: {playlistId: payload.playlistId, nextPageToken, items: nextItems}});
+         return store.dispatch(fetchYoutubePlaylistItems(payload.playlistId, nextItems, nextPageToken));
        }
        return fetchPlaylistItemsFulfilled(nextItems);
      })
