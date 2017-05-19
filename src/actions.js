@@ -12,6 +12,10 @@ export const resetState = createAction(ac.RESET_STATE);
 export const resetCallNext = createAction(ac.RESET_CALL_NEXT);
 export const setServerId = createAction(ac.SET_SERVER_ID, id => id);
 
+//error
+export const setError = createAction(ac.SET_ERROR_MESSAGE, message => message);
+export const hideError = createAction(ac.HIDE_ERROR);
+
 //playlistItems
 export const fetchPlaylistItemsFulfilled = createAction(ac.SET_PLAYLIST_ITEMS, items => items);
 export const nextVideo = createAction(ac.NEXT_VIDEO);

@@ -7,7 +7,6 @@ import {
   FETCH_YOUTUBE_PLAYLISTS,
   FETCH_SERVER_PLAYLISTS,
   SAVE_PLAYLIST,
-  SET_SERVER_ID,
   DELETE_PLAYLIST,
   UPDATE_PLAYLIST
 } from '../actionCreators';
@@ -20,7 +19,8 @@ import {
   deleteServerPlaylistFulfilled,
   setServerId,
   invertModalState,
-  updatePlaylistFulfilled
+  updatePlaylistFulfilled,
+  setError
 } from '../actions';
 
 export function fetchPlaylistsEpic(action$, store) {
@@ -39,7 +39,8 @@ export function fetchPlaylistsEpic(action$, store) {
         };
       });
     })
-    .map((items) => fetchYoutubePlaylistFulfilled(items));
+    .map((items) => fetchYoutubePlaylistFulfilled(items))
+    .catch(() => Observable.of(setError('No Playlists. Create one on Youtube')));
   });
 }
 
@@ -62,7 +63,8 @@ export function savePlaylistEpic(action$, store) {
         thumbnail: playlist.get('thumbnail')
       });
       return ajax.post(SERVER_URL + 'playlists', newPlaylist, {'Content-Type': 'application/json'})
-        .map(({response}) => createServerPlaylistFulfilled([response.playlist]));
+        .map(({response}) => createServerPlaylistFulfilled([response.playlist]))
+        .catch(() => Observable.of(setError('Playlist not saved')));
     });
 }
 
@@ -74,10 +76,7 @@ export function getUserPlaylistsEpic(action$, store) {
       return ajax.getJSON(`${SERVER_URL}users/${googleId}/playlists`)
         .mergeMap(({playlists, _id}) => [fetchServerPlaylistsFulfilled(playlists),
           setServerId(_id)])
-        .catch(() => Observable.of({
-          type: SET_SERVER_ID,
-          id: ''
-        }));
+        .catch(() => Observable.of(setServerId('')));
     });
 }
 
@@ -93,6 +92,7 @@ export function updatePlaylistEpic(action$) {
   return action$.ofType(UPDATE_PLAYLIST)
     .mergeMap(function ({payload}) {
       return ajax.put(`${SERVER_URL}playlists/${payload.id}`, JSON.stringify(payload.updateData), {'Content-Type': 'application/json'})
-        .map(({response}) => updatePlaylistFulfilled(response));
+        .map(({response}) => updatePlaylistFulfilled(response))
+        .catch(() => Observable.of(setError('Failed to update playlist')));
     });
 }

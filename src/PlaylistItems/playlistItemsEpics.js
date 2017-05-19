@@ -2,6 +2,7 @@ import { ajax } from 'rxjs/observable/dom/ajax';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/concat';
+import { Observable } from 'rxjs';
 
 import {
   FETCH_YOUTUBE_PLAYLIST_ITEMS,
@@ -15,7 +16,11 @@ import {
   YOUTUBE_URL,
   SERVER_URL,
 } from '../epics';
-import { fetchPlaylistItemsFulfilled, empty } from '../actions';
+import {
+  fetchPlaylistItemsFulfilled,
+  setError,
+  empty
+} from '../actions';
 
 
 export function fetchPlaylistItemsEpic(action$, store) {
@@ -42,7 +47,8 @@ export function fetchPlaylistItemsEpic(action$, store) {
          return store.dispatch({type: FETCH_YOUTUBE_PLAYLIST_ITEMS, payload: {playlistId: payload.playlistId, nextPageToken, items: nextItems}});
        }
        return fetchPlaylistItemsFulfilled(nextItems);
-     });
+     })
+     .catch(() => Observable.of(setError('Failed to get playlist')));
   });
 }
 
@@ -50,7 +56,8 @@ export function fetchServerPlaylistItemsEpic(action$) {
   return action$.ofType(FETCH_SERVER_PLAYLIST_ITEMS)
     .mergeMap(function ({payload}) {
       return ajax.getJSON(`${SERVER_URL}playlists/${payload}/playlistItems`)
-        .map((items) => fetchPlaylistItemsFulfilled(items));
+        .map((items) => fetchPlaylistItemsFulfilled(items))
+        .catch(() => Observable.of(setError('Failed to get playlist')));
     });
 }
 
@@ -69,7 +76,8 @@ export function changeServerVideoStartEpic(action$, store) {
       const updateData = JSON.stringify({startTime: payload});
 
       return ajax.put(`${SERVER_URL}playlists/${playlistId}/playlistItems/${playlistItemId}`, updateData, {'Content-Type': 'application/json'})
-        .map(() => empty());
+        .map(() => empty())
+        .catch(() => Observable.of(setError('Failed to set video start time')));
     });
 }
 
@@ -83,6 +91,7 @@ export function moveItemEpic(action$, store) {
 
 
       return ajax.put(`${SERVER_URL}playlists/${playlistId}/moveItem`, payload, {'Content-Type': 'application/json'})
-        .map(() => empty());
+        .map(() => empty())
+        .catch(() => Observable.of(setError('Failed to move video')));
     });
 }

@@ -12,13 +12,18 @@ import {
 
 import {
   fetchServerPlaylistsFulfilled,
-  setServerId
+  setServerId,
+  setError
  } from '../actions';
 
 export function createUserEpic(action$) {
   return action$.ofType(LOGIN_USER)
     .mergeMap(function ({payload: googleId}) {
       return ajax.post(SERVER_URL + 'users', JSON.stringify({googleId}), {'Content-Type': 'application/json'})
-        .mergeMap(({response}) => [setServerId(response._id), fetchServerPlaylistsFulfilled(response.playlists)]);
+        .mergeMap(({response}) => [setServerId(response._id), fetchServerPlaylistsFulfilled(response.playlists)])
+        .catch((error) => {
+          console.error(error);
+          return setError('Wrong');
+        })
     });
 }

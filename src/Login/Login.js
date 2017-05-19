@@ -1,7 +1,11 @@
 import React from 'react';
 import GoogleLogin from 'react-google-login';
 import { connect } from 'react-redux';
-import { setAccessToken, fetchYoutubePlaylists, loginUser } from '../actions';
+import {
+  setAccessToken,
+  fetchYoutubePlaylists,
+  loginUser
+} from '../actions';
 
 function Login({signIn}) {
   return (

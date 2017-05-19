@@ -4,6 +4,7 @@ import root from './rootReducer';
 import playlistItems from './PlaylistItems/playlistItemsReducer';
 import playlists from './Playlists/playlistsReducer';
 import clock from './Clock/clockReducer';
+import error from './ErrorBar/errorReducer';
 import { RESET_STATE } from './actionCreators';
 
 const appReducer = combineReducers({
@@ -11,6 +12,7 @@ const appReducer = combineReducers({
   playlistItems,
   playlists,
   clock,
+  error
 });
 
 export default function reducers(state, action) {

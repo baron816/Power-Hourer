@@ -13,6 +13,7 @@ import ServerPlaylists from './Playlists/ServerPlaylists';
 import YouTubePlaylists from './Playlists/YouTubePlaylists';
 import ServerModal from './VideoModal/ServerModal';
 import YouTubeModal from './VideoModal/YouTubeModal';
+import ErrorBar from './ErrorBar/ErrorBar';
 
 import {
   resetState,
@@ -41,6 +42,7 @@ function App({
         </div>
 
         <VideoModal />
+        <ErrorBar />
       </div>
   );
 

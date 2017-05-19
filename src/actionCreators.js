@@ -7,6 +7,10 @@ export const SHOW_MODAL = 'SHOW_MODAL';
 export const RESET_STATE = 'RESET_STATE';
 export const RESET_CALL_NEXT = 'RESET_CALL_NEXT';
 
+//error
+export const SET_ERROR_MESSAGE = 'SET_ERROR_MESSAGE';
+export const HIDE_ERROR = 'HIDE_ERROR';
+
 //playlistItems
 export const SET_PLAYLIST_ITEMS = 'SET_PLAYLIST_ITEMS';
 export const NEXT_VIDEO = 'NEXT_VIDEO';
