@@ -5,7 +5,8 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import { persistStore } from 'redux-persist-immutable';
 import CircularProgress from 'material-ui/CircularProgress';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { deepOrange500, indigo500 } from 'material-ui/styles/colors';
 
 import App from './App';
 import store from './store';
@@ -15,6 +16,13 @@ injectTapEventPlugin();
 
 function AppProvider() {
   const c = new React.Component();
+
+  const muiTheme = getMuiTheme({
+    fontFamily: 'Roboto, sans-serif',
+    palette: {
+      primary1Color: indigo500,
+    }
+  });
 
   c.state = {
     rehyrdrated: false
@@ -29,7 +37,7 @@ function AppProvider() {
   c.render =  function () {
     return (
       <Provider store={store}>
-        <MuiThemeProvider>
+        <MuiThemeProvider muiTheme={muiTheme}>
           {c.state.rehyrdrated ?
             <App /> : <Spinner />
           }
