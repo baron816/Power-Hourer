@@ -34,10 +34,6 @@ export const resetClock = createAction(ac.RESET_CLOCK);
 export const incrementTime = createAction(ac.INCREMENT_TIME);
 export const changePlayState = createAction(ac.CHANGE_PLAY_STATE, bool => bool);
 
-//createUser
-export const showCreateDialog = createAction(ac.FLIP_SHOW_DIALOG);
-export const setUsername = createAction(ac.CHANGE_USERNAME, username => username);
-
 //Epic
 //playlists
 export const fetchYoutubePlaylists = createAction(ac.FETCH_YOUTUBE_PLAYLISTS);
@@ -57,7 +53,7 @@ export const changeServerVideoStart = createAction(ac.CHANGE_SERVER_VIDEO_START,
 export const startTime = createAction(ac.START_TIME);
 export const endTime = createAction(ac.END_TIME);
 
-//createUser
+//login
 export const loginUser = createAction(ac.LOGIN_USER, googleId => googleId);
 
 export const empty = createAction('EMPTY');

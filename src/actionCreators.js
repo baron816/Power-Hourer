@@ -19,9 +19,7 @@ export const RESET_CLOCK = 'RESET_CLOCK';
 export const INCREMENT_TIME = 'INCREMENT_TIME';
 export const CHANGE_PLAY_STATE = 'CHANGE_PLAY_STATE';
 
-//createUser
-export const FLIP_SHOW_DIALOG = 'FLIP_SHOW_DIALOG';
-export const CHANGE_USERNAME = 'CHANGE_USERNAME';
+//login
 export const SET_SERVER_ID = 'SET_SERVER_ID';
 
 //playlists
