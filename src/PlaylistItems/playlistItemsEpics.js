@@ -49,7 +49,7 @@ export function fetchPlaylistItemsEpic(action$, store) {
        }
        return fetchPlaylistItemsFulfilled(nextItems);
      })
-     .catch(() => Observable.of(setError('Failed to get playlist')));
+     .catch(() => Observable.of(setError('Error. Please remove any private or deleted videos from playlist.')));
   });
 }
 
