@@ -6,6 +6,7 @@ import {
   ADD_SERVER_PLAYLIST,
   SET_PLAYLIST_INDEX,
   SET_CURRENT_PLAYLIST,
+  SET_PUBLIC_PLAYLISTS,
   REMOVE_SERVER_PLAYLIST,
   UPDATE_PLAYLIST_FULFILLED
 } from '../actionCreators';
@@ -13,6 +14,9 @@ import {
 const initialState = fromJS({
     youtubePlaylists: [],
     serverPlaylists: [],
+    publicPlaylists: [],
+    publicPlaylistPage: 1,
+    publicPlaylistPageCount: 2,
     playlistIndex: 0,
     currentPlaylist: ''
 });
@@ -44,7 +48,17 @@ function playlistSetter(type) {
   };
 }
 
+const addPublicPlaylist = playlistSetter('publicPlaylists');
 const addServerPlaylist = playlistSetter('serverPlaylists');
+
+function setPublicPlaylists(state, {page, pages, playlists}) {
+  return state.withMutations((ctx) => {
+    ctx.set('publicPlaylistPage', page);
+    ctx.set('publicPlaylistPageCount', pages);
+
+    addPublicPlaylist(ctx, playlists);
+  });
+}
 
 export default function playlistsReducer(state = initialState, action) {
   switch (action.type) {
@@ -62,6 +76,8 @@ export default function playlistsReducer(state = initialState, action) {
       return removeServerItem(state, action.payload);
     case UPDATE_PLAYLIST_FULFILLED:
       return updatePlaylistFulfilled(state, action.payload);
+    case SET_PUBLIC_PLAYLISTS:
+      return setPublicPlaylists(state, action.payload);
     default:
       return state;
   }

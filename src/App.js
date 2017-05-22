@@ -11,6 +11,7 @@ import MusicNote from 'material-ui/svg-icons/image/music-note';
 import Login from './Login/Login';
 import ServerPlaylists from './Playlists/ServerPlaylists';
 import YouTubePlaylists from './Playlists/YouTubePlaylists';
+import PublicPlaylists from './Playlists/PublicPlaylists';
 import ServerModal from './VideoModal/ServerModal';
 import YouTubeModal from './VideoModal/YouTubeModal';
 import ErrorBar from './ErrorBar/ErrorBar';
@@ -37,6 +38,7 @@ function App({
         />
 
         <div id="playlistLists">
+          <PublicPlaylists />
           <ServerPlaylists />
           <YouTubePlaylists />
         </div>

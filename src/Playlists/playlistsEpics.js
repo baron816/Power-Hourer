@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import {
   FETCH_YOUTUBE_PLAYLISTS,
   FETCH_SERVER_PLAYLISTS,
+  FETCH_PUBLIC_PLAYLISTS,
   SAVE_PLAYLIST,
   DELETE_PLAYLIST,
   UPDATE_PLAYLIST
@@ -17,6 +18,7 @@ import {
   fetchServerPlaylistsFulfilled,
   createServerPlaylistFulfilled,
   deleteServerPlaylistFulfilled,
+  fetchPublicPlaylistsFulfilled,
   setServerId,
   invertModalState,
   updatePlaylistFulfilled,
@@ -94,5 +96,16 @@ export function updatePlaylistEpic(action$) {
       return ajax.put(`${SERVER_URL}playlists/${payload.id}`, JSON.stringify(payload.updateData), {'Content-Type': 'application/json'})
         .map(({response}) => updatePlaylistFulfilled(response))
         .catch(() => Observable.of(setError('Failed to update playlist')));
+    });
+}
+
+export function fetchPublicPlaylistsEpic(action$, store) {
+  return action$.ofType(FETCH_PUBLIC_PLAYLISTS)
+    .mergeMap(function () {
+      const state = store.getState();
+      const page = state.getIn(['playlists', 'publicPlaylistPage']);
+      return ajax.getJSON(`${SERVER_URL}playlists?page=${page}`)
+        .map(response => fetchPublicPlaylistsFulfilled(response))
+        .catch(() => Observable.of(setError('Faild to get playlists')));
     });
 }

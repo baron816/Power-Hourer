@@ -7,8 +7,9 @@ import {
   setPlaylistIndex,
   fetchYoutubePlaylistFulfilled,
   fetchServerPlaylistsFulfilled,
+  fetchPublicPlaylistsFulfilled,
   createServerPlaylistFulfilled,
-  updatePlaylistFulfilled
+  updatePlaylistFulfilled,
 } from '../actions';
 
 describe('#playlistsReducer', function () {
@@ -71,8 +72,8 @@ describe('#playlistsReducer', function () {
 
       const nextState = reducer(initialState, action);
 
-      expect(nextState).toEqual(Map({
-        serverPlaylists: List([Map({name: 'Hot girl'}), Map({name: 'funfun'})])
+      expect(nextState).toEqual(fromJS({
+        serverPlaylists: [{name: 'Hot girl'}, {name: 'funfun'}]
       }));
     });
   });
@@ -127,6 +128,30 @@ describe('#playlistsReducer', function () {
           {_id: 'avce2', title: 'JockJams'},
           {_id: 'ij1n', title: 'What not to wear'}
         ]
+      }));
+    });
+  });
+
+  describe('#fetchPublicPlaylistsFulfilled', function () {
+    it('concats the playlists and sets the page number', function () {
+      const initialState = fromJS({
+        publicPlaylistPage: 1,
+        publicPlaylistPageCount: 2,
+        publicPlaylists: [{id: '3aon3a'}]
+      });
+
+      const action = fetchPublicPlaylistsFulfilled({
+        playlists: [{id: 'an3ou2'}, {id: '290vj2na'}, {id: '3oinaou23'}],
+        page: 1,
+        pages: 1,
+      });
+
+      const nextState = reducer(initialState, action);
+
+      expect(nextState).toEqual(fromJS({
+        publicPlaylistPage: 1,
+        publicPlaylistPageCount: 1,
+        publicPlaylists: [{id: '3aon3a'}, {id: 'an3ou2'}, {id: '290vj2na'}, {id: '3oinaou23'}]
       }));
     });
   });

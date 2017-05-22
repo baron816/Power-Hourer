@@ -19,7 +19,7 @@ import {
 
 function Playlists({name, playlists, getPlaylist, idKey, playlistIndex, currentPlaylist, style}) {
   return (
-    <Paper zDepth={3} id="playlists" style={style}>
+    <Paper zDepth={3} className="playlists" style={style}>
       <List>
         <Subheader inset={true}>{name} Playlists</Subheader>
         {playlists.map(function (list, index) {
