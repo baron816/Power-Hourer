@@ -13,7 +13,8 @@ import {
   invertModalState,
   setPlaylistIndex,
   setCurrentPlaylist,
-  resetCallNext
+  resetCallNext,
+  setLoaded
 } from '../actions';
 
 function Playlists({name, playlists, getPlaylist, idKey, playlistIndex, currentPlaylist, style}) {
@@ -55,6 +56,8 @@ function mapDispatchToProps(dispatch, {fetchPlaylistItems, playlistName}) {
         dispatch(changePlayState(false));
         dispatch(resetClock());
         dispatch(setCurrentPlaylist(playlistName));
+      } else {
+        dispatch(setLoaded(true));
       }
       dispatch(resetCallNext());
       dispatch(invertModalState());

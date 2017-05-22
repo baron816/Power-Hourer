@@ -22,6 +22,7 @@ export const nextVideo = createAction(ac.NEXT_VIDEO);
 export const goToVideo = createAction(ac.GOTO_VIDEO, index => index);
 export const changeVideoStart = createAction(ac.CHANGE_VIDEO_START, (index, time) => ({index, time}));
 export const moveItem = createAction(ac.MOVE_ITEM, indexes => indexes);
+export const setLoaded = createAction(ac.SET_LOADED, bool => bool);
 
 
 //playlists

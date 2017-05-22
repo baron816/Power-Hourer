@@ -17,6 +17,7 @@ export const NEXT_VIDEO = 'NEXT_VIDEO';
 export const GOTO_VIDEO = 'GOTO_VIDEO';
 export const CHANGE_VIDEO_START = 'CHANGE_VIDEO_START';
 export const MOVE_ITEM = 'MOVE_ITEM';
+export const SET_LOADED = 'SET_LOADED';
 
 //clock
 export const RESET_CLOCK = 'RESET_CLOCK';

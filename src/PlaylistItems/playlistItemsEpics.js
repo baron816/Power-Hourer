@@ -20,11 +20,12 @@ import {
   fetchYoutubePlaylistItems,
   fetchPlaylistItemsFulfilled,
   setError,
+  setLoaded,
   empty
 } from '../actions';
 
 
-export function fetchPlaylistItemsEpic(action$, store) {
+export function fetchPlaylistItemsEpic(action$) {
   return action$.ofType(FETCH_YOUTUBE_PLAYLIST_ITEMS)
   .switchMap(function ({payload}) {
     const nextPageToken = payload.nextPageToken ? `&pageToken=${payload.nextPageToken}` : '';
@@ -42,12 +43,13 @@ export function fetchPlaylistItemsEpic(action$, store) {
 
        return {items: normalizedItems, nextPageToken};
      })
-     .map(({items, nextPageToken}) => {
+     .mergeMap(({items, nextPageToken}) => {
        const nextItems = payload.items.concat(items);
        if (nextPageToken) {
-         return store.dispatch(fetchYoutubePlaylistItems(payload.playlistId, nextItems, nextPageToken));
+         return [fetchYoutubePlaylistItems(payload.playlistId, nextItems, nextPageToken)];
+       } else {
+         return [fetchPlaylistItemsFulfilled(nextItems), setLoaded(true)];
        }
-       return fetchPlaylistItemsFulfilled(nextItems);
      })
      .catch(() => Observable.of(setError('Error. Please remove any private or deleted videos from playlist.')));
   });
@@ -57,7 +59,7 @@ export function fetchServerPlaylistItemsEpic(action$) {
   return action$.ofType(FETCH_SERVER_PLAYLIST_ITEMS)
     .mergeMap(function ({payload}) {
       return ajax.getJSON(`${SERVER_URL}playlists/${payload}/playlistItems`)
-        .map((items) => fetchPlaylistItemsFulfilled(items))
+        .mergeMap((items) => [fetchPlaylistItemsFulfilled(items), setLoaded(true)])
         .catch(() => Observable.of(setError('Failed to get playlist')));
     });
 }

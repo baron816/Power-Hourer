@@ -5,12 +5,14 @@ import {
   NEXT_VIDEO,
   GOTO_VIDEO,
   CHANGE_VIDEO_START,
-  MOVE_ITEM
+  MOVE_ITEM,
+  SET_LOADED
 } from '../actionCreators';
 
 const initialState = fromJS({
     playlistItems: [],
-    playlistItemsIndex: 0
+    playlistItemsIndex: 0,
+    loaded: false
 });
 
 function incrementPlaylistIndex(state) {
@@ -52,6 +54,8 @@ export default function playlistItemsReducer(state = initialState, action) {
       return changeVideoStart(state, action.payload);
     case MOVE_ITEM:
       return moveItem(state, action.payload);
+    case SET_LOADED:
+      return state.set('loaded', action.payload);
     default:
       return state;
   }

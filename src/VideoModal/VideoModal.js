@@ -9,9 +9,14 @@ import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import MenuItem from 'material-ui/MenuItem';
 import IconMenu from 'material-ui/IconMenu';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import CircularProgress from 'material-ui/CircularProgress';
 
 import PlaylistItems from '../PlaylistItems/PlaylistItems';
-import { invertModalState, savePlaylist } from '../actions';
+import {
+  invertModalState,
+  savePlaylist,
+  setLoaded
+} from '../actions';
 
 import './VideoModal.css';
 
@@ -22,7 +27,8 @@ function VideoModal({
   savePl,
   settingsItems,
   Video,
-  movePlItem
+  movePlItem,
+  loaded
 }) {
   const actions = [
     <FlatButton
@@ -37,18 +43,25 @@ function VideoModal({
         modal={true}
         open={showModal}
         actions={actions}
+        bodyStyle={{minHeight: '800px', overflowY: 'scroll'}}
         contentStyle={{width: '98%', maxWidth: 'none'}}>
         <AppBar
           title={selectedPlaylist.get('title')}
           iconElementLeft={<CloseButton />}
           iconElementRight={<Settings />}
         />
-        <div id='modalContent'>
-          <PlaylistItems moveItem={movePlItem}/>
-          <Video />
-        </div>
+        <Content/>
       </Dialog>
   );
+
+  function Content() {
+    return loaded ? (
+      <div id='modalContent'>
+        <PlaylistItems moveItem={movePlItem}/>
+        <Video />
+      </div>
+    ) : <div id='spinner'><CircularProgress size={100} thickness={8} /></div>;
+  }
 
   function CloseButton() {
     return (
@@ -79,12 +92,14 @@ function VideoModal({
 function mapStateToProps(state) {
   return {
     showModal: state.getIn(['root', 'showModal']),
+    loaded: state.getIn(['playlistItems', 'loaded'])
   };
 }
 
 function mapDispatchToProps(dispatch) {
   function invertModal() {
     dispatch(invertModalState());
+    dispatch(setLoaded(false));
   }
 
   function savePl() {

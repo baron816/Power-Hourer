@@ -1,9 +1,6 @@
-#playlistItems {
-  height: 800px;
-  overflow: scroll;
-}
-
 #playlistPaper {
+  height: 800px;
+  overflow-y: auto;
   flex: 4;
   margin-top: 5px;
 }
@@ -15,4 +12,11 @@
   top: 4px;
   margin: 12px;
   right: 4px;
+}
+
+#spinner {
+  display: flex;
+  height: 800px;
+  align-items: center;
+  justify-content: center;
 }
