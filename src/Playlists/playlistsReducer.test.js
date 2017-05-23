@@ -9,6 +9,7 @@ import {
   fetchServerPlaylistsFulfilled,
   fetchPublicPlaylistsFulfilled,
   createServerPlaylistFulfilled,
+  fetchNextPublicPlaylistsPageFulfilled,
   updatePlaylistFulfilled,
 } from '../actions';
 
@@ -132,8 +133,32 @@ describe('#playlistsReducer', function () {
     });
   });
 
-  describe('#fetchPublicPlaylistsFulfilled', function () {
+  describe('#fetchNextPublicPlaylistsPageFulfilled', function () {
     it('concats the playlists and sets the page number', function () {
+      const initialState = fromJS({
+        publicPlaylistPage: 1,
+        publicPlaylistPageCount: 2,
+        publicPlaylists: [{id: '3aon3a'}]
+      });
+
+      const action = fetchNextPublicPlaylistsPageFulfilled({
+        playlists: [{id: 'an3ou2'}, {id: '290vj2na'}, {id: '3oinaou23'}],
+        page: 2,
+        pages: 2,
+      });
+
+      const nextState = reducer(initialState, action);
+
+      expect(nextState).toEqual(fromJS({
+        publicPlaylistPage: 2,
+        publicPlaylistPageCount: 2,
+        publicPlaylists: [{id: '3aon3a'}, {id: 'an3ou2'}, {id: '290vj2na'}, {id: '3oinaou23'}]
+      }));
+    });
+  });
+
+  describe('#fetchPublicPlaylistsFulfilled', function () {
+    it('resets the playlists and sets the page number', function () {
       const initialState = fromJS({
         publicPlaylistPage: 1,
         publicPlaylistPageCount: 2,
@@ -151,7 +176,7 @@ describe('#playlistsReducer', function () {
       expect(nextState).toEqual(fromJS({
         publicPlaylistPage: 1,
         publicPlaylistPageCount: 1,
-        publicPlaylists: [{id: '3aon3a'}, {id: 'an3ou2'}, {id: '290vj2na'}, {id: '3oinaou23'}]
+        publicPlaylists: [{id: 'an3ou2'}, {id: '290vj2na'}, {id: '3oinaou23'}]
       }));
     });
   });

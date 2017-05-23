@@ -7,6 +7,7 @@ import {
   FETCH_YOUTUBE_PLAYLISTS,
   FETCH_SERVER_PLAYLISTS,
   FETCH_PUBLIC_PLAYLISTS,
+  FETCH_NEXT_PUBLIC_PLAYLISTS_PAGE,
   SAVE_PLAYLIST,
   DELETE_PLAYLIST,
   UPDATE_PLAYLIST
@@ -19,6 +20,7 @@ import {
   createServerPlaylistFulfilled,
   deleteServerPlaylistFulfilled,
   fetchPublicPlaylistsFulfilled,
+  fetchNextPublicPlaylistsPageFulfilled,
   setServerId,
   invertModalState,
   updatePlaylistFulfilled,
@@ -99,13 +101,20 @@ export function updatePlaylistEpic(action$) {
     });
 }
 
-export function fetchPublicPlaylistsEpic(action$, store) {
+export function fetchPublicPlaylistsEpic(action$) {
   return action$.ofType(FETCH_PUBLIC_PLAYLISTS)
     .mergeMap(function () {
-      const state = store.getState();
-      const page = state.getIn(['playlists', 'publicPlaylistPage']);
-      return ajax.getJSON(`${SERVER_URL}playlists?page=${page}`)
+      return ajax.getJSON(`${SERVER_URL}playlists`)
         .map(response => fetchPublicPlaylistsFulfilled(response))
         .catch(() => Observable.of(setError('Faild to get playlists')));
+    });
+}
+
+export function fetchNextPublicPlaylistsPageEpic(action$) {
+  return action$.ofType(FETCH_NEXT_PUBLIC_PLAYLISTS_PAGE)
+    .mergeMap(function ({payload}) {
+      return ajax.getJSON(`${SERVER_URL}playlists?page=${payload}`)
+        .map(response => fetchNextPublicPlaylistsPageFulfilled(response))
+        .catch(() => Observable.of(setError('Failed to get next page')));
     });
 }

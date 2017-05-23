@@ -10,7 +10,8 @@ import {
   savePlaylistEpic,
   deleteServerPlaylistEpic,
   updatePlaylistEpic,
-  fetchPublicPlaylistsEpic
+  fetchPublicPlaylistsEpic,
+  fetchNextPublicPlaylistsPageEpic
 } from './Playlists/playlistsEpics';
 
 import {
@@ -40,5 +41,6 @@ export default combineEpics(
   deleteServerPlaylistEpic,
   moveItemEpic,
   updatePlaylistEpic,
-  fetchPublicPlaylistsEpic
+  fetchPublicPlaylistsEpic,
+  fetchNextPublicPlaylistsPageEpic
 );

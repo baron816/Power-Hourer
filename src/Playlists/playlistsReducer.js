@@ -7,6 +7,7 @@ import {
   SET_PLAYLIST_INDEX,
   SET_CURRENT_PLAYLIST,
   SET_PUBLIC_PLAYLISTS,
+  ADD_PUBLIC_PLAYLISTS,
   REMOVE_SERVER_PLAYLIST,
   UPDATE_PLAYLIST_FULFILLED
 } from '../actionCreators';
@@ -51,12 +52,21 @@ function playlistSetter(type) {
 const addPublicPlaylist = playlistSetter('publicPlaylists');
 const addServerPlaylist = playlistSetter('serverPlaylists');
 
+function setPageData(state, page, pages) {
+  return state.withMutations(ctx => ctx.set('publicPlaylistPage', page).set('publicPlaylistPageCount', pages));
+}
+
+function addPublicPlaylists(state, {page, pages, playlists}) {
+  return state.withMutations((ctx) => {
+    setPageData(ctx, page, pages);
+    addPublicPlaylist(ctx, playlists);
+  });
+}
+
 function setPublicPlaylists(state, {page, pages, playlists}) {
   return state.withMutations((ctx) => {
-    ctx.set('publicPlaylistPage', page);
-    ctx.set('publicPlaylistPageCount', pages);
-
-    addPublicPlaylist(ctx, playlists);
+    setPageData(ctx, page, pages);
+    ctx.set('publicPlaylists', fromJS(playlists));
   });
 }
 
@@ -78,6 +88,8 @@ export default function playlistsReducer(state = initialState, action) {
       return updatePlaylistFulfilled(state, action.payload);
     case SET_PUBLIC_PLAYLISTS:
       return setPublicPlaylists(state, action.payload);
+    case ADD_PUBLIC_PLAYLISTS:
+        return addPublicPlaylists(state, action.payload);
     default:
       return state;
   }

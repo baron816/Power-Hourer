@@ -17,7 +17,16 @@ import {
   setLoaded
 } from '../actions';
 
-function Playlists({name, playlists, getPlaylist, idKey, playlistIndex, currentPlaylist, style}) {
+function Playlists({
+  name,
+  playlists,
+  getPlaylist,
+  idKey,
+  playlistIndex,
+  currentPlaylist,
+  style,
+  fetchNext
+}) {
   return (
     <Paper zDepth={3} className="playlists" style={style}>
       <List>
@@ -34,9 +43,22 @@ function Playlists({name, playlists, getPlaylist, idKey, playlistIndex, currentP
             </ListItem>
           );
         })}
+        <LastItem />
       </List>
     </Paper>
   );
+
+  function LastItem() {
+    return fetchNext ?
+        <ListItem
+          key={'fetchNext'}
+          onClick={fetchNext}
+        >
+          Next
+        </ListItem>
+    : <span/>;
+
+  }
 }
 
 function mapStateToProps(state) {

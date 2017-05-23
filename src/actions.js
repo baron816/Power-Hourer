@@ -31,6 +31,7 @@ export const setPlaylistIndex = createAction(ac.SET_PLAYLIST_INDEX, index => ind
 export const fetchYoutubePlaylistFulfilled = createAction(ac.SET_YOUTUBE_PLAYLISTS, playlists => playlists);
 export const fetchServerPlaylistsFulfilled = createAction(ac.SET_SERVER_PLAYLISTS, playlists => playlists);
 export const fetchPublicPlaylistsFulfilled = createAction(ac.SET_PUBLIC_PLAYLISTS, response => response);
+export const fetchNextPublicPlaylistsPageFulfilled = createAction(ac.ADD_PUBLIC_PLAYLISTS, response => response);
 export const createServerPlaylistFulfilled = createAction(ac.ADD_SERVER_PLAYLIST, playlist => playlist);
 export const deleteServerPlaylistFulfilled = createAction(ac.REMOVE_SERVER_PLAYLIST, index => index);
 export const updatePlaylistFulfilled = createAction(ac.UPDATE_PLAYLIST_FULFILLED, playlist => playlist);
@@ -45,6 +46,7 @@ export const changePlayState = createAction(ac.CHANGE_PLAY_STATE, bool => bool);
 export const fetchYoutubePlaylists = createAction(ac.FETCH_YOUTUBE_PLAYLISTS);
 export const fetchServerPlaylists = createAction(ac.FETCH_SERVER_PLAYLISTS);
 export const fetchPublicPlaylists = createAction(ac.FETCH_PUBLIC_PLAYLISTS);
+export const fetchNextPublicPlaylistsPage = createAction(ac.FETCH_NEXT_PUBLIC_PLAYLISTS_PAGE, page => page);
 export const savePlaylist = createAction(ac.SAVE_PLAYLIST);
 export const deletePlaylist = createAction(ac.DELETE_PLAYLIST, (id, index) => ({id, index}));
 export const moveServerItem = createAction(ac.MOVE_SERVER_ITEM, payload => payload);

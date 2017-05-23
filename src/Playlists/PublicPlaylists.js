@@ -5,24 +5,26 @@ import Playlists from './Playlists';
 
 import {
   fetchPublicPlaylists,
-  fetchServerPlaylistItems
+  fetchServerPlaylistItems,
+  fetchNextPublicPlaylistsPage
 } from '../actions';
 
 function PublicPlaylists(props) {
   const c = new React.Component(props);
 
   c.componentDidMount = function () {
-    !c.props.playlists.size && c.props.fetchPlaylists();
+    c.props.fetchPlaylists();
   };
 
   c.render = function () {
     return (
       <Playlists
-      playlists={c.props.playlists}
-      name='Public'
-      idKey='_id'
-      playlistName='publicPlaylists'
-      fetchPlaylistItems={fetchServerPlaylistItems}
+        playlists={c.props.playlists}
+        name='Public'
+        idKey='_id'
+        playlistName='publicPlaylists'
+        fetchPlaylistItems={fetchServerPlaylistItems}
+        fetchNext={c.props.fetchNext(c.props.publicPlaylistPage, c.props.publicPlaylistPageCount)}
       />
     );
   };
@@ -32,7 +34,9 @@ function PublicPlaylists(props) {
 
 function mapStateToProps(state) {
   return {
-    playlists: state.getIn(['playlists', 'publicPlaylists'])
+    playlists: state.getIn(['playlists', 'publicPlaylists']),
+    publicPlaylistPage: state.getIn(['playlists', 'publicPlaylistPage']),
+    publicPlaylistPageCount: state.getIn(['playlists', 'publicPlaylistPageCount'])
   };
 }
 
@@ -41,8 +45,17 @@ function mapDispatchToProps(dispatch) {
     dispatch(fetchPublicPlaylists());
   }
 
+  function fetchNext(publicPlaylistPage, publicPlaylistPageCount) {
+    if (publicPlaylistPage < publicPlaylistPageCount) {
+      return function () {
+        dispatch(fetchNextPublicPlaylistsPage(publicPlaylistPage + 1));
+      };
+    }
+  }
+
   return {
-    fetchPlaylists
+    fetchPlaylists,
+    fetchNext
   };
 }
 

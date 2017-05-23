@@ -20,7 +20,8 @@ import ErrorBar from './ErrorBar/ErrorBar';
 import {
   resetState,
   fetchYoutubePlaylists,
-  fetchServerPlaylists
+  fetchServerPlaylists,
+  fetchPublicPlaylists
 } from './actions';
 
 function App({
@@ -94,6 +95,7 @@ function mapDispatchToProps(dispatch) {
   function getPlaylists() {
     dispatch(fetchYoutubePlaylists());
     dispatch(fetchServerPlaylists());
+    dispatch(fetchPublicPlaylists());
   }
 
   return {
