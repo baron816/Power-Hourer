@@ -27,7 +27,7 @@ function Playlists({name, playlists, getPlaylist, idKey, playlistIndex, currentP
           const title = list.get('title');
           return(
             <ListItem
-              key={id}
+              key={`${name}-${id}`}
               onClick={getPlaylist(id, index, playlistIndex, currentPlaylist)}
               leftAvatar={ <Avatar src={list.get('thumbnail')} /> }>
               {title}

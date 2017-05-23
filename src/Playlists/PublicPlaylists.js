@@ -3,15 +3,31 @@ import { connect } from 'react-redux';
 
 import Playlists from './Playlists';
 
-function PublicPlaylists({playlists}) {
-  return (
-    <Playlists
-      playlists={playlists}
+import {
+  fetchPublicPlaylists,
+  fetchServerPlaylistItems
+} from '../actions';
+
+function PublicPlaylists(props) {
+  const c = new React.Component(props);
+
+  c.componentDidMount = function () {
+    !c.props.playlists.size && c.props.fetchPlaylists();
+  };
+
+  c.render = function () {
+    return (
+      <Playlists
+      playlists={c.props.playlists}
       name='Public'
       idKey='_id'
       playlistName='publicPlaylists'
-    />
-  );
+      fetchPlaylistItems={fetchServerPlaylistItems}
+      />
+    );
+  };
+
+  return c;
 }
 
 function mapStateToProps(state) {
@@ -20,4 +36,14 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(PublicPlaylists);
+function mapDispatchToProps(dispatch) {
+  function fetchPlaylists() {
+    dispatch(fetchPublicPlaylists());
+  }
+
+  return {
+    fetchPlaylists
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PublicPlaylists);

@@ -28,7 +28,8 @@ function VideoModal({
   settingsItems,
   Video,
   movePlItem,
-  loaded
+  loaded,
+  serverId
 }) {
   const actions = [
     <FlatButton
@@ -83,7 +84,7 @@ function VideoModal({
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
         {settingsItems}
-        <MenuItem primaryText="Save Playlist Copy" onClick={savePl} />
+        {serverId.size && <MenuItem primaryText="Save Playlist Copy" onClick={savePl} />}
       </IconMenu>
     );
   }
@@ -92,7 +93,8 @@ function VideoModal({
 function mapStateToProps(state) {
   return {
     showModal: state.getIn(['root', 'showModal']),
-    loaded: state.getIn(['playlistItems', 'loaded'])
+    loaded: state.getIn(['playlistItems', 'loaded']),
+    serverId: state.getIn(['root', 'serverId'])
   };
 }
 

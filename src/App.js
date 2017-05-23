@@ -14,6 +14,7 @@ import YouTubePlaylists from './Playlists/YouTubePlaylists';
 import PublicPlaylists from './Playlists/PublicPlaylists';
 import ServerModal from './VideoModal/ServerModal';
 import YouTubeModal from './VideoModal/YouTubeModal';
+import PublicModal from './VideoModal/PublicModal';
 import ErrorBar from './ErrorBar/ErrorBar';
 
 import {
@@ -69,6 +70,8 @@ function App({
         return <YouTubeModal />;
       case 'serverPlaylists':
         return <ServerModal />;
+      case 'publicPlaylists':
+        return <PublicModal />;
       default:
         return null;
     }
