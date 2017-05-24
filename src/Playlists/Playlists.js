@@ -27,26 +27,30 @@ function Playlists({
   style,
   fetchNext
 }) {
-  return (
-    <Paper zDepth={3} className="playlists" style={style}>
+  if (playlists.size) {
+    return (
+      <Paper zDepth={3} className="playlists" style={style}>
       <List>
-        <Subheader inset={true}>{name} Playlists</Subheader>
-        {playlists.map(function (list, index) {
-          const id = list.get(idKey);
-          const title = list.get('title');
-          return(
-            <ListItem
-              key={`${name}-${id}`}
-              onClick={getPlaylist(id, index, playlistIndex, currentPlaylist)}
-              leftAvatar={ <Avatar src={list.get('thumbnail')} /> }>
-              {title}
-            </ListItem>
-          );
-        })}
-        <LastItem />
+      <Subheader inset={true}>{name} Playlists</Subheader>
+      {playlists.map(function (list, index) {
+        const id = list.get(idKey);
+        const title = list.get('title');
+        return(
+          <ListItem
+          key={`${name}-${id}`}
+          onClick={getPlaylist(id, index, playlistIndex, currentPlaylist)}
+          leftAvatar={ <Avatar src={list.get('thumbnail')} /> }>
+          {title}
+          </ListItem>
+        );
+      })}
+      <LastItem />
       </List>
-    </Paper>
-  );
+      </Paper>
+    );
+  } else {
+    return <span />;
+  }
 
   function LastItem() {
     return fetchNext ?
