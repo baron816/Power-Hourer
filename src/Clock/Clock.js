@@ -1,7 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { startTime, endTime } from '../actions';
+import {
+  startTime,
+  endTime,
+  incrementPlayCount
+} from '../actions';
 
 function Clock(props) {
   const c = new React.Component(props);
@@ -16,6 +20,13 @@ function Clock(props) {
 
   c.componentWillUnmount = function () {
     c.props.stopClock();
+  };
+
+  c.componentDidUpdate = function () {
+    const { time, currentPlaylist } = c.props;
+    if (time === 1600 && currentPlaylist) {
+      c.props.updatePlayCount(currentPlaylist);
+    }
   };
 
   c.render = function () {
@@ -39,7 +50,8 @@ function Clock(props) {
 
 function mapStateToProps(state) {
   return {
-    time: state.getIn(['clock', 'time'])
+    time: state.getIn(['clock', 'time']),
+    currentPlaylist: state.getIn(['playlists', 'currentPlaylist'])
   };
 }
 
@@ -52,9 +64,14 @@ function mapDispatchToProps(dispatch) {
     dispatch(endTime());
   }
 
+  function updatePlayCount(currentPlaylist) {
+    dispatch(incrementPlayCount(currentPlaylist));
+  }
+
   return {
     moveClock,
-    stopClock
+    stopClock,
+    updatePlayCount
   };
 }
 

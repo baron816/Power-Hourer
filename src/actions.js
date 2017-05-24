@@ -51,6 +51,7 @@ export const savePlaylist = createAction(ac.SAVE_PLAYLIST);
 export const deletePlaylist = createAction(ac.DELETE_PLAYLIST, (id, index) => ({id, index}));
 export const moveServerItem = createAction(ac.MOVE_SERVER_ITEM, payload => payload);
 export const updatePlaylist = createAction(ac.UPDATE_PLAYLIST, (id, updateData) => ({id, updateData}));
+export const incrementPlayCount = createAction(ac.INCREMENT_PLAYCOUNT, currentPlaylist => currentPlaylist);
 
 
 //playlistItems

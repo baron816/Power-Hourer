@@ -10,7 +10,8 @@ import {
   FETCH_NEXT_PUBLIC_PLAYLISTS_PAGE,
   SAVE_PLAYLIST,
   DELETE_PLAYLIST,
-  UPDATE_PLAYLIST
+  UPDATE_PLAYLIST,
+  INCREMENT_PLAYCOUNT
 } from '../actionCreators';
 
 import { YOUTUBE_API_KEY, YOUTUBE_URL, SERVER_URL } from '../epics';
@@ -24,7 +25,8 @@ import {
   setServerId,
   invertModalState,
   updatePlaylistFulfilled,
-  setError
+  setError,
+  empty
 } from '../actions';
 
 export function fetchPlaylistsEpic(action$, store) {
@@ -116,5 +118,19 @@ export function fetchNextPublicPlaylistsPageEpic(action$) {
       return ajax.getJSON(`${SERVER_URL}playlists?page=${payload}`)
         .map(response => fetchNextPublicPlaylistsPageFulfilled(response))
         .catch(() => Observable.of(setError('Failed to get next page')));
+    });
+}
+
+export function incrementPlayCountEpic(action$, store) {
+  return action$.ofType(INCREMENT_PLAYCOUNT)
+    .mergeMap(function ({payload}) {
+      const state = store.getState();
+      const playlists = state.getIn(['playlists', payload]);
+      const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
+      const id = playlists.get(playlistIndex).get('_id');
+
+      return ajax.put(`${SERVER_URL}playlists/${id}/incrementPlayCount`)
+        .map(() => empty())
+        .catch(() => Observable.of(empty()));
     });
 }
