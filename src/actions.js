@@ -64,6 +64,6 @@ export const startTime = createAction(ac.START_TIME);
 export const endTime = createAction(ac.END_TIME);
 
 //login
-export const loginUser = createAction(ac.LOGIN_USER, googleId => googleId);
+export const loginUser = createAction(ac.LOGIN_USER, token => token);
 
 export const empty = createAction('EMPTY');
