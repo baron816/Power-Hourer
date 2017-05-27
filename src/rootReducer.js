@@ -9,8 +9,6 @@ import {
   RESET_CALL_NEXT
 } from './actionCreators';
 
-// import { REHYDRATE } from 'redux-persist/constants';
-
 const initialState = fromJS({
   accessToken: '',
   googleId: '',
