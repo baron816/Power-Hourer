@@ -60,7 +60,6 @@ export function savePlaylistEpic(action$, store) {
       const playlistItems = state.getIn(['playlistItems', 'playlistItems']);
       const owner = state.getIn(['root', 'serverId']);
 
-
       const newPlaylist = JSON.stringify({
         owner,
         playlistItems,
@@ -78,8 +77,8 @@ export function getUserPlaylistsEpic(action$, store) {
   return action$.ofType(FETCH_SERVER_PLAYLISTS)
     .mergeMap(function () {
       const state = store.getState();
-      const googleId = state.getIn(['root', 'googleId']);
-      return ajax.getJSON(`${SERVER_URL}users/${googleId}/playlists`)
+      const id = state.getIn(['root', 'serverId']);
+      return ajax.getJSON(`${SERVER_URL}users/${id}/playlists`)
         .mergeMap(({playlists, _id}) => [fetchServerPlaylistsFulfilled(playlists),
           setServerId(_id)])
         .catch(() => Observable.of(setServerId('')));
@@ -108,7 +107,7 @@ export function fetchPublicPlaylistsEpic(action$) {
     .mergeMap(function () {
       return ajax.getJSON(`${SERVER_URL}playlists`)
         .map(response => fetchPublicPlaylistsFulfilled(response))
-        .catch(() => Observable.of(setError('Faild to get playlists')));
+        .catch(() => Observable.of(setError('Failed to get playlists')));
     });
 }
 
