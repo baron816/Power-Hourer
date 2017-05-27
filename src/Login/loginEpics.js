@@ -18,8 +18,12 @@ import {
 
 export function createUserEpic(action$) {
   return action$.ofType(LOGIN_USER)
-    .mergeMap(function ({payload: googleId}) {
-      return ajax.post(SERVER_URL + 'users', JSON.stringify({googleId}), {'Content-Type': 'application/json'})
+    .mergeMap(function ({payload: tokenId}) {
+      return ajax.post(SERVER_URL + 'users', null,
+      {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': tokenId
+      })
         .mergeMap(({response}) => [setServerId(response._id), fetchServerPlaylistsFulfilled(response.playlists)])
         .catch(() => {
           return setError('Faild to create user');
