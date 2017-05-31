@@ -84,7 +84,7 @@ function VideoModal({
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
         {settingsItems}
-        {serverId.size && <MenuItem primaryText="Save Playlist Copy" onClick={savePl} />}
+        {serverId.length && <MenuItem primaryText="Save Playlist Copy" onClick={savePl} />}
       </IconMenu>
     );
   }
