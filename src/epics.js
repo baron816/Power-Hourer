@@ -2,7 +2,7 @@ import { combineEpics } from 'redux-observable';
 
 export const YOUTUBE_API_KEY = 'AIzaSyCGpesu-gaoZl7gCTOoYkGldLH9FVXGoEE';
 export const YOUTUBE_URL = 'https://www.googleapis.com/youtube/v3/';
-export const SERVER_URL = 'http://localhost:3001/';
+export const SERVER_URL = process.env.NODE_ENV === 'production' ? 'https://pure-lowlands-17729.herokuapp.com/' : 'http://localhost:3001/';
 
 import {
   fetchPlaylistsEpic,
