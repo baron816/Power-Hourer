@@ -24,7 +24,7 @@ export function createUserEpic(action$) {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': tokenId
       })
-        .mergeMap(({response}) => [setServerId(response._id), fetchServerPlaylistsFulfilled(response.playlists)])
+        .mergeMap(({response}) => [setServerId(response.token), fetchServerPlaylistsFulfilled(response.playlists)])
         .catch(() => {
           return setError('Faild to create user');
         });

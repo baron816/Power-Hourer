@@ -22,7 +22,6 @@ import {
   deleteServerPlaylistFulfilled,
   fetchPublicPlaylistsFulfilled,
   fetchNextPublicPlaylistsPageFulfilled,
-  setServerId,
   invertModalState,
   updatePlaylistFulfilled,
   setError,
@@ -58,16 +57,18 @@ export function savePlaylistEpic(action$, store) {
       const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
       const playlist = playlists.get(playlistIndex);
       const playlistItems = state.getIn(['playlistItems', 'playlistItems']);
-      const owner = state.getIn(['root', 'serverId']);
+      const token = state.getIn(['root', 'serverId']);
 
       const newPlaylist = JSON.stringify({
-        owner,
         playlistItems,
         playlistId: playlist.get('playlistId'),
         title: playlist.get('title'),
         thumbnail: playlist.get('thumbnail')
       });
-      return ajax.post(SERVER_URL + 'playlists', newPlaylist, {'Content-Type': 'application/json'})
+      return ajax.post(SERVER_URL + 'playlists', newPlaylist, {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      })
         .map(({response}) => createServerPlaylistFulfilled([response.playlist]))
         .catch(() => Observable.of(setError('Playlist not saved')));
     });
@@ -78,25 +79,39 @@ export function getUserPlaylistsEpic(action$, store) {
     .mergeMap(function () {
       const state = store.getState();
       const id = state.getIn(['root', 'serverId']);
-      return ajax.getJSON(`${SERVER_URL}users/${id}/playlists`)
-        .mergeMap(({playlists, _id}) => [fetchServerPlaylistsFulfilled(playlists),
-          setServerId(_id)])
-        .catch(() => Observable.of(setServerId('')));
+
+      return ajax.getJSON(`${SERVER_URL}users/playlists`, {
+        Authorization: 'Bearer ' + id
+      })
+        .map(({playlists}) => fetchServerPlaylistsFulfilled(playlists))
+        .catch(() => Observable.of(setError('Filed to get playlists')));
     });
 }
 
-export function deleteServerPlaylistEpic(action$) {
+export function deleteServerPlaylistEpic(action$, store) {
   return action$.ofType(DELETE_PLAYLIST)
     .mergeMap(function ({payload}) {
-      return ajax.delete(`${SERVER_URL}playlists/${payload.id}`)
-        .mergeMap(() => [invertModalState(), deleteServerPlaylistFulfilled(payload.index)]);
+      const state = store.getState();
+      const token = state.getIn(['root', 'serverId']);
+
+      return ajax.delete(`${SERVER_URL}playlists/${payload.id}`, {
+        Authorization: 'Bearer ' + token
+      })
+        .mergeMap(() => [invertModalState(), deleteServerPlaylistFulfilled(payload.index)])
+        .catch(() => Observable.of(setError('Failed to delete playlist')));
     });
 }
 
-export function updatePlaylistEpic(action$) {
+export function updatePlaylistEpic(action$, store) {
   return action$.ofType(UPDATE_PLAYLIST)
     .mergeMap(function ({payload}) {
-      return ajax.put(`${SERVER_URL}playlists/${payload.id}`, JSON.stringify(payload.updateData), {'Content-Type': 'application/json'})
+      const state = store.getState();
+      const token = state.getIn(['root', 'serverId']);
+
+      return ajax.put(`${SERVER_URL}playlists/${payload.id}`, JSON.stringify(payload.updateData), {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      })
         .map(({response}) => updatePlaylistFulfilled(response))
         .catch(() => Observable.of(setError('Failed to update playlist')));
     });

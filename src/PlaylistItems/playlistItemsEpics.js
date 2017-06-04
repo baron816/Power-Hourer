@@ -75,10 +75,14 @@ export function changeServerVideoStartEpic(action$, store) {
       const playlist = state.getIn(['playlists', 'serverPlaylists']);
       const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
       const playlistId = playlist.get(playlistIndex).get('_id');
+      const token = state.getIn(['root', 'serverId']);
 
       const updateData = JSON.stringify({startTime: payload});
 
-      return ajax.put(`${SERVER_URL}playlists/${playlistId}/playlistItems/${playlistItemId}`, updateData, {'Content-Type': 'application/json'})
+      return ajax.put(`${SERVER_URL}playlists/${playlistId}/playlistItems/${playlistItemId}`, updateData, {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      })
         .map(() => empty())
         .catch(() => Observable.of(setError('Failed to set video start time')));
     });
@@ -91,9 +95,12 @@ export function moveItemEpic(action$, store) {
       const playlist = state.getIn(['playlists', 'serverPlaylists']);
       const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
       const playlistId = playlist.get(playlistIndex).get('_id');
+      const token = state.getIn(['root', 'serverId']);
 
-
-      return ajax.put(`${SERVER_URL}playlists/${playlistId}/moveItem`, payload, {'Content-Type': 'application/json'})
+      return ajax.put(`${SERVER_URL}playlists/${playlistId}/moveItem`, payload, {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      })
         .map(() => empty())
         .catch(() => Observable.of(setError('Failed to move video')));
     });
