@@ -10,7 +10,6 @@ function ServerPlaylists({playlists}) {
     <Playlists
       playlists={playlists}
       name='Saved'
-      idKey='_id'
       playlistName='serverPlaylists'
       style={{marginRight: '5px', marginLeft: '5px'}}
       fetchPlaylistItems={fetchServerPlaylistItems}

@@ -2,7 +2,6 @@ import { fromJS, Map } from 'immutable';
 
 import {
   setAccessToken,
-  changeVideoLength,
   flipNext,
   invertModalState,
   resetCallNext,
@@ -26,22 +25,6 @@ describe('reducer', function () {
       expect(nextState).toEqual(Map({
         accessToken: 'somelongstringherewithrandomchars',
         googleId: 'mygoogleid'
-      }));
-    });
-  });
-
-  describe('#changeVideoLength', function () {
-    it('sets the video length', function () {
-      const initialState = fromJS({
-        videoLength: 60
-      });
-
-      const action = changeVideoLength(80);
-
-      const nextState = reducer(initialState, action);
-
-      expect(nextState).toEqual(Map({
-        videoLength: 80
       }));
     });
   });

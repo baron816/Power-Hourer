@@ -9,7 +9,9 @@ import {
   SET_PUBLIC_PLAYLISTS,
   ADD_PUBLIC_PLAYLISTS,
   REMOVE_SERVER_PLAYLIST,
-  UPDATE_PLAYLIST_FULFILLED
+  UPDATE_PLAYLIST_FULFILLED,
+  SET_PLAYLIST_DEFAULT_START_TIME,
+  SET_PLAYLIST_DEFAULT_LENGTH
 } from '../actionCreators';
 
 const initialState = fromJS({
@@ -40,8 +42,25 @@ function updatePlaylistFulfilled(state, data) {
       return list;
     }
   });
-
 }
+
+function setPlaylistDefault(type) {
+  return function setPlaylistDefaultStartTime(state, value) {
+    return state.update(ctx => {
+      const currentPlaylist = ctx.get('currentPlaylist');
+      const index = ctx.get('playlistIndex');
+
+      return ctx.updateIn([currentPlaylist], list => {
+        return list.update(index, item => {
+          return item.set(type, value);
+        });
+      });
+    });
+  };
+}
+
+const setPlaylistDefaultStartTime = setPlaylistDefault('defaultStart');
+const setPlaylistDefaultLength = setPlaylistDefault('defaultLength');
 
 function playlistSetter(type) {
   return function (state, playlists) {
@@ -89,7 +108,11 @@ export default function playlistsReducer(state = initialState, action) {
     case SET_PUBLIC_PLAYLISTS:
       return setPublicPlaylists(state, action.payload);
     case ADD_PUBLIC_PLAYLISTS:
-        return addPublicPlaylists(state, action.payload);
+      return addPublicPlaylists(state, action.payload);
+    case SET_PLAYLIST_DEFAULT_START_TIME:
+      return setPlaylistDefaultStartTime(state, action.payload);
+    case SET_PLAYLIST_DEFAULT_LENGTH:
+      return setPlaylistDefaultLength(state, action.payload);
     default:
       return state;
   }

@@ -21,7 +21,6 @@ function PublicPlaylists(props) {
       <Playlists
         playlists={c.props.playlists}
         name='Public'
-        idKey='_id'
         playlistName='publicPlaylists'
         fetchPlaylistItems={fetchServerPlaylistItems}
         fetchNext={c.props.fetchNext(c.props.publicPlaylistPage, c.props.publicPlaylistPageCount)}

@@ -6,7 +6,8 @@ import {
   GOTO_VIDEO,
   CHANGE_VIDEO_START,
   MOVE_ITEM,
-  SET_LOADED
+  SET_LOADED,
+  CHANGE_VIDEO_LENGTH
 } from '../actionCreators';
 
 const initialState = fromJS({
@@ -22,14 +23,11 @@ function incrementPlaylistIndex(state) {
   return state;
 }
 
-function changeVideoStart(state, {index, time}) {
-  return state.updateIn(['playlistItems'], list => list.updateIn([Number(index)], map => map.set('startTime', Number(time))));
-}
-
 function moveItem(state, {oldIndex, newIndex}) {
-  const playlistItemsIndex = state.get('playlistItemsIndex');
-  const oldItem = state.get('playlistItems').get(oldIndex);
   return state.withMutations((ctx) => {
+    const playlistItemsIndex = ctx.get('playlistItemsIndex');
+    const oldItem = ctx.get('playlistItems').get(oldIndex);
+
     if (oldIndex > playlistItemsIndex && newIndex < playlistItemsIndex) {
       ctx.set('playlistItemsIndex', playlistItemsIndex + 1);
     } else if (oldIndex < playlistItemsIndex && newIndex > playlistItemsIndex) {
@@ -42,6 +40,23 @@ function moveItem(state, {oldIndex, newIndex}) {
   });
 }
 
+function changeProperty(property) {
+  return function (state, time) {
+    return state.update(ctx => {
+      const index = ctx.get('playlistItemsIndex');
+
+      return ctx.updateIn(['playlistItems'], list => {
+        return list.updateIn([index], item => {
+          return item.set(property, time);
+        });
+      });
+    });
+  };
+}
+
+const changeVideoStart = changeProperty('startTime');
+const changeVideoLength = changeProperty('videoLength');
+
 export default function playlistItemsReducer(state = initialState, action) {
   switch (action.type) {
     case SET_PLAYLIST_ITEMS:
@@ -52,6 +67,8 @@ export default function playlistItemsReducer(state = initialState, action) {
       return state.set('playlistItemsIndex', Number(action.payload));
     case CHANGE_VIDEO_START:
       return changeVideoStart(state, action.payload);
+    case CHANGE_VIDEO_LENGTH:
+      return changeVideoLength(state, action.payload);
     case MOVE_ITEM:
       return moveItem(state, action.payload);
     case SET_LOADED:

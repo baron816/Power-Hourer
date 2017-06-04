@@ -28,6 +28,21 @@ import {
   empty
 } from '../actions';
 
+function playlistData(store) {
+  const state = store.getState();
+  const currentPlaylistName = state.getIn(['playlists', 'currentPlaylist']);
+  const playlists = state.getIn(['playlists', currentPlaylistName]);
+  const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
+  const playlist = playlists.get(playlistIndex);
+  const token = state.getIn(['root', 'serverId']);
+
+  return {
+    token,
+    playlist,
+    playlistIndex,
+  };
+}
+
 export function fetchPlaylistsEpic(action$, store) {
   return action$.ofType(FETCH_YOUTUBE_PLAYLISTS)
   .mergeMap(function () {
@@ -38,7 +53,7 @@ export function fetchPlaylistsEpic(action$, store) {
     .map(function ({items}) {
       return items.map(function (item) {
         return {
-          playlistId: item.id,
+          _id: item.id,
           title: item.snippet.title,
           thumbnail: item.snippet.thumbnails.default.url
         };
@@ -53,18 +68,16 @@ export function savePlaylistEpic(action$, store) {
   return action$.ofType(SAVE_PLAYLIST)
     .mergeMap(function () {
       const state = store.getState();
-      const playlists = state.getIn(['playlists', 'youtubePlaylists']);
-      const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
-      const playlist = playlists.get(playlistIndex);
+      const { playlist, token } = playlistData(store);
       const playlistItems = state.getIn(['playlistItems', 'playlistItems']);
-      const token = state.getIn(['root', 'serverId']);
 
       const newPlaylist = JSON.stringify({
         playlistItems,
-        playlistId: playlist.get('playlistId'),
+        playlistId: playlist.get('_id'),
         title: playlist.get('title'),
         thumbnail: playlist.get('thumbnail')
       });
+
       return ajax.post(SERVER_URL + 'playlists', newPlaylist, {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + token
@@ -90,14 +103,13 @@ export function getUserPlaylistsEpic(action$, store) {
 
 export function deleteServerPlaylistEpic(action$, store) {
   return action$.ofType(DELETE_PLAYLIST)
-    .mergeMap(function ({payload}) {
-      const state = store.getState();
-      const token = state.getIn(['root', 'serverId']);
+    .mergeMap(function () {
+      const { playlistIndex, playlist, token } = playlistData(store);
 
-      return ajax.delete(`${SERVER_URL}playlists/${payload.id}`, {
+      return ajax.delete(`${SERVER_URL}playlists/${playlist.get('_id')}`, {
         Authorization: 'Bearer ' + token
       })
-        .mergeMap(() => [invertModalState(), deleteServerPlaylistFulfilled(payload.index)])
+        .mergeMap(() => [invertModalState(), deleteServerPlaylistFulfilled(playlistIndex)])
         .catch(() => Observable.of(setError('Failed to delete playlist')));
     });
 }
@@ -105,10 +117,9 @@ export function deleteServerPlaylistEpic(action$, store) {
 export function updatePlaylistEpic(action$, store) {
   return action$.ofType(UPDATE_PLAYLIST)
     .mergeMap(function ({payload}) {
-      const state = store.getState();
-      const token = state.getIn(['root', 'serverId']);
+      const {token, playlist} = playlistData(store);
 
-      return ajax.put(`${SERVER_URL}playlists/${payload.id}`, JSON.stringify(payload.updateData), {
+      return ajax.put(`${SERVER_URL}playlists/${playlist.get('_id')}`, JSON.stringify(payload), {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + token
       })
@@ -137,13 +148,10 @@ export function fetchNextPublicPlaylistsPageEpic(action$) {
 
 export function incrementPlayCountEpic(action$, store) {
   return action$.ofType(INCREMENT_PLAYCOUNT)
-    .mergeMap(function ({payload}) {
-      const state = store.getState();
-      const playlists = state.getIn(['playlists', payload]);
-      const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
-      const id = playlists.get(playlistIndex).get('_id');
+    .mergeMap(function () {
+      const { playlist } = playlistData(store);
 
-      return ajax.put(`${SERVER_URL}playlists/${id}/incrementPlayCount`)
+      return ajax.put(`${SERVER_URL}playlists/${playlist.get('_id')}/incrementPlayCount`)
         .map(() => empty())
         .catch(() => Observable.of(empty()));
     });

@@ -7,6 +7,7 @@ import {
   nextVideo,
   goToVideo,
   changeVideoStart,
+  changeVideoLength,
   moveItem
 } from '../actions';
 
@@ -90,15 +91,35 @@ describe('playlistItemsReducer', function () {
   describe('#changeVideoStart', function () {
     it('sets the start time of a video at an index', function () {
       const initialState = fromJS({
-        playlistItems: [{id: 'aegvae'}, {id: 'ibnaieubn'}, {id: 'vuiab3ta'}]
+        playlistItems: [{id: 'aegvae'}, {id: 'ibnaieubn'}, {id: 'vuiab3ta'}],
+        playlistItemsIndex: 1
       });
 
-      const action = changeVideoStart(1, 45);
+      const action = changeVideoStart(45);
 
       const nextState = reducer(initialState, action);
 
-      expect(nextState).toEqual(Map({
-        playlistItems: List([Map({id: 'aegvae'}), Map({id: 'ibnaieubn', startTime: 45}), Map({id: 'vuiab3ta'})])
+      expect(nextState).toEqual(fromJS({
+        playlistItems: [{id: 'aegvae'},{id: 'ibnaieubn', startTime: 45}, {id: 'vuiab3ta'}],
+        playlistItemsIndex: 1
+      }));
+    });
+  });
+
+  describe('#changeVideoLength', function () {
+    it('sets the length of a video at an index', function () {
+      const initialState = fromJS({
+        playlistItems: [{id: 'aegvae'}, {id: 'ibnaieubn'}, {id: 'vuiab3ta'}],
+        playlistItemsIndex: 1
+      });
+
+      const action = changeVideoLength(80);
+
+      const nextState = reducer(initialState, action);
+
+      expect(nextState).toEqual(fromJS({
+        playlistItems: [{id: 'aegvae'},{id: 'ibnaieubn', videoLength: 80}, {id: 'vuiab3ta'}],
+        playlistItemsIndex: 1
       }));
     });
   });

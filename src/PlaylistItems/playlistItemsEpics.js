@@ -8,6 +8,7 @@ import {
   FETCH_YOUTUBE_PLAYLIST_ITEMS,
   FETCH_SERVER_PLAYLIST_ITEMS,
   CHANGE_SERVER_VIDEO_START,
+  CHANGE_SERVER_VIDEO_LENGTH,
   MOVE_SERVER_ITEM
 } from '../actionCreators';
 
@@ -24,6 +25,35 @@ import {
   empty
 } from '../actions';
 
+function playlistData(store) {
+  const state = store.getState();
+  const playlistItemsIndex = state.getIn(['playlistItems', 'playlistItemsIndex']);
+  const playlistItems = state.getIn(['playlistItems', 'playlistItems']);
+  const playlistItemId = playlistItems.get(playlistItemsIndex).get('_id');
+  const playlist = state.getIn(['playlists', 'serverPlaylists']);
+  const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
+  const playlistId = playlist.get(playlistIndex).get('_id');
+  const token = state.getIn(['root', 'serverId']);
+
+  return {
+    token,
+    playlistId,
+    playlistItemId
+  };
+}
+
+function updateVideo(store, payload) {
+  const {playlistId, playlistItemId, token} = playlistData(store);
+
+  const updateData = JSON.stringify({startTime: payload});
+
+  return ajax.put(`${SERVER_URL}playlists/${playlistId}/playlistItems/${playlistItemId}`, updateData, {
+    'Content-Type': 'application/json',
+    Authorization: 'Bearer ' + token
+  })
+    .map(() => empty())
+    .catch(() => Observable.of(setError('Failed to set video start time')));
+}
 
 export function fetchPlaylistItemsEpic(action$) {
   return action$.ofType(FETCH_YOUTUBE_PLAYLIST_ITEMS)
@@ -66,26 +96,14 @@ export function fetchServerPlaylistItemsEpic(action$) {
 
 export function changeServerVideoStartEpic(action$, store) {
   return action$.ofType(CHANGE_SERVER_VIDEO_START)
-    .debounceTime(5000)
-    .switchMap(function ({payload}) {
-      const state = store.getState();
-      const playlistItemsIndex = state.getIn(['playlistItems', 'playlistItemsIndex']);
-      const playlistItems = state.getIn(['playlistItems', 'playlistItems']);
-      const playlistItemId = playlistItems.get(playlistItemsIndex).get('_id');
-      const playlist = state.getIn(['playlists', 'serverPlaylists']);
-      const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
-      const playlistId = playlist.get(playlistIndex).get('_id');
-      const token = state.getIn(['root', 'serverId']);
+    .debounceTime(2500)
+    .switchMap(({payload}) => updateVideo(store, payload));
+}
 
-      const updateData = JSON.stringify({startTime: payload});
-
-      return ajax.put(`${SERVER_URL}playlists/${playlistId}/playlistItems/${playlistItemId}`, updateData, {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token
-      })
-        .map(() => empty())
-        .catch(() => Observable.of(setError('Failed to set video start time')));
-    });
+export function changeServerVideoLengthEpic(action$, store) {
+  return action$.ofType(CHANGE_SERVER_VIDEO_LENGTH)
+    .debounceTime(1000)
+    .switchMap(({payload}) => updateVideo(store, payload));
 }
 
 export function moveItemEpic(action$, store) {

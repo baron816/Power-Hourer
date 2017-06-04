@@ -5,10 +5,12 @@ import MenuItem from 'material-ui/MenuItem';
 import VideoModal from './VideoModal';
 
 import {
+  setPlaylistDefaultLength,
+  setPlaylistDefaultStartTime,
   moveItem
 } from '../actions';
 
-export default function VideoModalHOC(Video, fetch, list, idKey) {
+export default function VideoModalHOC(Video, fetch, list) {
   function Modal(props) {
     const settingsItems= [
       <MenuItem
@@ -24,9 +26,13 @@ export default function VideoModalHOC(Video, fetch, list, idKey) {
     const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
     const playlist = state.getIn(['playlists', list], List());
     const selectedPlaylist = playlist.get(playlistIndex, Map());
+    const defaultStart = selectedPlaylist.get('defaultStart', 30);
+    const defaultLength = selectedPlaylist.get('defaultLength', 60);
 
     return {
-      selectedPlaylist
+      selectedPlaylist,
+      defaultStart,
+      defaultLength
     };
   }
 
@@ -37,13 +43,25 @@ export default function VideoModalHOC(Video, fetch, list, idKey) {
 
     function fetchItems(selectedPlaylist) {
       return function () {
-        dispatch(fetch(selectedPlaylist.get(idKey)));
+        dispatch(fetch(selectedPlaylist.get('_id')));
       };
     }
 
+    function setDefault(fn) {
+      return function (event) {
+        const time = event.target.value;
+        dispatch(fn(time));
+      };
+    }
+
+    const setDefaultStart = setDefault(setPlaylistDefaultStartTime);
+    const setDefaultLength = setDefault(setPlaylistDefaultLength);
+
     return {
       movePlItem,
-      fetchItems
+      fetchItems,
+      setDefaultStart,
+      setDefaultLength
     };
   }
 

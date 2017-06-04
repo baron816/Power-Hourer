@@ -21,7 +21,6 @@ function Playlists({
   name,
   playlists,
   getPlaylist,
-  idKey,
   playlistIndex,
   currentPlaylist,
   style,
@@ -33,7 +32,7 @@ function Playlists({
       <List>
       <Subheader inset={true}>{name} Playlists</Subheader>
       {playlists.map(function (list, index) {
-        const id = list.get(idKey);
+        const id = list.get('_id');
         const title = list.get('title');
         return(
           <ListItem

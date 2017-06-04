@@ -7,7 +7,11 @@ import TextField from 'material-ui/TextField';
 import { Map } from 'immutable';
 
 import Clock from '../Clock/Clock';
-import { changePlayState, nextVideo, flipNext, changeVideoLength } from '../actions';
+import {
+  changePlayState,
+  nextVideo,
+  flipNext
+} from '../actions';
 import './Video.css';
 
 function Video({
@@ -23,13 +27,13 @@ function Video({
   videoEnd,
   autoplay,
   handleVideoError,
-  changeStartToNow
+  changeStartToNow,
 }) {
 
   let videoElement;
 
   return (
-    <Card id="video">
+    <Card id='video'>
       <CardHeader
         title={video.get('title')}
         subtitle={<Clock />}
@@ -52,26 +56,28 @@ function Video({
           onPlay={changePlay(true)}
           onPause={changePlay(false)}
           onError={handleVideoError}
-          id="main-video"
+          id='main-video'
           ref={(vid) => videoElement = vid}
         />
       </CardMedia>
       <CardText expandable={true}>
         <TextField
-          floatingLabelText="Videos length"
+          floatingLabelText='Video length'
           value={String(videoLength)}
           onChange={changeVidLen}
-          type="number"
-          step={10}
+          type='number'
+          step={5}
+          min={1}
         /> <br/>
         <TextField
-          floatingLabelText="Video start time"
+          floatingLabelText='Video start time'
           value={String(videoStart)}
-          onChange={changeVidStart(playlistItemsIndex)}
-          type="number"
-          step={10}
+          onChange={changeVidStart}
+          type='number'
+          step={5}
+          min={0}
         /><br/>
-        <RaisedButton onClick={startNow} label="Set video start to now" primary={true}/>
+        <RaisedButton onClick={startNow} label='Set video start to now' primary={true}/>
       </CardText>
     </Card>
   );
@@ -79,17 +85,17 @@ function Video({
   function startNow() {
     videoElement.internalPlayer.getCurrentTime()
     .then((time) => {
-      changeStartToNow(playlistItemsIndex, Math.floor(time));
+      changeStartToNow(Math.floor(time));
     });
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   const playlistItemsIndex = state.getIn(['playlistItems', 'playlistItemsIndex']);
   const playlistItems = state.getIn(['playlistItems', 'playlistItems']);
   const video = playlistItems.get(playlistItemsIndex, Map());
-  const videoLength = state.getIn(['root', 'videoLength']);
-  const videoStart = video.get('startTime') || 30;
+  const videoLength = video.get('videoLength') || ownProps.defaultLength || 60;
+  const videoStart = video.get('startTime') || ownProps.defaultStart || 30;
   const videoEnd = videoLength + videoStart;
   const autoplay = playlistItemsIndex === 0 ? 0 : 1;
   return {
@@ -127,14 +133,9 @@ function mapDispatchToProps(dispatch) {
     };
   }
 
-  function changeVidLen(event) {
-    dispatch(changeVideoLength(event.target.value));
-  }
-
   return {
     handleVideoEnd,
     handleVideoError,
-    changeVidLen,
     changePlay
   };
 }

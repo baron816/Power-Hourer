@@ -64,8 +64,8 @@ function mapDispatchToProps(dispatch) {
     dispatch(endTime());
   }
 
-  function updatePlayCount(currentPlaylist) {
-    dispatch(incrementPlayCount(currentPlaylist));
+  function updatePlayCount() {
+    dispatch(incrementPlayCount());
   }
 
   return {

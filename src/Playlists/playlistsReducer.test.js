@@ -11,6 +11,8 @@ import {
   createServerPlaylistFulfilled,
   fetchNextPublicPlaylistsPageFulfilled,
   updatePlaylistFulfilled,
+  setPlaylistDefaultStartTime,
+  setPlaylistDefaultLength
 } from '../actions';
 
 describe('#playlistsReducer', function () {
@@ -177,6 +179,50 @@ describe('#playlistsReducer', function () {
         publicPlaylistPage: 1,
         publicPlaylistPageCount: 1,
         publicPlaylists: [{id: 'an3ou2'}, {id: '290vj2na'}, {id: '3oinaou23'}]
+      }));
+    });
+  });
+
+  describe('#setPlaylistDefaultStartTime', function () {
+    it('sets the default start time of the right playlist', function () {
+      const initialState = fromJS({
+        youtubePlaylists: [{name: 've328j1'}, {name: '2807hiunf2'}],
+        serverPlaylists: [{name: 'baevawe'}, {name: 'ieoanu3h'}, {name: 'fau3n2'}],
+        playlistIndex: 1,
+        currentPlaylist: 'serverPlaylists'
+      });
+
+      const action = setPlaylistDefaultStartTime(15);
+
+      const nextState = reducer(initialState, action);
+
+      expect(nextState).toEqual(fromJS({
+        youtubePlaylists: [{name: 've328j1'}, {name: '2807hiunf2'}],
+        serverPlaylists: [{name: 'baevawe'}, {name: 'ieoanu3h', defaultStart: 15}, {name: 'fau3n2'}],
+        playlistIndex: 1,
+        currentPlaylist: 'serverPlaylists'
+      }));
+    });
+  });
+
+  describe('#setPlaylistDefaultLength', function () {
+    it('sets the default length of the right playlist', function () {
+      const initialState = fromJS({
+        youtubePlaylists: [{name: 've328j1'}, {name: '2807hiunf2'}],
+        serverPlaylists: [{name: 'baevawe'}, {name: 'ieoanu3h'}, {name: 'fau3n2'}],
+        playlistIndex: 1,
+        currentPlaylist: 'serverPlaylists'
+      });
+
+      const action = setPlaylistDefaultLength(80);
+
+      const nextState = reducer(initialState, action);
+
+      expect(nextState).toEqual(fromJS({
+        youtubePlaylists: [{name: 've328j1'}, {name: '2807hiunf2'}],
+        serverPlaylists: [{name: 'baevawe'}, {name: 'ieoanu3h', defaultLength: 80}, {name: 'fau3n2'}],
+        playlistIndex: 1,
+        currentPlaylist: 'serverPlaylists'
       }));
     });
   });

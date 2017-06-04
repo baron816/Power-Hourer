@@ -2,7 +2,6 @@ import { fromJS } from 'immutable';
 
 import {
   SET_ACCESS_TOKEN,
-  CHANGE_VIDEO_LENGTH,
   FLIP_NEXT,
   SHOW_MODAL,
   SET_SERVER_ID,
@@ -12,7 +11,6 @@ import {
 const initialState = fromJS({
   accessToken: '',
   googleId: '',
-  videoLength: 60,
   callNext: true,
   showModal: false,
   serverId: ''
@@ -35,8 +33,6 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_ACCESS_TOKEN:
       return setToken(state, action.payload);
-    case CHANGE_VIDEO_LENGTH:
-      return state.set('videoLength', Number(action.payload));
     case FLIP_NEXT:
       return flipNext(state);
     case SHOW_MODAL:

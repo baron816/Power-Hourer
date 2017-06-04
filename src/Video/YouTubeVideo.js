@@ -2,7 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Video from './Video';
 
-import { changeVideoStart } from '../actions';
+import {
+  changeVideoStart,
+  changeVideoLength,
+  setPlaylistDefaultStartTime
+ } from '../actions';
 
 function YouTubeVideo(props) {
   return (
@@ -15,20 +19,30 @@ function mapStateToProps() {
 }
 
 function mapDispatchToProps(dispatch) {
-  function changeVidStart(index) {
-    return function (event) {
-      const time = event.target.value;
-      dispatch(changeVideoStart(index, time));
-    };
+  function changeVidStart(event) {
+    const time = event.target.value;
+    dispatch(changeVideoStart(time));
   }
 
-  function changeStartToNow(index, time) {
-    dispatch(changeVideoStart(index, time));
+  function changeStartToNow(time) {
+    dispatch(changeVideoStart(time));
+  }
+
+  function setDefaultStart(event) {
+    const time = event.target.value;
+    dispatch(setPlaylistDefaultStartTime(time));
+  }
+
+  function changeVidLen(event) {
+    const time = event.target.value;
+    dispatch(changeVideoLength(time));
   }
 
   return {
     changeVidStart,
-    changeStartToNow
+    changeVidLen,
+    changeStartToNow,
+    setDefaultStart
   };
 }
 

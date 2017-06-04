@@ -10,6 +10,7 @@ import MenuItem from 'material-ui/MenuItem';
 import IconMenu from 'material-ui/IconMenu';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import CircularProgress from 'material-ui/CircularProgress';
+import TextField from 'material-ui/TextField';
 
 import PlaylistItems from '../PlaylistItems/PlaylistItems';
 import {
@@ -20,54 +21,86 @@ import {
 
 import './VideoModal.css';
 
-function VideoModal({
-  showModal,
-  invertModal,
-  selectedPlaylist,
-  savePl,
-  settingsItems,
-  Video,
-  movePlItem,
-  loaded,
-  serverId
-}) {
+function VideoModal(props) {
+  const c = new React.Component(props);
+
+  c.state = {
+    open: false
+  };
+
   const actions = [
     <FlatButton
       label='Close'
       primary={true}
-      onTouchTap={invertModal}
+      onTouchTap={c.props.invertModal}
     />
   ];
 
-  return (
+  c.render = function () {
+    return (
       <Dialog
-        modal={true}
-        open={showModal}
-        actions={actions}
-        bodyStyle={{minHeight: '800px', overflowY: 'scroll'}}
-        contentStyle={{width: '98%', maxWidth: 'none'}}>
-        <AppBar
-          title={selectedPlaylist.get('title')}
-          iconElementLeft={<CloseButton />}
-          iconElementRight={<Settings />}
-        />
+      modal={true}
+      open={c.props.showModal}
+      actions={actions}
+      bodyStyle={{minHeight: '800px', overflowY: 'scroll'}}
+      contentStyle={{width: '98%', maxWidth: 'none'}}>
+      <AppBar
+      title={c.props.selectedPlaylist.get('title')}
+      iconElementLeft={<CloseButton />}
+      iconElementRight={<Settings />}
+      />
         <Content/>
       </Dialog>
-  );
+    );
+  };
 
   function Content() {
-    return loaded ? (
+    return c.props.loaded ? (
       <div id='modalContent'>
-        <PlaylistItems moveItem={movePlItem}/>
-        <Video />
+        <PlaylistItems moveItem={c.props.movePlItem}/>
+        <c.props.Video
+          defaultStart={c.props.defaultStart}
+          defaultLength={c.props.defaultLength}
+        />
+
+        <DefaultsDialog />
       </div>
     ) : <div id='spinner'><CircularProgress size={100} thickness={8} /></div>;
+  }
+
+  function DefaultsDialog() {
+    return (
+      <Dialog
+        open={c.state.open}
+        title='Playlist Defaults'
+        onRequestClose={handleDefaultsOpen}
+        actions={<FlatButton label='Close' primary={true} onTouchTap={handleDefaultsOpen} />}
+      >
+       <TextField
+         floatingLabelText='Default Length'
+         value={c.props.defaultLength}
+         onChange={c.props.setDefaultLength}
+         type='number'
+         step={5}
+         min={1}
+       />
+       <TextField
+         floatingLabelText='Default Start'
+         value={c.props.defaultStart}
+         onChange={c.props.setDefaultStart}
+         type='number'
+         step={5}
+         min={0}
+       />
+      </Dialog>
+    );
   }
 
   function CloseButton() {
     return (
       <IconButton
-        onTouchTap={invertModal}
+        iconStyle={{color: 'white'}}
+        onTouchTap={c.props.invertModal}
       >
         <NavigationClose />
       </IconButton>
@@ -78,16 +111,24 @@ function VideoModal({
     return (
       <IconMenu
         iconButtonElement={
-          <IconButton><MoreVertIcon /></IconButton>
+          <IconButton iconStyle={{color: 'white'}}><MoreVertIcon /></IconButton>
         }
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
-        {settingsItems}
-        {serverId.length && <MenuItem primaryText="Save Playlist Copy" onClick={savePl} />}
+        {c.props.settingsItems}
+        {c.props.serverId.length && <MenuItem primaryText="Save Playlist Copy" onClick={c.props.savePl} />}
+        <MenuItem primaryText='Set Defaults'  onClick={handleDefaultsOpen}/>
       </IconMenu>
     );
+
   }
+
+  function handleDefaultsOpen() {
+    c.setState({open: !c.state.open});
+  }
+
+  return c;
 }
 
 function mapStateToProps(state) {
