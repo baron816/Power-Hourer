@@ -26,7 +26,7 @@ export function createUserEpic(action$) {
       })
         .mergeMap(({response}) => [setServerId(response.token), fetchServerPlaylistsFulfilled(response.playlists)])
         .catch(() => {
-          return setError('Faild to create user');
+          return setError('Failed to create user');
         });
     });
 }
