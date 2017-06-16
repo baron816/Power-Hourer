@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -145,9 +146,11 @@ function mapDispatchToProps(dispatch) {
     dispatch(setLoaded(false));
   }
 
-  function savePl() {
-    dispatch(savePlaylist());
-  }
+  // function savePl() {
+  //   dispatch(savePlaylist());
+  // }
+
+  const savePl = compose(dispatch, savePlaylist);
 
   return {
     invertModal,

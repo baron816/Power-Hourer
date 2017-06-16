@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 
 import {
   startTime,
@@ -56,17 +57,9 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  function moveClock() {
-    dispatch(startTime());
-  }
-
-  function stopClock() {
-    dispatch(endTime());
-  }
-
-  function updatePlayCount() {
-    dispatch(incrementPlayCount());
-  }
+  const moveClock = compose(dispatch, startTime);
+  const stopClock = compose(dispatch, endTime);
+  const updatePlayCount = compose(dispatch, incrementPlayCount);
 
   return {
     moveClock,

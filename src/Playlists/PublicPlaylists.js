@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 
 import Playlists from './Playlists';
 
@@ -40,9 +41,11 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  function fetchPlaylists() {
-    dispatch(fetchPublicPlaylists());
-  }
+  // function fetchPlaylists() {
+  //   dispatch(fetchPublicPlaylists());
+  // }
+
+  const fetchPlaylists = compose(dispatch, fetchPublicPlaylists);
 
   function fetchNext(publicPlaylistPage, publicPlaylistPageCount) {
     if (publicPlaylistPage < publicPlaylistPageCount) {

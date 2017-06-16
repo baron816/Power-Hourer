@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import MenuItem from 'material-ui/MenuItem';
 import { Map, List } from 'immutable';
 
@@ -47,9 +48,11 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  function deletePl() {
-    dispatch(deletePlaylist());
-  }
+  // function deletePl() {
+  //   dispatch(deletePlaylist());
+  // }
+
+  const deletePl = compose(dispatch, deletePlaylist);
 
   function movePlItem(indexes) {
     dispatch(moveItem(indexes));
