@@ -31,6 +31,12 @@ function App({
   currentPlaylistName
 }) {
 
+  const MODALS = {
+    youtubePlaylists: YouTubeModal,
+    serverPlaylists: ServerModal,
+    publicPlaylists: PublicModal
+  };
+  
   return (
       <div className="App">
         <AppBar
@@ -65,17 +71,11 @@ function App({
     );
   }
 
+
   function VideoModal() {
-    switch (currentPlaylistName) {
-      case 'youtubePlaylists':
-        return <YouTubeModal />;
-      case 'serverPlaylists':
-        return <ServerModal />;
-      case 'publicPlaylists':
-        return <PublicModal />;
-      default:
-        return null;
-    }
+    const Handler = MODALS[currentPlaylistName];
+
+    return <Handler />;
   }
 }
 
