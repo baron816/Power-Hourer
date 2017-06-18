@@ -15,7 +15,6 @@ import {
 import './Video.css';
 
 function Video({
-  playlistItemsIndex,
   video,
   handleVideoEnd,
   changePlay,
@@ -99,7 +98,6 @@ function mapStateToProps(state, ownProps) {
   const videoEnd = videoLength + videoStart;
   const autoplay = playlistItemsIndex === 0 ? 0 : 1;
   return {
-    playlistItemsIndex,
     video,
     videoStart,
     videoEnd,
