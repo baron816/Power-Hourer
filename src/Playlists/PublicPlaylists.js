@@ -1,8 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
+// import { compose } from 'redux';
+import { makeProps, dispatchAll } from '../utils';
 
 import Playlists from './Playlists';
+
+import {
+  publicPlaylists,
+  publicPlaylistPageCount,
+  publicPlaylistPage
+} from '../selectors';
 
 import {
   fetchPublicPlaylists,
@@ -20,7 +27,7 @@ function PublicPlaylists(props) {
   c.render = function () {
     return (
       <Playlists
-        playlists={c.props.playlists}
+        playlists={c.props.publicPlaylists}
         name='Public'
         playlistName='publicPlaylists'
         fetchPlaylistItems={fetchServerPlaylistItems}
@@ -32,24 +39,20 @@ function PublicPlaylists(props) {
   return c;
 }
 
-function mapStateToProps(state) {
-  return {
-    playlists: state.getIn(['playlists', 'publicPlaylists']),
-    publicPlaylistPage: state.getIn(['playlists', 'publicPlaylistPage']),
-    publicPlaylistPageCount: state.getIn(['playlists', 'publicPlaylistPageCount'])
-  };
-}
+const mapStateToProps = makeProps({publicPlaylists, publicPlaylistPageCount, publicPlaylistPage});
 
 function mapDispatchToProps(dispatch) {
-  const fetchPlaylists = compose(dispatch, fetchPublicPlaylists);
+  const fetchPlaylists = dispatchAll(dispatch, fetchPublicPlaylists);
 
-  function fetchNext(publicPlaylistPage, publicPlaylistPageCount) {
-    if (publicPlaylistPage < publicPlaylistPageCount) {
-      return function () {
-        dispatch(fetchNextPublicPlaylistsPage(publicPlaylistPage + 1));
-      };
-    }
-  }
+  // function fetchNext(publicPlaylistPage, publicPlaylistPageCount) {
+  //   if (publicPlaylistPage < publicPlaylistPageCount) {
+  //     return function () {
+  //       dispatch(fetchNextPublicPlaylistsPage(publicPlaylistPage + 1));
+  //     };
+  //   }
+  // }
+
+  const fetchNext = (publicPlaylistPage, publicPlaylistPageCount) => dispatchAll(dispatch, publicPlaylistPage < publicPlaylistPageCount && fetchNextPublicPlaylistsPage(publicPlaylistPage + 1));
 
   return {
     fetchPlaylists,

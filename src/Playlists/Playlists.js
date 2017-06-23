@@ -5,6 +5,11 @@ import Subheader from 'material-ui/Subheader';
 import Avatar from 'material-ui/Avatar';
 import Paper from 'material-ui/Paper';
 import './Playlists.css';
+import { makeProps, dispatchAll } from '../utils';
+import {
+  playlistIndex,
+  currentPlaylist
+} from '../selectors';
 
 import {
   goToVideo,
@@ -64,29 +69,48 @@ function Playlists({
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    playlistIndex: state.getIn(['playlists', 'playlistIndex']),
-    currentPlaylist: state.getIn(['playlists', 'currentPlaylist'])
-  };
-}
+
+const mapStateToProps = makeProps({playlistIndex, currentPlaylist});
 
 function mapDispatchToProps(dispatch, {fetchPlaylistItems, playlistName}) {
+  // function getPlaylist(listId, index, playlistIndex, currentPlaylist) {
+  //   return function () {
+  //     if (index !== playlistIndex || playlistName !== currentPlaylist) {
+  //       dispatch(setPlaylistIndex(index));
+  //       dispatch(fetchPlaylistItems(listId));
+  //       dispatch(goToVideo(0));
+  //       dispatch(changePlayState(false));
+  //       dispatch(resetClock());
+  //       dispatch(setCurrentPlaylist(playlistName));
+  //     } else {
+  //       dispatch(setLoaded(true));
+  //     }
+  //     dispatch(resetCallNext());
+  //     dispatch(invertModalState());
+  //   };
+  // }
+
   function getPlaylist(listId, index, playlistIndex, currentPlaylist) {
-    return function () {
-      if (index !== playlistIndex || playlistName !== currentPlaylist) {
-        dispatch(setPlaylistIndex(index));
-        dispatch(fetchPlaylistItems(listId));
-        dispatch(goToVideo(0));
-        dispatch(changePlayState(false));
-        dispatch(resetClock());
-        dispatch(setCurrentPlaylist(playlistName));
-      } else {
-        dispatch(setLoaded(true));
-      }
-      dispatch(resetCallNext());
-      dispatch(invertModalState());
-    };
+    var first;
+    if (index !== playlistIndex || playlistName !== currentPlaylist) {
+      first = [
+        setPlaylistIndex(index),
+        fetchPlaylistItems(listId),
+        goToVideo(0),
+        changePlayState(false),
+        resetClock(),
+        setCurrentPlaylist(playlistName)
+      ];
+    } else {
+      first = [setLoaded(true)];
+    }
+
+    return dispatchAll(
+      dispatch,
+      first,
+      resetCallNext(),
+      invertModalState()
+    );
   }
 
   return {

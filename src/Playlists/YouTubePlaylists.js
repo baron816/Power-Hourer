@@ -1,13 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { makeProps } from '../utils';
 
+import {
+  youtubePlaylists
+} from '../selectors';
 import Playlists from './Playlists';
 import { fetchYoutubePlaylistItems } from '../actions';
 
-function YouTubePlaylists({playlists}) {
+function YouTubePlaylists({youtubePlaylists}) {
   return (
     <Playlists
-      playlists={playlists}
+      playlists={youtubePlaylists}
       fetchPlaylistItems={fetchYoutubePlaylistItems}
       name='YouTube'
       playlistName='youtubePlaylists'
@@ -15,10 +19,6 @@ function YouTubePlaylists({playlists}) {
   );
 }
 
-function mapStateToProps(state) {
-  return {
-    playlists: state.getIn(['playlists', 'youtubePlaylists'])
-  };
-}
+const mapStateToProps = makeProps({youtubePlaylists});
 
 export default connect(mapStateToProps)(YouTubePlaylists);

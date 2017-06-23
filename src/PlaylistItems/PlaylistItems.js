@@ -5,6 +5,12 @@ import Avatar from 'material-ui/Avatar';
 import Paper from 'material-ui/Paper';
 import './PlaylistItems.css';
 import Reorder from 'material-ui/svg-icons/action/reorder';
+import { makeProps, dispatchAll } from '../utils';
+
+import {
+  playlistItems,
+  playlistItemsIndex
+} from '../selectors';
 
 import {
   SortableContainer,
@@ -24,11 +30,11 @@ function PlaylistItems(props) {
   const DragHandle = SortableHandle(() => <Reorder className='reorder'/>);
 
   const SortableItem = SortableElement(({value}) => {
-    const {setVideoIndex, playlistIndex} = c.props;
+    const {setVideoIndex, playlistItemsIndex} = c.props;
     const {item, index} = value;
     return (
       <ListItem key={item.get('videoId')}
-        style={playlistIndex === index ? { backgroundColor: 'rgba(0,0,0, 0.2)' } : {}}
+        style={playlistItemsIndex === index ? { backgroundColor: 'rgba(0,0,0, 0.2)' } : {}}
         data-index={index}
         onClick={setVideoIndex(index)}
         leftAvatar={<Avatar src={item.get('thumbnail')} />}
@@ -65,28 +71,11 @@ function PlaylistItems(props) {
   return c;
 }
 
-function mapStateToProps(state) {
-  return {
-    playlistItems: state.getIn(['playlistItems', 'playlistItems']),
-    playlistIndex: state.getIn(['playlistItems', 'playlistItemsIndex'])
-  };
-}
+const mapStateToProps = makeProps({playlistItems, playlistItemsIndex});
 
 function mapDispatchToProps(dispatch) {
-  function setVideoIndex(index) {
-    return function () {
-      if (index === 0) {
-        dispatch(changePlayState(false));
-        dispatch(resetClock());
-      }
-      dispatch(goToVideo(index));
-    };
-  }
-
-
-
   return {
-    setVideoIndex
+    setVideoIndex: (index) => dispatchAll(dispatch, index === 0 && [changePlayState(false), resetClock], goToVideo(index))
   };
 }
 

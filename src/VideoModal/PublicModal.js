@@ -5,4 +5,4 @@ import {
   fetchServerPlaylistItems
 } from '../actions';
 
-export default VideoModalHOC(YouTubeVideo, fetchServerPlaylistItems, 'publicPlaylists', 'playlistId');
+export default VideoModalHOC(YouTubeVideo, fetchServerPlaylistItems);

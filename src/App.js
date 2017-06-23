@@ -1,6 +1,14 @@
 import React from 'react';
 import './App.css';
 import { connect } from 'react-redux';
+import { makeProps, dispatchAll } from './utils';
+
+import {
+  accessToken,
+  serverId,
+  currentPlaylist
+} from './selectors';
+
 import AppBar from 'material-ui/AppBar';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
@@ -28,7 +36,7 @@ function App({
   accessToken,
   logout,
   getPlaylists,
-  currentPlaylistName
+  currentPlaylist
 }) {
 
   const MODALS = {
@@ -36,7 +44,7 @@ function App({
     serverPlaylists: ServerModal,
     publicPlaylists: PublicModal
   };
-  
+
   return (
       <div className="App">
         <AppBar
@@ -73,30 +81,35 @@ function App({
 
 
   function VideoModal() {
-    const Handler = MODALS[currentPlaylistName];
+    const Handler = MODALS[currentPlaylist] || PublicModal;
 
     return <Handler />;
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    accessToken: state.getIn(['root', 'accessToken']),
-    serverId: state.getIn(['root', 'serverId']),
-    currentPlaylistName: state.getIn(['playlists', 'currentPlaylist'])
-  };
-}
+// function mapStateToProps(state) {
+//   return {
+//     accessToken: state.getIn(['root', 'accessToken']),
+//     serverId: state.getIn(['root', 'serverId']),
+//     currentPlaylistName: state.getIn(['playlists', 'currentPlaylist'])
+//   };
+// }
+
+const mapStateToProps = makeProps({accessToken, serverId, currentPlaylist});
 
 function mapDispatchToProps(dispatch) {
-  function logout() {
-    dispatch(resetState());
-  }
+  // function logout() {
+  //   dispatch(resetState());
+  // }
+  //
+  // function getPlaylists() {
+  //   dispatch(fetchYoutubePlaylists());
+  //   dispatch(fetchServerPlaylists());
+  //   dispatch(fetchPublicPlaylists());
+  // }
 
-  function getPlaylists() {
-    dispatch(fetchYoutubePlaylists());
-    dispatch(fetchServerPlaylists());
-    dispatch(fetchPublicPlaylists());
-  }
+  const logout = dispatchAll(dispatch, resetState);
+  const getPlaylists = dispatchAll(dispatch, fetchYoutubePlaylists, fetchServerPlaylists, fetchPublicPlaylists);
 
   return {
     logout,

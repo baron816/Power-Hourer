@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Video from './Video';
+import { dispatchAll } from '../utils';
 
 import {
   changeVideoStart,
@@ -24,9 +25,7 @@ function mapDispatchToProps(dispatch) {
     dispatch(changeVideoStart(time));
   }
 
-  function changeStartToNow(time) {
-    dispatch(changeVideoStart(time));
-  }
+  const changeStartToNow = (time) => dispatchAll(dispatch, changeVideoStart(time));
 
   function setDefaultStart(event) {
     const time = event.target.value;

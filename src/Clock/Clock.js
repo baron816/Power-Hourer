@@ -1,6 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
+import { makeProps, dispatchAll } from '../utils';
+
+import {
+  time,
+  currentPlaylist
+} from '../selectors';
 
 import {
   startTime,
@@ -49,22 +54,13 @@ function Clock(props) {
   return c;
 }
 
-function mapStateToProps(state) {
-  return {
-    time: state.getIn(['clock', 'time']),
-    currentPlaylist: state.getIn(['playlists', 'currentPlaylist'])
-  };
-}
+const mapStateToProps = makeProps({time, currentPlaylist});
 
 function mapDispatchToProps(dispatch) {
-  const moveClock = compose(dispatch, startTime);
-  const stopClock = compose(dispatch, endTime);
-  const updatePlayCount = compose(dispatch, incrementPlayCount);
-
   return {
-    moveClock,
-    stopClock,
-    updatePlayCount
+    moveClock: dispatchAll(dispatch, startTime),
+    stopClock: dispatchAll(dispatch, endTime),
+    updatePlayCount: dispatchAll(dispatch, incrementPlayCount)
   };
 }
 

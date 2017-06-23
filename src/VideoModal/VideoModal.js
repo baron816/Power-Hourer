@@ -1,7 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
+// import { compose } from 'redux';
+import { makeProps, dispatchAll } from '../utils';
 
+import {
+  showModal,
+  loaded,
+  serverId
+} from '../selectors';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import AppBar from 'material-ui/AppBar';
@@ -38,15 +44,16 @@ function VideoModal(props) {
   ];
 
   c.render = function () {
+    const { showModal, selectedPlaylist } = c.props;
     return (
       <Dialog
       modal={true}
-      open={c.props.showModal}
+      open={showModal}
       actions={actions}
       bodyStyle={{minHeight: '800px', overflowY: 'scroll'}}
       contentStyle={{width: '98%', maxWidth: 'none'}}>
       <AppBar
-      title={c.props.selectedPlaylist.get('title')}
+      title={selectedPlaylist.get('title')}
       iconElementLeft={<CloseButton />}
       iconElementRight={<Settings />}
       />
@@ -56,12 +63,13 @@ function VideoModal(props) {
   };
 
   function Content() {
-    return c.props.loaded ? (
+    const { loaded, movePlItem, defaultStart, defaultLength, Video } = c.props;
+    return loaded ? (
       <div id='modalContent'>
-        <PlaylistItems moveItem={c.props.movePlItem}/>
-        <c.props.Video
-          defaultStart={c.props.defaultStart}
-          defaultLength={c.props.defaultLength}
+        <PlaylistItems moveItem={movePlItem}/>
+        <Video
+          defaultStart={defaultStart}
+          defaultLength={defaultLength}
         />
 
         <DefaultsDialog />
@@ -70,6 +78,7 @@ function VideoModal(props) {
   }
 
   function DefaultsDialog() {
+    const { defaultLength, setDefaultLength, defaultStart, setDefaultStart } = c.props;
     return (
       <Dialog
         open={c.state.open}
@@ -79,16 +88,16 @@ function VideoModal(props) {
       >
        <TextField
          floatingLabelText='Default Length'
-         value={c.props.defaultLength}
-         onChange={c.props.setDefaultLength}
+         value={defaultLength}
+         onChange={setDefaultLength}
          type='number'
          step={5}
          min={1}
        />
        <TextField
          floatingLabelText='Default Start'
-         value={c.props.defaultStart}
-         onChange={c.props.setDefaultStart}
+         value={defaultStart}
+         onChange={setDefaultStart}
          type='number'
          step={5}
          min={0}
@@ -109,6 +118,7 @@ function VideoModal(props) {
   }
 
   function Settings() {
+    const { settingsItems, serverId: {length}, savePl } = c.props;
     return (
       <IconMenu
         iconButtonElement={
@@ -117,8 +127,8 @@ function VideoModal(props) {
         targetOrigin={{horizontal: 'right', vertical: 'top'}}
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
-        {c.props.settingsItems}
-        {c.props.serverId.length && <MenuItem primaryText="Save Playlist Copy" onClick={c.props.savePl} />}
+        {settingsItems}
+        {length && <MenuItem primaryText="Save Playlist Copy" onClick={savePl} />}
         <MenuItem primaryText='Set Defaults'  onClick={handleDefaultsOpen}/>
       </IconMenu>
     );
@@ -132,29 +142,12 @@ function VideoModal(props) {
   return c;
 }
 
-function mapStateToProps(state) {
-  return {
-    showModal: state.getIn(['root', 'showModal']),
-    loaded: state.getIn(['playlistItems', 'loaded']),
-    serverId: state.getIn(['root', 'serverId'])
-  };
-}
+const mapStateToProps = makeProps({showModal, loaded, serverId});
 
 function mapDispatchToProps(dispatch) {
-  function invertModal() {
-    dispatch(invertModalState());
-    dispatch(setLoaded(false));
-  }
-
-  // function savePl() {
-  //   dispatch(savePlaylist());
-  // }
-
-  const savePl = compose(dispatch, savePlaylist);
-
   return {
-    invertModal,
-    savePl,
+    invertModal: dispatchAll(dispatch, invertModalState(), setLoaded()),
+    savePl: dispatchAll(dispatch, savePlaylist)
   };
 }
 

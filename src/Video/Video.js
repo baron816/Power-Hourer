@@ -4,7 +4,18 @@ import YouTube from 'react-youtube';
 import { Card, CardHeader, CardMedia, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import { Map } from 'immutable';
+
+import { makeProps, dispatchAll } from '../utils';
+
+import {
+  video,
+  videoStart,
+  videoEnd,
+  videoLength,
+  autoplay,
+  callNext,
+  showModal
+} from '../selectors';
 
 import Clock from '../Clock/Clock';
 import {
@@ -30,7 +41,6 @@ function Video({
 }) {
 
   let videoElement;
-
   return (
     <Card id='video'>
       <CardHeader
@@ -89,47 +99,14 @@ function Video({
   }
 }
 
-function mapStateToProps(state, ownProps) {
-  const playlistItemsIndex = state.getIn(['playlistItems', 'playlistItemsIndex']);
-  const playlistItems = state.getIn(['playlistItems', 'playlistItems']);
-  const video = playlistItems.get(playlistItemsIndex, Map());
-  const videoLength = video.get('videoLength') || ownProps.defaultLength || 60;
-  const videoStart = video.get('startTime') || ownProps.defaultStart || 30;
-  const videoEnd = videoLength + videoStart;
-  const autoplay = playlistItemsIndex === 0 ? 0 : 1;
-  return {
-    video,
-    videoStart,
-    videoEnd,
-    videoLength,
-    autoplay,
-    callNext: state.getIn(['root', 'callNext']),
-    showModal: state.getIn(['root', 'showModal'])
-  };
-}
+const mapStateToProps = makeProps({video, videoStart, videoEnd, videoLength, autoplay, callNext, showModal});
 
 function mapDispatchToProps(dispatch) {
-  function handleVideoEnd(next) {
-    return function () {
-      // if statement is workaround for bug that causes onEnd to be called twice
-      if (next) {
-        dispatch(nextVideo());
-      }
-      dispatch(flipNext());
-      dispatch(changePlayState(false));
-    };
-  }
+  const handleVideoEnd = (next) => dispatchAll(dispatch, next && nextVideo(), flipNext, changePlayState(false));
 
-  function handleVideoError() {
-    dispatch(nextVideo());
-    dispatch(changePlayState(false));
-  }
+  const handleVideoError = dispatchAll(dispatch, nextVideo, changePlayState(false));
 
-  function changePlay(bool) {
-    return function () {
-      dispatch(changePlayState(bool));
-    };
-  }
+  const changePlay = (bool) => dispatchAll(dispatch, changePlayState(bool));
 
   return {
     handleVideoEnd,

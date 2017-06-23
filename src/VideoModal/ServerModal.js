@@ -1,8 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
 import MenuItem from 'material-ui/MenuItem';
-import { Map, List } from 'immutable';
+import { makeProps, dispatchAll } from '../utils';
+
+import {
+  selectedPlaylist,
+  playlistIndex,
+  defaultStart,
+  defaultLength,
+  playlistExposed
+} from '../selectors';
 
 import ServerVideo from '../Video/ServerVideo';
 import VideoModal from './VideoModal';
@@ -30,40 +37,13 @@ function ServerModal(props) {
   }
 }
 
-function mapStateToProps(state) {
-  const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
-  const playlist = state.getIn(['playlists', 'serverPlaylists'], List());
-  const selectedPlaylist = playlist.get(playlistIndex, Map());
-  const playlistExposed = selectedPlaylist.get('exposed');
-  const defaultStart = selectedPlaylist.get('defaultStart', 30);
-  const defaultLength = selectedPlaylist.get('defaultLength', 60);
-
-  return {
-    selectedPlaylist,
-    playlistIndex,
-    defaultStart,
-    defaultLength,
-    playlistExposed
-  };
-}
+const mapStateToProps = makeProps({selectedPlaylist, playlistIndex, defaultStart, defaultLength, playlistExposed});
 
 function mapDispatchToProps(dispatch) {
-  // function deletePl() {
-  //   dispatch(deletePlaylist());
-  // }
 
-  const deletePl = compose(dispatch, deletePlaylist);
-
-  function movePlItem(indexes) {
-    dispatch(moveItem(indexes));
-    dispatch(moveServerItem(indexes));
-  }
-
-  function changeExposure(exposure) {
-    return function () {
-      dispatch(updatePlaylist({exposed: !exposure}));
-    };
-  }
+  const deletePl = dispatchAll(dispatch, deletePlaylist);
+  const movePlItem = dispatchAll(dispatch, moveItem, moveServerItem);
+  const changeExposure = (exposure) => dispatchAll(dispatch, updatePlaylist({exposed: !exposure}));
 
   function setDefault(fn, type) {
     return function (event) {

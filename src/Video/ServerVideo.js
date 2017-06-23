@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Video from './Video';
+import { dispatchAll } from '../utils';
 
 import {
   changeVideoStart,
@@ -20,14 +21,11 @@ function mapStateToProps() {
 }
 
 function mapDispatchToProps(dispatch) {
+  const changeStartToNow = dispatchAll(dispatch, changeVideoStart, changeServerVideoStart);
+
   function changeVidStart(event) {
     const time = event.target.value;
     changeStartToNow(time);
-  }
-
-  function changeStartToNow(time) {
-    dispatch(changeVideoStart(time));
-    dispatch(changeServerVideoStart(time));
   }
 
   function changeVidLen(event) {
