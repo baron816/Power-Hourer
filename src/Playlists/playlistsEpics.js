@@ -51,11 +51,11 @@ export function fetchPlaylistsEpic(action$, store) {
       Authorization: 'Bearer ' + accessToken
     })
     .map(function ({items}) {
-      return items.map(function (item) {
+      return items.map(function ({id, snippet: {title, thumbnails: {default: {url}}}}) {
         return {
-          _id: item.id,
-          title: item.snippet.title,
-          thumbnail: item.snippet.thumbnails.default.url
+          _id: id,
+          title: title,
+          thumbnail: url
         };
       });
     })
@@ -82,7 +82,7 @@ export function savePlaylistEpic(action$, store) {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + token
       })
-        .map(({response}) => createServerPlaylistFulfilled([response.playlist]))
+        .map(({response: {playlist}}) => createServerPlaylistFulfilled([playlist]))
         .catch(() => Observable.of(setError('Playlist not saved')));
     });
 }

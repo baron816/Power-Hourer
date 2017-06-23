@@ -52,7 +52,7 @@ function setPlaylistDefault(type) {
 
       return ctx.updateIn([currentPlaylist], list => {
         return list.update(index, item => {
-          return item.set(type, value);
+          return item.set(type, Number(value));
         });
       });
     });

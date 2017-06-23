@@ -57,26 +57,35 @@ function updateVideo(store, payload) {
 
 export function fetchPlaylistItemsEpic(action$) {
   return action$.ofType(FETCH_YOUTUBE_PLAYLIST_ITEMS)
-  .switchMap(function ({payload}) {
-    const nextPageToken = payload.nextPageToken ? `&pageToken=${payload.nextPageToken}` : '';
-     const url = `${YOUTUBE_URL}playlistItems?part=snippet&playlistId=${payload.playlistId}&maxResults=50&key=${YOUTUBE_API_KEY}${nextPageToken}`;
+  .switchMap(function ({payload: {
+    nextPageToken,
+    playlistId,
+    items: existingItems
+  }}) {
+    const nextPage = nextPageToken ? `&pageToken=${nextPageToken}` : '';
+     const url = `${YOUTUBE_URL}playlistItems?part=snippet&playlistId=${playlistId}&maxResults=50&key=${YOUTUBE_API_KEY}${nextPage}`;
 
      return ajax.getJSON(url)
      .map(function ({items, nextPageToken}) {
-       const normalizedItems = items.map(function ({snippet}) {
+       const normalizedItems = items.map(function ({
+         snippet: {
+           resourceId: {videoId},
+           thumbnails: {default: {url}},
+           title}
+         }) {
          return {
-           videoId: snippet.resourceId.videoId,
-           thumbnail: snippet.thumbnails.default.url,
-           title: snippet.title
+           videoId: videoId,
+           thumbnail: url,
+           title: title
          };
        });
 
        return {items: normalizedItems, nextPageToken};
      })
      .mergeMap(({items, nextPageToken}) => {
-       const nextItems = payload.items.concat(items);
-       if (nextPageToken) {
-         return [fetchYoutubePlaylistItems(payload.playlistId, nextItems, nextPageToken)];
+       const nextItems = existingItems.concat(items);
+       if (nextPageToken !== undefined) {
+         return [fetchYoutubePlaylistItems(playlistId, nextItems, nextPageToken)];
        } else {
          return [fetchPlaylistItemsFulfilled(nextItems), setLoaded(true)];
        }
