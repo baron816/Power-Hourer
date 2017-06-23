@@ -41,10 +41,6 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  // function fetchPlaylists() {
-  //   dispatch(fetchPublicPlaylists());
-  // }
-
   const fetchPlaylists = compose(dispatch, fetchPublicPlaylists);
 
   function fetchNext(publicPlaylistPage, publicPlaylistPageCount) {
