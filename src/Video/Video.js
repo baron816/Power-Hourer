@@ -61,7 +61,7 @@ function Video({
               rel: 0
             }
           }}
-          onEnd={handleVideoEnd(callNext)}
+          onEnd={handleVideoEnd(callNext, videoEnd)}
           onPlay={changePlay(true)}
           onPause={changePlay(false)}
           onError={handleVideoError}
@@ -102,7 +102,21 @@ function Video({
 const mapStateToProps = makeProps({video, videoStart, videoEnd, videoLength, autoplay, callNext, showModal});
 
 function mapDispatchToProps(dispatch) {
-  const handleVideoEnd = (next) => dispatchAll(dispatch, next && nextVideo(), flipNext, changePlayState(false));
+  function handleVideoEnd(next, videoEnd) {
+    return function (event) {
+      // if statement is workaround for bug that causes onEnd to be called twice
+      if (next) {
+        dispatch(nextVideo());
+      }
+      const duration = event.target.getDuration();
+
+      console.log({duration, videoEnd})
+      if (duration >= videoEnd || duration === 0) {
+        dispatch(flipNext());
+      }
+      dispatch(changePlayState(false));
+    };
+  }
 
   const handleVideoError = dispatchAll(dispatch, nextVideo, changePlayState(false));
 
