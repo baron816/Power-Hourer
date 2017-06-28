@@ -109,3 +109,14 @@ export const loaded = withGetIn(['playlistItems', 'loaded']);
 export const accessToken = withGetIn(['root', 'accessToken']);
 export const serverId = withGetIn(['root', 'serverId']);
 // -> currentPlaylist
+
+//PlaylistItemsEpcis
+export const playlistId = createSelector(
+  [serverPlaylists, playlistIndex],
+  (playlist, index) => playlist.get(index).get('_id')
+);
+
+export const playlistItemId = createSelector(
+  [playlistItems, playlistItemsIndex],
+  (items, index) => items.get(index).get('_id')
+);
