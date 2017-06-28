@@ -16,8 +16,8 @@ const initialState = fromJS({
   serverId: ''
 });
 
-function setToken(state, {token, googleId}) {
-  return state.withMutations(map => map.set('accessToken', token).set('googleId', googleId));
+function setToken(state, {accessToken, googleId}) {
+  return state.withMutations(map => map.set('accessToken', accessToken).set('googleId', googleId));
 }
 
 function flipState(key) {

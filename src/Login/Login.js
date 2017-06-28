@@ -29,7 +29,7 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
 
-  const signIn = ({accessToken, googleId, tokenId}) => dispatchAll(dispatch, setAccessToken(accessToken, googleId), fetchYoutubePlaylists(), loginUser(tokenId));
+  const signIn = dispatchAll(dispatch, setAccessToken, fetchYoutubePlaylists(), loginUser);
 
   const error = dispatchAll(dispatch, setError('Failed to login'));
 
