@@ -24,46 +24,76 @@ import {
   changePlayState,
 } from '../actions';
 
+const DragHandle = SortableHandle(() => <Reorder className='reorder'/>);
+
+const SortableItem = SortableElement((props) => {
+  const c = new React.Component(props);
+
+  c.shouldComponentUpdate = function (newProps) {
+    const { currentVideo, index } = c.props.value;
+    const { currentVideo: newCurrent, index: newIndex } = newProps.value;
+    return currentVideo !== newCurrent || index !== newIndex;
+  };
+
+  c.render = function () {
+    const {item, index, setVideoIndex, currentVideo} = c.props.value;
+    return (
+      <ListItem
+      key={item.get('videoId')}
+      style={currentVideo ? { backgroundColor: 'rgba(0,0,0, 0.2)' } : {}}
+      onClick={setVideoIndex(index)}
+      leftAvatar={<Avatar src={item.get('thumbnail')} />}
+      rightIcon={<DragHandle />}
+      >
+      {item.get('title')}
+      </ListItem>
+    );
+  };
+
+  return c;
+});
+
+const SortableList = SortableContainer(({
+  playlistItems,
+  setVideoIndex,
+  playlistItemsIndex
+}) => {
+  return (
+    <List id='playlistItems'>
+    {playlistItems.map(function (item, index) {
+      const currentVideo = playlistItemsIndex === index;
+      return(
+        <SortableItem
+        value={{item, index, setVideoIndex, currentVideo}}
+        index={index}
+        key={`item-${item.get('videoId')}`}
+        />
+      );
+    })}
+    </List>
+  );
+});
+
 function PlaylistItems(props) {
   const c = new React.Component(props);
 
-  const DragHandle = SortableHandle(() => <Reorder className='reorder'/>);
-
-  const SortableItem = SortableElement(({value}) => {
-    const {setVideoIndex, playlistItemsIndex} = c.props;
-    const {item, index} = value;
-    return (
-      <ListItem key={item.get('videoId')}
-        style={playlistItemsIndex === index ? { backgroundColor: 'rgba(0,0,0, 0.2)' } : {}}
-        data-index={index}
-        onClick={setVideoIndex(index)}
-        leftAvatar={<Avatar src={item.get('thumbnail')} />}
-        rightIcon={<DragHandle />}
-      >
-        {item.get('title')}
-      </ListItem>
-    );
-  });
-
-  const SortableList = SortableContainer(() => {
-    const {playlistItems} = c.props;
-    return (
-      <List id='playlistItems'>
-      {playlistItems.map(function (item, index) {
-        return(
-          <SortableItem value={{item, index}} index={index} key={`item-${item.get('videoId')}`} />
-        );
-      })}
-      </List>
-    );
-  });
-
-
   c.render = function () {
-    const {moveItem} = c.props;
+    const {
+      moveItem,
+      playlistItems,
+      setVideoIndex,
+      playlistItemsIndex
+    } = c.props;
     return (
       <Paper zDepth={3} id='playlistPaper'>
-        <SortableList useDragHandle={true} onSortEnd={moveItem} />
+        <SortableList
+          useDragHandle={true}
+          onSortEnd={moveItem}
+          helperClass='sortableHelper'
+          playlistItems={playlistItems}
+          setVideoIndex={setVideoIndex}
+          playlistItemsIndex={playlistItemsIndex}
+        />
       </Paper>
     );
   };
