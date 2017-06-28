@@ -24,30 +24,21 @@ import {
   setLoaded,
   empty
 } from '../actions';
+import { makeProps } from '../utils';
 
-function playlistData(store) {
-  const state = store.getState();
-  const playlistItemsIndex = state.getIn(['playlistItems', 'playlistItemsIndex']);
-  const playlistItems = state.getIn(['playlistItems', 'playlistItems']);
-  const playlistItemId = playlistItems.get(playlistItemsIndex).get('_id');
-  const playlist = state.getIn(['playlists', 'serverPlaylists']);
-  const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
-  const playlistId = playlist.get(playlistIndex).get('_id');
-  const token = state.getIn(['root', 'serverId']);
-
-  return {
-    token,
-    playlistId,
-    playlistItemId
-  };
-}
+import {
+  serverId,
+  playlistId,
+  playlistItemId
+} from '../selectors';
 
 function updateVideo(store, payload) {
-  const {playlistId, playlistItemId, token} = playlistData(store);
+  const props = makeProps({playlist: playlistId, item: playlistItemId, token: serverId})(store.getState());
+  const { playlist, item, token } = props;
 
   const updateData = JSON.stringify({startTime: payload});
 
-  return ajax.put(`${SERVER_URL}playlists/${playlistId}/playlistItems/${playlistItemId}`, updateData, {
+  return ajax.put(`${SERVER_URL}playlists/${playlist}/playlistItems/${item}`, updateData, {
     'Content-Type': 'application/json',
     Authorization: 'Bearer ' + token
   })
@@ -118,13 +109,11 @@ export function changeServerVideoLengthEpic(action$, store) {
 export function moveItemEpic(action$, store) {
   return action$.ofType(MOVE_SERVER_ITEM)
     .mergeMap(function ({payload}) {
-      const state = store.getState();
-      const playlist = state.getIn(['playlists', 'serverPlaylists']);
-      const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
-      const playlistId = playlist.get(playlistIndex).get('_id');
-      const token = state.getIn(['root', 'serverId']);
+      const props = makeProps({token: serverId, playlist: playlistId})(store.getState());
 
-      return ajax.put(`${SERVER_URL}playlists/${playlistId}/moveItem`, payload, {
+      const { token, playlist } = props;
+
+      return ajax.put(`${SERVER_URL}playlists/${playlist}/moveItem`, payload, {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + token
       })
