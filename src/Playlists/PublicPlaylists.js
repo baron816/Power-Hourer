@@ -44,13 +44,6 @@ const mapStateToProps = makeProps({publicPlaylists, publicPlaylistPageCount, pub
 function mapDispatchToProps(dispatch) {
   const fetchPlaylists = dispatchAll(dispatch, fetchPublicPlaylists);
 
-  // function fetchNext(publicPlaylistPage, publicPlaylistPageCount) {
-  //   if (publicPlaylistPage < publicPlaylistPageCount) {
-  //     return function () {
-  //       dispatch(fetchNextPublicPlaylistsPage(publicPlaylistPage + 1));
-  //     };
-  //   }
-  // }
 
   const fetchNext = (publicPlaylistPage, publicPlaylistPageCount) => dispatchAll(dispatch, publicPlaylistPage < publicPlaylistPageCount && fetchNextPublicPlaylistsPage(publicPlaylistPage + 1));
 
