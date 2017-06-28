@@ -6,10 +6,8 @@ import {
   defaultStart,
   defaultLength
 } from '../selectors';
-// import { Map, List } from 'immutable';
 import MenuItem from 'material-ui/MenuItem';
 import VideoModal from './VideoModal';
-// import { compose } from 'redux';
 
 import {
   setPlaylistDefaultLength,
@@ -37,7 +35,7 @@ export default function VideoModalHOC(Video, fetch) {
 
     function setDefault(fn) {
       return function (event) {
-        const time = event.target.value;
+        const time = Number(event.target.value);
         dispatch(fn(time));
       };
     }

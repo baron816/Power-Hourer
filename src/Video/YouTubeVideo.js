@@ -21,19 +21,19 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   function changeVidStart(event) {
-    const time = event.target.value;
+    const time = Number(event.target.value);
     dispatch(changeVideoStart(time));
   }
 
-  const changeStartToNow = (time) => dispatchAll(dispatch, changeVideoStart(time));
+  const changeStartToNow = dispatchAll(dispatch, changeVideoStart);
 
   function setDefaultStart(event) {
-    const time = event.target.value;
+    const time = Number(event.target.value);
     dispatch(setPlaylistDefaultStartTime(time));
   }
 
   function changeVidLen(event) {
-    const time = event.target.value;
+    const time = Number(event.target.value);
     dispatch(changeVideoLength(time));
   }
 

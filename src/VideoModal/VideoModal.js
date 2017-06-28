@@ -42,7 +42,6 @@ function VideoModal(props) {
       onTouchTap={c.props.invertModal}
     />
   ];
-
   c.render = function () {
     const { showModal, selectedPlaylist } = c.props;
     return (

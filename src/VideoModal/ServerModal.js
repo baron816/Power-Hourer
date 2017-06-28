@@ -48,7 +48,7 @@ function mapDispatchToProps(dispatch) {
   function setDefault(fn, type) {
     return function (event) {
       const time = event.target.value;
-      dispatch(updatePlaylist({[type]: time}));
+      dispatch(updatePlaylist({[type]: Number(time)}));
     };
   }
 

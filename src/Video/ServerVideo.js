@@ -24,12 +24,12 @@ function mapDispatchToProps(dispatch) {
   const changeStartToNow = dispatchAll(dispatch, changeVideoStart, changeServerVideoStart);
 
   function changeVidStart(event) {
-    const time = event.target.value;
+    const time = Number(event.target.value);
     changeStartToNow(time);
   }
 
   function changeVidLen(event) {
-    const time = event.target.value;
+    const time = Number(event.target.value);
     dispatch(changeVideoLength(time));
     dispatch(changeServerVideoLength(time));
   }
