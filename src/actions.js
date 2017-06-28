@@ -4,7 +4,7 @@ import * as ac from './actionCreators';
 
 //Redux
 //root
-export const setAccessToken = createAction(ac.SET_ACCESS_TOKEN, (token, googleId) => ({token, googleId}));
+export const setAccessToken = createAction(ac.SET_ACCESS_TOKEN, ({accessToken, googleId}) => ({accessToken, googleId}));
 export const flipNext = createAction(ac.FLIP_NEXT);
 export const invertModalState = createAction(ac.SHOW_MODAL);
 export const resetState = createAction(ac.RESET_STATE);
@@ -67,6 +67,6 @@ export const startTime = createAction(ac.START_TIME);
 export const endTime = createAction(ac.END_TIME);
 
 //login
-export const loginUser = createAction(ac.LOGIN_USER, token => token);
+export const loginUser = createAction(ac.LOGIN_USER, ({tokenId}) => tokenId);
 
 export const empty = createAction('EMPTY');
