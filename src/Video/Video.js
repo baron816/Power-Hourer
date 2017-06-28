@@ -110,7 +110,6 @@ function mapDispatchToProps(dispatch) {
       }
       const duration = event.target.getDuration();
 
-      console.log({duration, videoEnd})
       if (duration >= videoEnd || duration === 0) {
         dispatch(flipNext());
       }
