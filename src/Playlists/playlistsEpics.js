@@ -15,6 +15,7 @@ import {
 } from '../actionCreators';
 
 import { YOUTUBE_API_KEY, YOUTUBE_URL, SERVER_URL } from '../epics';
+
 import {
   fetchYoutubePlaylistFulfilled,
   fetchServerPlaylistsFulfilled,
@@ -28,33 +29,43 @@ import {
   empty
 } from '../actions';
 
-function playlistData(store) {
-  const state = store.getState();
-  const currentPlaylistName = state.getIn(['playlists', 'currentPlaylist']);
-  const playlists = state.getIn(['playlists', currentPlaylistName]);
-  const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
-  const playlist = playlists.get(playlistIndex);
-  const token = state.getIn(['root', 'serverId']);
+import { makeProps } from '../utils';
 
-  return {
-    token,
-    playlist,
-    playlistIndex,
-  };
-}
+import {
+  accessToken,
+  selectedPlaylist,
+  playlistIndex,
+  playlistItems,
+  serverId
+} from '../selectors';
+
+// function playlistData(store) {
+//   const state = store.getState();
+//   const currentPlaylistName = state.getIn(['playlists', 'currentPlaylist']);
+//   const playlists = state.getIn(['playlists', currentPlaylistName]);
+//   const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
+//   const playlist = playlists.get(playlistIndex);
+//   const token = state.getIn(['root', 'serverId']);
+//
+//   return {
+//     token,
+//     playlist,
+//     playlistIndex,
+//   };
+// }
 
 export function fetchPlaylistsEpic(action$, store) {
   return action$.ofType(FETCH_YOUTUBE_PLAYLISTS)
   .mergeMap(function () {
-    const accessToken = store.getState().getIn(['root', 'accessToken']);
+    const token = accessToken(store.getState());
     return ajax.getJSON(`${YOUTUBE_URL}playlists?part=snippet&mine=true&key=${YOUTUBE_API_KEY}`, {
-      Authorization: 'Bearer ' + accessToken
+      Authorization: 'Bearer ' + token
     })
     .map(function ({items}) {
       return items.map(function ({id, snippet: {title, thumbnails: {default: {url}}}}) {
         return {
           _id: id,
-          title: title,
+          title,
           thumbnail: url
         };
       });
@@ -67,12 +78,10 @@ export function fetchPlaylistsEpic(action$, store) {
 export function savePlaylistEpic(action$, store) {
   return action$.ofType(SAVE_PLAYLIST)
     .mergeMap(function () {
-      const state = store.getState();
-      const { playlist, token } = playlistData(store);
-      const playlistItems = state.getIn(['playlistItems', 'playlistItems']);
+      const { playlist, token, plItems } = makeProps({playlist: selectedPlaylist, token: serverId, plItems: playlistItems})(store.getState());
 
       const newPlaylist = JSON.stringify({
-        playlistItems,
+        playlistItems: plItems,
         playlistId: playlist.get('_id'),
         title: playlist.get('title'),
         thumbnail: playlist.get('thumbnail')
@@ -90,8 +99,7 @@ export function savePlaylistEpic(action$, store) {
 export function getUserPlaylistsEpic(action$, store) {
   return action$.ofType(FETCH_SERVER_PLAYLISTS)
     .mergeMap(function () {
-      const state = store.getState();
-      const id = state.getIn(['root', 'serverId']);
+      const id = serverId(store.getState());
 
       return ajax.getJSON(`${SERVER_URL}users/playlists`, {
         Authorization: 'Bearer ' + id
@@ -104,12 +112,12 @@ export function getUserPlaylistsEpic(action$, store) {
 export function deleteServerPlaylistEpic(action$, store) {
   return action$.ofType(DELETE_PLAYLIST)
     .mergeMap(function () {
-      const { playlistIndex, playlist, token } = playlistData(store);
+      const { plIndex, playlist, token } = makeProps({plIndex: playlistIndex, playlist: selectedPlaylist, token: serverId})(store.getState());
 
       return ajax.delete(`${SERVER_URL}playlists/${playlist.get('_id')}`, {
         Authorization: 'Bearer ' + token
       })
-        .mergeMap(() => [invertModalState(), deleteServerPlaylistFulfilled(playlistIndex)])
+        .mergeMap(() => [invertModalState(), deleteServerPlaylistFulfilled(plIndex)])
         .catch(() => Observable.of(setError('Failed to delete playlist')));
     });
 }
@@ -117,7 +125,7 @@ export function deleteServerPlaylistEpic(action$, store) {
 export function updatePlaylistEpic(action$, store) {
   return action$.ofType(UPDATE_PLAYLIST)
     .mergeMap(function ({payload}) {
-      const {token, playlist} = playlistData(store);
+      const {token, playlist} = makeProps({token: serverId, playlist: selectedPlaylist})(store.getState());
 
       return ajax.put(`${SERVER_URL}playlists/${playlist.get('_id')}`, JSON.stringify(payload), {
         'Content-Type': 'application/json',
@@ -149,7 +157,7 @@ export function fetchNextPublicPlaylistsPageEpic(action$) {
 export function incrementPlayCountEpic(action$, store) {
   return action$.ofType(INCREMENT_PLAYCOUNT)
     .mergeMap(function () {
-      const { playlist } = playlistData(store);
+      const { playlist } = selectedPlaylist(store.getState());
 
       return ajax.put(`${SERVER_URL}playlists/${playlist.get('_id')}/incrementPlayCount`)
         .map(() => empty())

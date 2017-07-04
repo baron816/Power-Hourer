@@ -41,7 +41,7 @@ const mapStateToProps = makeProps({selectedPlaylist, playlistIndex, defaultStart
 
 function mapDispatchToProps(dispatch) {
 
-  const deletePl = dispatchAll(dispatch, deletePlaylist);
+  const deletePl = dispatchAll(dispatch, deletePlaylist());
   const movePlItem = dispatchAll(dispatch, moveItem, moveServerItem);
   const changeExposure = (exposure) => dispatchAll(dispatch, updatePlaylist({exposed: !exposure}));
 

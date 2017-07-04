@@ -146,7 +146,7 @@ const mapStateToProps = makeProps({showModal, loaded, serverId});
 function mapDispatchToProps(dispatch) {
   return {
     invertModal: dispatchAll(dispatch, invertModalState(), setLoaded()),
-    savePl: dispatchAll(dispatch, savePlaylist)
+    savePl: dispatchAll(dispatch, savePlaylist())
   };
 }
 
