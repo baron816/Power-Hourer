@@ -19,13 +19,15 @@ import {
   moveServerItem,
   updatePlaylist,
   setPlaylistDefaultLength,
-  setPlaylistDefaultStartTime
+  setPlaylistDefaultStartTime,
+  removeItem
  } from '../actions';
 
 function ServerModal(props) {
   const settingsItems = [
     <ExposureItem key='exposure' />,
-    <MenuItem primaryText='Delete Playlist' onClick={props.deletePl} key='delete'/>
+    <MenuItem primaryText='Delete Playlist' onClick={props.deletePl} key='delete'/>,
+    <MenuItem primaryText='Remove Video' onClick={props.removeVideo} key='removeVideo' />
   ];
 
   return <VideoModal Video={ServerVideo} settingsItems={settingsItems} {...props} />;
@@ -43,6 +45,7 @@ function mapDispatchToProps(dispatch) {
 
   const deletePl = dispatchAll(dispatch, deletePlaylist());
   const movePlItem = dispatchAll(dispatch, moveItem, moveServerItem);
+  const removeVideo = dispatchAll(dispatch, removeItem());
   const changeExposure = (exposure) => dispatchAll(dispatch, updatePlaylist({exposed: !exposure}));
 
   function setDefault(fn, type) {
@@ -55,12 +58,14 @@ function mapDispatchToProps(dispatch) {
   const setDefaultStart = setDefault(setPlaylistDefaultStartTime, 'defaultStart');
   const setDefaultLength = setDefault(setPlaylistDefaultLength, 'defaultLength');
 
+
   return {
     deletePl,
     movePlItem,
     changeExposure,
     setDefaultStart,
-    setDefaultLength
+    setDefaultLength,
+    removeVideo
   };
 }
 

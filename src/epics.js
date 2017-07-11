@@ -28,7 +28,8 @@ import {
   fetchServerPlaylistItemsEpic,
   changeServerVideoStartEpic,
   changeServerVideoLengthEpic,
-  moveItemEpic
+  moveItemEpic,
+  removeItemEpic
 } from './PlaylistItems/playlistItemsEpics';
 
 export default combineEpics(
@@ -43,6 +44,7 @@ export default combineEpics(
   changeServerVideoLengthEpic,
   deleteServerPlaylistEpic,
   moveItemEpic,
+  removeItemEpic,
   updatePlaylistEpic,
   fetchPublicPlaylistsEpic,
   fetchNextPublicPlaylistsPageEpic,

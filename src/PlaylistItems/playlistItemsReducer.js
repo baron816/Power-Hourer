@@ -7,7 +7,8 @@ import {
   CHANGE_VIDEO_START,
   MOVE_ITEM,
   SET_LOADED,
-  CHANGE_VIDEO_LENGTH
+  CHANGE_VIDEO_LENGTH,
+  REMOVE_ITEM_FULFILLED
 } from '../actionCreators';
 
 const initialState = fromJS({
@@ -38,6 +39,16 @@ function moveItem(state, {oldIndex, newIndex}) {
 
     ctx.updateIn(['playlistItems'], list => list.delete(oldIndex).insert(newIndex, oldItem));
   });
+}
+
+function removeItem(state, id) {
+  const index = state.get('playlistItems').findIndex(item => item.get('_id') === id);
+
+  if (index >= 0) {
+    return state.updateIn(['playlistItems'], list => list.remove(index));
+  } else {
+    return state;
+  }
 }
 
 function changeProperty(property) {
@@ -73,6 +84,8 @@ export default function playlistItemsReducer(state = initialState, action) {
       return moveItem(state, action.payload);
     case SET_LOADED:
       return state.set('loaded', action.payload);
+    case REMOVE_ITEM_FULFILLED:
+      return removeItem(state, action.payload);
     default:
       return state;
   }

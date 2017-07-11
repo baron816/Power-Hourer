@@ -39,21 +39,6 @@ import {
   serverId
 } from '../selectors';
 
-// function playlistData(store) {
-//   const state = store.getState();
-//   const currentPlaylistName = state.getIn(['playlists', 'currentPlaylist']);
-//   const playlists = state.getIn(['playlists', currentPlaylistName]);
-//   const playlistIndex = state.getIn(['playlists', 'playlistIndex']);
-//   const playlist = playlists.get(playlistIndex);
-//   const token = state.getIn(['root', 'serverId']);
-//
-//   return {
-//     token,
-//     playlist,
-//     playlistIndex,
-//   };
-// }
-
 export function fetchPlaylistsEpic(action$, store) {
   return action$.ofType(FETCH_YOUTUBE_PLAYLISTS)
   .mergeMap(function () {

@@ -23,6 +23,7 @@ export const changeVideoStart = createAction(ac.CHANGE_VIDEO_START, time => time
 export const changeVideoLength = createAction(ac.CHANGE_VIDEO_LENGTH, time => time);
 export const moveItem = createAction(ac.MOVE_ITEM, indexes => indexes);
 export const setLoaded = createAction(ac.SET_LOADED, bool => bool);
+export const removeItemFulfilled = createAction(ac.REMOVE_ITEM_FULFILLED, id => id);
 
 
 //playlists
@@ -61,6 +62,7 @@ export const fetchYoutubePlaylistItems = createAction(ac.FETCH_YOUTUBE_PLAYLIST_
 export const fetchServerPlaylistItems = createAction(ac.FETCH_SERVER_PLAYLIST_ITEMS, _id => _id);
 export const changeServerVideoStart = createAction(ac.CHANGE_SERVER_VIDEO_START, time => time);
 export const changeServerVideoLength = createAction(ac.CHANGE_SERVER_VIDEO_LENGTH, time => time);
+export const removeItem = createAction(ac.REMOVE_ITEM);
 
 //clock
 export const startTime = createAction(ac.START_TIME);

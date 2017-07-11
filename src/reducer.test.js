@@ -18,7 +18,7 @@ describe('reducer', function () {
     });
 
     it('sets the state with the token', function () {
-      const action = setAccessToken('somelongstringherewithrandomchars', 'mygoogleid');
+      const action = setAccessToken({accessToken: 'somelongstringherewithrandomchars', googleId: 'mygoogleid'});
 
       const nextState = reducer(initialState, action);
 

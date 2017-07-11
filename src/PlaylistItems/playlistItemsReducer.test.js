@@ -8,7 +8,8 @@ import {
   goToVideo,
   changeVideoStart,
   changeVideoLength,
-  moveItem
+  moveItem,
+  removeItemFulfilled
 } from '../actions';
 
 describe('playlistItemsReducer', function () {
@@ -173,5 +174,31 @@ describe('playlistItemsReducer', function () {
         }));
       });
     });
+  });
+});
+
+describe('#removeItem', () => {
+  const initialState = fromJS({
+    playlistItems: [{_id: 'c2oun1oun'}, {_id: 'auen3oun'}, {_id: '1no8j08a'}, {_id: 'n90a0va'}]
+  });
+
+  it('removes a pl item from the playlist', () => {
+    const action = removeItemFulfilled('1no8j08a');
+
+    const nextState = reducer(initialState, action);
+
+    expect(nextState).toEqual(fromJS({
+      playlistItems: [{_id: 'c2oun1oun'}, {_id: 'auen3oun'}, {_id: 'n90a0va'}]
+    }));
+  });
+
+  it('wont change the playlistItem if item is not present', () => {
+    const action = removeItemFulfilled('notThere');
+
+    const nextState = reducer(initialState, action);
+
+    expect(nextState).toEqual(fromJS({
+      playlistItems: [{_id: 'c2oun1oun'}, {_id: 'auen3oun'}, {_id: '1no8j08a'}, {_id: 'n90a0va'}]
+    }));
   });
 });

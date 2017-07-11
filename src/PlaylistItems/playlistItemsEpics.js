@@ -9,7 +9,8 @@ import {
   FETCH_SERVER_PLAYLIST_ITEMS,
   CHANGE_SERVER_VIDEO_START,
   CHANGE_SERVER_VIDEO_LENGTH,
-  MOVE_SERVER_ITEM
+  MOVE_SERVER_ITEM,
+  REMOVE_ITEM
 } from '../actionCreators';
 
 import {
@@ -22,7 +23,8 @@ import {
   fetchPlaylistItemsFulfilled,
   setError,
   setLoaded,
-  empty
+  empty,
+  removeItemFulfilled
 } from '../actions';
 import { makeProps } from '../utils';
 
@@ -119,5 +121,21 @@ export function moveItemEpic(action$, store) {
       })
         .map(() => empty())
         .catch(() => Observable.of(setError('Failed to move video')));
+    });
+}
+
+export function removeItemEpic(action$, store) {
+  return action$.ofType(REMOVE_ITEM)
+    .mergeMap(function () {
+      const props = makeProps({playlist: playlistId, item: playlistItemId, token: serverId})(store.getState());
+
+      const { token, item, playlist } = props;
+
+      return ajax.delete(`${SERVER_URL}playlists/${playlist}/playlistItems/${item}`, {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      })
+        .map(({response}) => removeItemFulfilled(response))
+        .catch(() => Observable.of(setError('Failed to delete Item')));
     });
 }
