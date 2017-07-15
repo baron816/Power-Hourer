@@ -87,26 +87,9 @@ function App({
   }
 }
 
-// function mapStateToProps(state) {
-//   return {
-//     accessToken: state.getIn(['root', 'accessToken']),
-//     serverId: state.getIn(['root', 'serverId']),
-//     currentPlaylistName: state.getIn(['playlists', 'currentPlaylist'])
-//   };
-// }
-
 const mapStateToProps = makeProps({accessToken, serverId, currentPlaylist});
 
 function mapDispatchToProps(dispatch) {
-  // function logout() {
-  //   dispatch(resetState());
-  // }
-  //
-  // function getPlaylists() {
-  //   dispatch(fetchYoutubePlaylists());
-  //   dispatch(fetchServerPlaylists());
-  //   dispatch(fetchPublicPlaylists());
-  // }
 
   const logout = dispatchAll(dispatch, resetState);
   const getPlaylists = dispatchAll(dispatch, fetchYoutubePlaylists, fetchServerPlaylists, fetchPublicPlaylists);
