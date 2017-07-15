@@ -44,6 +44,11 @@ export const resetClock = createAction(ac.RESET_CLOCK);
 export const incrementTime = createAction(ac.INCREMENT_TIME);
 export const changePlayState = createAction(ac.CHANGE_PLAY_STATE, bool => bool);
 
+//searchVideos
+export const searchVideosFulfilled = createAction(ac.SEARCH_VIDEOS_FULFILLED, (videos, nextPageToken) => ({videos, nextPageToken}));
+export const flipSearching = createAction(ac.FLIP_SEARCHING);
+export const setSearchingToFalse = createAction(ac.SET_SEARCHING_TO_FALSE);
+
 //Epic
 //playlists
 export const fetchYoutubePlaylists = createAction(ac.FETCH_YOUTUBE_PLAYLISTS);
@@ -63,6 +68,8 @@ export const fetchServerPlaylistItems = createAction(ac.FETCH_SERVER_PLAYLIST_IT
 export const changeServerVideoStart = createAction(ac.CHANGE_SERVER_VIDEO_START, time => time);
 export const changeServerVideoLength = createAction(ac.CHANGE_SERVER_VIDEO_LENGTH, time => time);
 export const removeItem = createAction(ac.REMOVE_ITEM);
+export const addVideoToServerPlaylist = createAction(ac.ADD_VIDEO_TO_SERVER_PLAYLIST);
+export const addPlaylistItemFulfilled = createAction(ac.ADD_PLAYLIST_ITEM_FULFILLED, item => item);
 
 //clock
 export const startTime = createAction(ac.START_TIME);
@@ -70,5 +77,8 @@ export const endTime = createAction(ac.END_TIME);
 
 //login
 export const loginUser = createAction(ac.LOGIN_USER, ({tokenId}) => tokenId);
+
+//searchVideos
+export const searchVideos = createAction(ac.SEARCH_VIDEOS, query => query);
 
 export const empty = createAction('EMPTY');

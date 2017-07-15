@@ -29,8 +29,13 @@ import {
   changeServerVideoStartEpic,
   changeServerVideoLengthEpic,
   moveItemEpic,
-  removeItemEpic
+  removeItemEpic,
+  addItemEpic
 } from './PlaylistItems/playlistItemsEpics';
+
+import {
+  searchVideos
+} from './SearchVideos/searchVideosEpics';
 
 export default combineEpics(
   fetchPlaylistsEpic,
@@ -45,8 +50,10 @@ export default combineEpics(
   deleteServerPlaylistEpic,
   moveItemEpic,
   removeItemEpic,
+  addItemEpic,
   updatePlaylistEpic,
   fetchPublicPlaylistsEpic,
   fetchNextPublicPlaylistsPageEpic,
-  incrementPlayCountEpic
+  incrementPlayCountEpic,
+  searchVideos
 );

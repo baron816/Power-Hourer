@@ -19,7 +19,8 @@ import {
   setPlaylistIndex,
   setCurrentPlaylist,
   resetCallNext,
-  setLoaded
+  setLoaded,
+  setSearchingToFalse
 } from '../actions';
 
 function Playlists({
@@ -73,23 +74,6 @@ function Playlists({
 const mapStateToProps = makeProps({playlistIndex, currentPlaylist});
 
 function mapDispatchToProps(dispatch, {fetchPlaylistItems, playlistName}) {
-  // function getPlaylist(listId, index, playlistIndex, currentPlaylist) {
-  //   return function () {
-  //     if (index !== playlistIndex || playlistName !== currentPlaylist) {
-  //       dispatch(setPlaylistIndex(index));
-  //       dispatch(fetchPlaylistItems(listId));
-  //       dispatch(goToVideo(0));
-  //       dispatch(changePlayState(false));
-  //       dispatch(resetClock());
-  //       dispatch(setCurrentPlaylist(playlistName));
-  //     } else {
-  //       dispatch(setLoaded(true));
-  //     }
-  //     dispatch(resetCallNext());
-  //     dispatch(invertModalState());
-  //   };
-  // }
-
   function getPlaylist(listId, index, playlistIndex, currentPlaylist) {
     var first;
     if (index !== playlistIndex || playlistName !== currentPlaylist) {
@@ -109,7 +93,8 @@ function mapDispatchToProps(dispatch, {fetchPlaylistItems, playlistName}) {
       dispatch,
       first,
       resetCallNext(),
-      invertModalState()
+      invertModalState(),
+      setSearchingToFalse()
     );
   }
 

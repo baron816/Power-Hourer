@@ -9,7 +9,8 @@ import {
   changeVideoStart,
   changeVideoLength,
   moveItem,
-  removeItemFulfilled
+  removeItemFulfilled,
+  addPlaylistItemFulfilled
 } from '../actions';
 
 describe('playlistItemsReducer', function () {
@@ -199,6 +200,22 @@ describe('#removeItem', () => {
 
     expect(nextState).toEqual(fromJS({
       playlistItems: [{_id: 'c2oun1oun'}, {_id: 'auen3oun'}, {_id: '1no8j08a'}, {_id: 'n90a0va'}]
+    }));
+  });
+});
+
+describe('#addItem', () => {
+  it('add an item', () => {
+    const initialState = fromJS({
+      playlistItems: [{_id: 'c2oun1oun'}, {_id: 'auen3oun'}, {_id: '1no8j08a'}, {_id: 'n90a0va'}]
+    });
+
+    const action = addPlaylistItemFulfilled({_id: '280h1ouna'});
+
+    const nextState = reducer(initialState, action);
+
+    expect(nextState).toEqual(fromJS({
+      playlistItems: [{_id: 'c2oun1oun'}, {_id: 'auen3oun'}, {_id: '1no8j08a'}, {_id: 'n90a0va'}, {_id: '280h1ouna'}]
     }));
   });
 });

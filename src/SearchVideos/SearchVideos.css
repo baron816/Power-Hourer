@@ -1,0 +1,7 @@
+#searchVideos {
+  flex: 1;
+  margin-left: 5px;
+  margin-top: 5px;
+  height: 600px;
+  overflow-y: auto;
+}

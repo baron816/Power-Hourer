@@ -10,7 +10,8 @@ import {
   CHANGE_SERVER_VIDEO_START,
   CHANGE_SERVER_VIDEO_LENGTH,
   MOVE_SERVER_ITEM,
-  REMOVE_ITEM
+  REMOVE_ITEM,
+  ADD_VIDEO_TO_SERVER_PLAYLIST
 } from '../actionCreators';
 
 import {
@@ -24,14 +25,16 @@ import {
   setError,
   setLoaded,
   empty,
-  removeItemFulfilled
+  removeItemFulfilled,
+  addPlaylistItemFulfilled
 } from '../actions';
 import { makeProps } from '../utils';
 
 import {
   serverId,
   playlistId,
-  playlistItemId
+  playlistItemId,
+  selectedFromSearch
 } from '../selectors';
 
 function updateVideo(store, payload) {
@@ -137,5 +140,20 @@ export function removeItemEpic(action$, store) {
       })
         .map(({response}) => removeItemFulfilled(response))
         .catch(() => Observable.of(setError('Failed to delete Item')));
+    });
+}
+
+export function addItemEpic(action$, store) {
+  return action$.ofType(ADD_VIDEO_TO_SERVER_PLAYLIST)
+    .mergeMap(function ({payload}) {
+      const props = makeProps({ item: selectedFromSearch(payload), playlist: playlistId, token: serverId })(store.getState());
+      const { item, playlist, token } = props;
+
+      return ajax.put(`${SERVER_URL}playlists/${playlist}/playlistItems`, JSON.stringify(item), {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token
+      })
+        .map(({response}) => addPlaylistItemFulfilled(response))
+        .catch(() => Observable.of(setError('Failed to add video')));
     });
 }

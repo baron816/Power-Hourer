@@ -8,7 +8,8 @@ import {
   MOVE_ITEM,
   SET_LOADED,
   CHANGE_VIDEO_LENGTH,
-  REMOVE_ITEM_FULFILLED
+  REMOVE_ITEM_FULFILLED,
+  ADD_PLAYLIST_ITEM_FULFILLED
 } from '../actionCreators';
 
 const initialState = fromJS({
@@ -51,6 +52,10 @@ function removeItem(state, id) {
   }
 }
 
+function addItem(state, item) {
+  return state.updateIn(['playlistItems'], items => items.push(fromJS(item)));
+}
+
 function changeProperty(property) {
   return function (state, time) {
     return state.update(ctx => {
@@ -86,6 +91,8 @@ export default function playlistItemsReducer(state = initialState, action) {
       return state.set('loaded', action.payload);
     case REMOVE_ITEM_FULFILLED:
       return removeItem(state, action.payload);
+    case ADD_PLAYLIST_ITEM_FULFILLED:
+      return addItem(state, action.payload);
     default:
       return state;
   }

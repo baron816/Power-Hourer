@@ -120,3 +120,15 @@ export const playlistItemId = createSelector(
   [playlistItems, playlistItemsIndex],
   (items, index) => items.get(index).get('_id')
 );
+
+//searchVideos
+export const searchResults = withGetIn(['searchVideos', 'searchResults']);
+export const nextPageToken = withGetIn(['searchVideos', 'nextPageToken']);
+export const searching = withGetIn(['searchVideos', 'searching']);
+
+export function selectedFromSearch(index) {
+  return createSelector(
+    searchResults,
+    (results) => results.get(index)
+  );
+}

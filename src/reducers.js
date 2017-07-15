@@ -5,6 +5,7 @@ import playlistItems from './PlaylistItems/playlistItemsReducer';
 import playlists from './Playlists/playlistsReducer';
 import clock from './Clock/clockReducer';
 import error from './ErrorBar/errorReducer';
+import searchVideos from './SearchVideos/searchVideosReducer';
 import { RESET_STATE } from './actionCreators';
 
 const appReducer = combineReducers({
@@ -12,7 +13,8 @@ const appReducer = combineReducers({
   playlistItems,
   playlists,
   clock,
-  error
+  error,
+  searchVideos
 });
 
 export default function reducers(state, action) {

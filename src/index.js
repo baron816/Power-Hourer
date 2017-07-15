@@ -29,7 +29,7 @@ function AppProvider() {
   };
 
   c.componentWillMount = function () {
-    persistStore(store, {}, () => {
+    persistStore(store, {blacklist: ['searchVideos']}, () => {
       c.setState({ rehyrdrated: true });
     });
   };

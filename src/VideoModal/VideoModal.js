@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import { compose } from 'redux';
 import { makeProps, dispatchAll } from '../utils';
 
 import {
   showModal,
   loaded,
-  serverId
+  serverId,
+  searching
 } from '../selectors';
+
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import AppBar from 'material-ui/AppBar';
@@ -20,6 +21,8 @@ import CircularProgress from 'material-ui/CircularProgress';
 import TextField from 'material-ui/TextField';
 
 import PlaylistItems from '../PlaylistItems/PlaylistItems';
+import SearchVideos from '../SearchVideos/SearchVideos';
+
 import {
   invertModalState,
   savePlaylist,
@@ -32,7 +35,7 @@ function VideoModal(props) {
   const c = new React.Component(props);
 
   c.state = {
-    open: false
+    open: false,
   };
 
   const actions = [
@@ -46,17 +49,18 @@ function VideoModal(props) {
     const { showModal, selectedPlaylist } = c.props;
     return (
       <Dialog
-      modal={true}
-      open={showModal}
-      actions={actions}
-      bodyStyle={{minHeight: '800px', overflowY: 'scroll'}}
-      contentStyle={{width: '98%', maxWidth: 'none'}}>
-      <AppBar
-      title={selectedPlaylist.get('title')}
-      iconElementLeft={<CloseButton />}
-      iconElementRight={<Settings />}
-      />
-        <Content/>
+        modal={true}
+        open={showModal}
+        actions={actions}
+        bodyStyle={{minHeight: '600px', overflowY: 'scroll'}}
+        contentStyle={{width: '98%', maxWidth: 'none'}}
+      >
+        <AppBar
+          title={selectedPlaylist.get('title')}
+          iconElementLeft={<CloseButton />}
+          iconElementRight={<Settings />}
+        />
+        {c.props.searching ? <SearchVideos /> : <Content />}
       </Dialog>
     );
   };
@@ -128,20 +132,20 @@ function VideoModal(props) {
       >
         {settingsItems}
         {length && <MenuItem primaryText="Save Playlist Copy" onClick={savePl} />}
-        <MenuItem primaryText='Set Defaults'  onClick={handleDefaultsOpen}/>
+        <MenuItem primaryText='Set Defaults' onClick={handleDefaultsOpen}/>
       </IconMenu>
     );
 
   }
 
   function handleDefaultsOpen() {
-    c.setState({open: !c.state.open});
+    c.setState(prevState => ({open: !prevState.open}));
   }
 
   return c;
 }
 
-const mapStateToProps = makeProps({showModal, loaded, serverId});
+const mapStateToProps = makeProps({showModal, loaded, serverId, searching});
 
 function mapDispatchToProps(dispatch) {
   return {

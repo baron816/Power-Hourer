@@ -105,7 +105,7 @@ const mapStateToProps = makeProps({playlistItems, playlistItemsIndex});
 
 function mapDispatchToProps(dispatch) {
   return {
-    setVideoIndex: (index) => dispatchAll(dispatch, index === 0 && [changePlayState(false), resetClock], goToVideo(index))
+    setVideoIndex: (index) => dispatchAll(dispatch, index === 0 && [changePlayState(false), resetClock()], goToVideo(index))
   };
 }
 
