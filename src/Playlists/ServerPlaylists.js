@@ -9,7 +9,7 @@ import Playlists from './Playlists';
 
 import { fetchServerPlaylistItems } from '../actions';
 
-function ServerPlaylists({serverPlaylists}) {
+function ServerPlaylists({serverPlaylists, fetchServerPlaylistItems}) {
   return (
     <Playlists
       playlists={serverPlaylists}
@@ -23,4 +23,4 @@ function ServerPlaylists({serverPlaylists}) {
 
 const mapStateToProps = makeProps({serverPlaylists});
 
-export default connect(mapStateToProps)(ServerPlaylists);
+export default connect(mapStateToProps, {fetchServerPlaylistItems})(ServerPlaylists);

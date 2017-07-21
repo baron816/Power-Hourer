@@ -8,7 +8,7 @@ import {
 import Playlists from './Playlists';
 import { fetchYoutubePlaylistItems } from '../actions';
 
-function YouTubePlaylists({youtubePlaylists}) {
+function YouTubePlaylists({youtubePlaylists, fetchYoutubePlaylistItems}) {
   return (
     <Playlists
       playlists={youtubePlaylists}
@@ -21,4 +21,4 @@ function YouTubePlaylists({youtubePlaylists}) {
 
 const mapStateToProps = makeProps({youtubePlaylists});
 
-export default connect(mapStateToProps)(YouTubePlaylists);
+export default connect(mapStateToProps, {fetchYoutubePlaylistItems})(YouTubePlaylists);

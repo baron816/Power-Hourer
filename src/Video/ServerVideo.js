@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Video from './Video';
-import { dispatchAll } from '../utils';
 
 import {
   changeVideoStart,
@@ -10,18 +9,16 @@ import {
   changeServerVideoLength
 } from '../actions';
 
-function ServerVideo(props) {
-  return (
-    <Video {...props} />
-  );
-}
-
-function mapStateToProps() {
-  return {};
-}
-
-function mapDispatchToProps(dispatch) {
-  const changeStartToNow = dispatchAll(dispatch, changeVideoStart, changeServerVideoStart);
+function ServerVideo({
+  changeVideoStart,
+  changeServerVideoStart,
+  changeVideoLength,
+  changeServerVideoLength
+}) {
+  function changeStartToNow(time) {
+    changeVideoStart(time);
+    changeServerVideoStart(time);
+  }
 
   function changeVidStart(event) {
     const time = Number(event.target.value);
@@ -30,15 +27,23 @@ function mapDispatchToProps(dispatch) {
 
   function changeVidLen(event) {
     const time = Number(event.target.value);
-    dispatch(changeVideoLength(time));
-    dispatch(changeServerVideoLength(time));
+    changeVideoLength(time);
+    changeServerVideoLength(time);
   }
 
-  return {
-    changeVidStart,
-    changeVidLen,
-    changeStartToNow
-  };
+  return (
+    <Video
+      changeVidStart={changeVidStart}
+      changeVidLength={changeVidLen}
+      changeStartToNow={changeStartToNow}
+    />
+  );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ServerVideo);
+
+export default connect(function(){return{};}, {
+  changeVideoStart,
+  changeServerVideoStart,
+  changeVideoLength,
+  changeServerVideoLength
+})(ServerVideo);

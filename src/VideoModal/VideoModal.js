@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { makeProps, dispatchAll } from '../utils';
+import { makeProps } from '../utils';
 
 import {
   showModal,
   loaded,
   serverId,
-  searching
+  searching,
+  defaultStart,
+  defaultLength
 } from '../selectors';
 
 import Dialog from 'material-ui/Dialog';
@@ -42,7 +44,7 @@ function VideoModal(props) {
     <FlatButton
       label='Close'
       primary={true}
-      onTouchTap={c.props.invertModal}
+      onTouchTap={invertModal}
     />
   ];
   c.render = function () {
@@ -66,14 +68,12 @@ function VideoModal(props) {
   };
 
   function Content() {
-    const { loaded, movePlItem, defaultStart, defaultLength, Video } = c.props;
+    const { loaded, moveItem, Video } = c.props;
+
     return loaded ? (
       <div id='modalContent'>
-        <PlaylistItems moveItem={movePlItem}/>
-        <Video
-          defaultStart={defaultStart}
-          defaultLength={defaultLength}
-        />
+        <PlaylistItems moveItem={moveItem}/>
+        <Video />
 
         <DefaultsDialog />
       </div>
@@ -81,7 +81,13 @@ function VideoModal(props) {
   }
 
   function DefaultsDialog() {
-    const { defaultLength, setDefaultLength, defaultStart, setDefaultStart } = c.props;
+    const {
+      defaultLength,
+      defaultStart,
+      setDefaultStart,
+      setDefaultLength
+    } = c.props;
+
     return (
       <Dialog
         open={c.state.open}
@@ -113,7 +119,7 @@ function VideoModal(props) {
     return (
       <IconButton
         iconStyle={{color: 'white'}}
-        onTouchTap={c.props.invertModal}
+        onTouchTap={invertModal}
       >
         <NavigationClose />
       </IconButton>
@@ -121,7 +127,7 @@ function VideoModal(props) {
   }
 
   function Settings() {
-    const { settingsItems, serverId: {length}, savePl } = c.props;
+    const { settingsItems, serverId: {length}, savePlaylist } = c.props;
     return (
       <IconMenu
         iconButtonElement={
@@ -131,11 +137,17 @@ function VideoModal(props) {
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
         {settingsItems}
-        {length && <MenuItem primaryText="Save Playlist Copy" onClick={savePl} />}
+        {length && <MenuItem primaryText="Save Playlist Copy" onClick={savePlaylist} />}
         <MenuItem primaryText='Set Defaults' onClick={handleDefaultsOpen}/>
       </IconMenu>
     );
 
+  }
+
+  function invertModal() {
+    const { invertModalState, setLoaded } = c.props;
+    invertModalState();
+    setLoaded();
   }
 
   function handleDefaultsOpen() {
@@ -145,13 +157,6 @@ function VideoModal(props) {
   return c;
 }
 
-const mapStateToProps = makeProps({showModal, loaded, serverId, searching});
+const mapStateToProps = makeProps({showModal, loaded, serverId, searching, defaultStart, defaultLength});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    invertModal: dispatchAll(dispatch, invertModalState(), setLoaded()),
-    savePl: dispatchAll(dispatch, savePlaylist())
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(VideoModal);
+export default connect(mapStateToProps, {invertModalState, setLoaded, savePlaylist})(VideoModal);

@@ -1,7 +1,6 @@
 import React from 'react';
 import GoogleLogin from 'react-google-login';
 import { connect } from 'react-redux';
-import { dispatchAll } from '../utils';
 
 import {
   setAccessToken,
@@ -10,7 +9,7 @@ import {
   setError
 } from '../actions';
 
-function Login({signIn, error}) {
+function Login({setAccessToken, fetchYoutubePlaylists, loginUser, setError}) {
   return (
     <GoogleLogin
       clientId="727985332451-et0hhrtnpccevvstmjm1e11vv7kc16pd.apps.googleusercontent.com"
@@ -21,22 +20,23 @@ function Login({signIn, error}) {
       onFailure={error}
     />
   );
+
+  function signIn(response) {
+    setAccessToken(response);
+    fetchYoutubePlaylists();
+    loginUser(response);
+  }
+
+  function error() {
+    return function () {
+      return setError('Failed to login');
+    };
+  }
 }
 
 function mapStateToProps() {
   return {};
 }
 
-function mapDispatchToProps(dispatch) {
 
-  const signIn = dispatchAll(dispatch, setAccessToken, fetchYoutubePlaylists(), loginUser);
-
-  const error = dispatchAll(dispatch, setError('Failed to login'));
-
-  return {
-    signIn,
-    error
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, {setAccessToken, fetchYoutubePlaylists, loginUser, setError})(Login);

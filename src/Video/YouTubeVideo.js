@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Video from './Video';
-import { dispatchAll } from '../utils';
 
 import {
   changeVideoStart,
@@ -9,40 +8,42 @@ import {
   setPlaylistDefaultStartTime
  } from '../actions';
 
-function YouTubeVideo(props) {
+function YouTubeVideo({
+  changeVideoStart,
+  setPlaylistDefaultStartTime,
+  changeVideoLength
+}) {
+  function changeVidStart(event) {
+    const time = Number(event.target.value);
+    changeVideoStart(time);
+  }
+
+  function changeStartToNow(time) {
+    changeVideoStart(time);
+  }
+
+  function changeSettings(fn) {
+    return function (event) {
+      const time = Number(event.target.value);
+      fn(time);
+    };
+  }
+
+  const setDefaultStart = changeSettings(setPlaylistDefaultStartTime);
+  const changeVidLen = changeSettings(changeVideoLength);
+
   return (
-    <Video {...props} />
+    <Video
+      changeVidStart={changeVidStart}
+      changeStartToNow={changeStartToNow}
+      setDefaultStart={setDefaultStart}
+      changeVidLen={changeVidLen}
+    />
   );
 }
 
-function mapStateToProps() {
-  return {};
-}
-
-function mapDispatchToProps(dispatch) {
-  function changeVidStart(event) {
-    const time = Number(event.target.value);
-    dispatch(changeVideoStart(time));
-  }
-
-  const changeStartToNow = dispatchAll(dispatch, changeVideoStart);
-
-  function setDefaultStart(event) {
-    const time = Number(event.target.value);
-    dispatch(setPlaylistDefaultStartTime(time));
-  }
-
-  function changeVidLen(event) {
-    const time = Number(event.target.value);
-    dispatch(changeVideoLength(time));
-  }
-
-  return {
-    changeVidStart,
-    changeVidLen,
-    changeStartToNow,
-    setDefaultStart
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(YouTubeVideo);
+export default connect(function(){return{};}, {
+  changeVideoStart,
+  setPlaylistDefaultStartTime,
+  changeVideoLength
+})(YouTubeVideo);

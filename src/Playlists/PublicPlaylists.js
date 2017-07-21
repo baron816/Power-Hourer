@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import { compose } from 'redux';
-import { makeProps, dispatchAll } from '../utils';
+import { makeProps } from '../utils';
 
 import Playlists from './Playlists';
 
@@ -21,7 +20,7 @@ function PublicPlaylists(props) {
   const c = new React.Component(props);
 
   c.componentDidMount = function () {
-    c.props.fetchPlaylists();
+    c.props.fetchPublicPlaylists();
   };
 
   c.render = function () {
@@ -31,26 +30,26 @@ function PublicPlaylists(props) {
         name='Public'
         playlistName='publicPlaylists'
         fetchPlaylistItems={fetchServerPlaylistItems}
-        fetchNext={c.props.fetchNext(c.props.publicPlaylistPage, c.props.publicPlaylistPageCount)}
+        fetchNext={fetchNext}
       />
     );
   };
+
+  function fetchNext() {
+    const { publicPlaylistPage, publicPlaylistPageCount, fetchNextPublicPlaylistsPage } = c.props;
+
+    if (publicPlaylistPage < publicPlaylistPageCount) {
+      fetchNextPublicPlaylistsPage(publicPlaylistPage + 1);
+    }
+  }
 
   return c;
 }
 
 const mapStateToProps = makeProps({publicPlaylists, publicPlaylistPageCount, publicPlaylistPage});
 
-function mapDispatchToProps(dispatch) {
-  const fetchPlaylists = dispatchAll(dispatch, fetchPublicPlaylists);
-
-
-  const fetchNext = (publicPlaylistPage, publicPlaylistPageCount) => dispatchAll(dispatch, publicPlaylistPage < publicPlaylistPageCount && fetchNextPublicPlaylistsPage(publicPlaylistPage + 1));
-
-  return {
-    fetchPlaylists,
-    fetchNext
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PublicPlaylists);
+export default connect(mapStateToProps, {
+  fetchPublicPlaylists,
+  fetchServerPlaylistItems,
+  fetchNextPublicPlaylistsPage
+})(PublicPlaylists);

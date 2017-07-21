@@ -7,20 +7,6 @@ export function makeProps(selectors) {
   };
 }
 
-export function dispatchAll(dispatch, ...actions) {
-  return function (...args) {
-    for (const action of actions) {
-      if (Array.isArray(action)) {
-        dispatchAll(dispatch, ...action)(...args);
-      } else if (typeof action === 'function') {
-        dispatch(action(...args));
-      } else if (typeof action === 'object') {
-        dispatch(action);
-      }
-    }
-  };
-}
-
 export function dismember(struct, method) {
   return require('immutable')[capitalizeFirstLetter(struct)].prototype[method];
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Snackbar from 'material-ui/Snackbar';
 
-import { dispatchAll, makeProps } from '../utils';
+import { makeProps } from '../utils';
 
 import {
   hideError
@@ -13,12 +13,12 @@ import {
   message
 } from '../selectors';
 
-function ErrorBar({open, message, hide}) {
+function ErrorBar({open, message, hideError}) {
   return (
     <Snackbar
       open={open}
       message={message}
-      onRequestClose={hide}
+      onRequestClose={hideError}
       autoHideDuration={4000}
     />
   );
@@ -26,10 +26,4 @@ function ErrorBar({open, message, hide}) {
 
 const mapStateToProps = makeProps({ open, message });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    hide: dispatchAll(dispatch, hideError)
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ErrorBar);
+export default connect(mapStateToProps, {hideError})(ErrorBar);

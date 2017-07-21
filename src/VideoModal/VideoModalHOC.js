@@ -1,10 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { makeProps, dispatchAll } from '../utils';
+import { makeProps } from '../utils';
 import {
   selectedPlaylist,
-  defaultStart,
-  defaultLength
 } from '../selectors';
 import MenuItem from 'material-ui/MenuItem';
 import VideoModal from './VideoModal';
@@ -20,36 +18,42 @@ export default function VideoModalHOC(Video, fetch) {
     const settingsItems= [
       <MenuItem
         primaryText='Reload Playlist'
-        onClick={props.fetchItems(props.selectedPlaylist.get('_id'))}
-        key='reolad'
+        onClick={fetchVideos}
+        key='reload'
       />
     ];
-    return <VideoModal Video={Video} settingsItems={settingsItems} {...props} />;
-  }
 
-  const mapStateToProps = makeProps({selectedPlaylist, defaultStart, defaultLength});
-
-  function mapDispatchToProps(dispatch) {
-    const movePlItem = dispatchAll(dispatch, moveItem);
-    const fetchItems = (id) => dispatchAll(dispatch, fetch(id));
+    function fetchVideos() {
+        props.fetch(props.selectedPlaylist.get('_id'));
+    }
 
     function setDefault(fn) {
       return function (event) {
-        const time = Number(event.target.value);
-        dispatch(fn(time));
+        const time = event.target.value;
+        fn(Number(time));
       };
     }
 
-    const setDefaultStart = setDefault(setPlaylistDefaultStartTime);
-    const setDefaultLength = setDefault(setPlaylistDefaultLength);
+    const setDefaultStart = setDefault(props.setPlaylistDefaultStartTime);
+    const setDefaultLength = setDefault(props.setPlaylistDefaultLength);
 
-    return {
-      movePlItem,
-      fetchItems,
-      setDefaultStart,
-      setDefaultLength
-    };
+    return (
+      <VideoModal
+        Video={Video}
+        settingsItems={settingsItems}
+        setDefaultStart={setDefaultStart}
+        setDefaultLength={setDefaultLength}
+        {...props}
+      />
+    );
   }
 
-  return connect(mapStateToProps, mapDispatchToProps)(Modal);
+  const mapStateToProps = makeProps({selectedPlaylist});
+
+  return connect(mapStateToProps, {
+    setPlaylistDefaultLength,
+    setPlaylistDefaultStartTime,
+    moveItem,
+    fetch
+  })(Modal);
 }

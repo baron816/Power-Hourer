@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { makeProps, dispatchAll } from '../utils';
+import { makeProps } from '../utils';
 
 import {
   time,
@@ -21,17 +21,17 @@ function Clock(props) {
   };
 
   c.componentDidMount = function () {
-    c.props.moveClock();
+    c.props.startTime();
   };
 
   c.componentWillUnmount = function () {
-    c.props.stopClock();
+    c.props.endTime();
   };
 
   c.componentDidUpdate = function () {
     const { time, currentPlaylist } = c.props;
     if (time === 1600 && currentPlaylist) {
-      c.props.updatePlayCount(currentPlaylist);
+      c.props.incrementPlayCount(currentPlaylist);
     }
   };
 
@@ -56,12 +56,4 @@ function Clock(props) {
 
 const mapStateToProps = makeProps({time, currentPlaylist});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    moveClock: dispatchAll(dispatch, startTime),
-    stopClock: dispatchAll(dispatch, endTime),
-    updatePlayCount: dispatchAll(dispatch, incrementPlayCount)
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Clock);
+export default connect(mapStateToProps, {startTime, endTime, incrementPlayCount})(Clock);

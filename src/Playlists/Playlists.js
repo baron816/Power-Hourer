@@ -5,7 +5,7 @@ import Subheader from 'material-ui/Subheader';
 import Avatar from 'material-ui/Avatar';
 import Paper from 'material-ui/Paper';
 import './Playlists.css';
-import { makeProps, dispatchAll } from '../utils';
+import { makeProps } from '../utils';
 import {
   playlistIndex,
   currentPlaylist
@@ -23,27 +23,19 @@ import {
   setSearchingToFalse
 } from '../actions';
 
-function Playlists({
-  name,
-  playlists,
-  getPlaylist,
-  playlistIndex,
-  currentPlaylist,
-  style,
-  fetchNext
-}) {
-  if (playlists.size) {
+function Playlists(props) {
+  if (props.playlists.size) {
     return (
-      <Paper zDepth={3} className="playlists" style={style}>
+      <Paper zDepth={3} className="playlists" style={props.style}>
       <List>
       <Subheader inset={true}>{name} Playlists</Subheader>
-      {playlists.map(function (list, index) {
+      {props.playlists.map(function (list, index) {
         const id = list.get('_id');
         const title = list.get('title');
         return(
           <ListItem
           key={`${name}-${id}`}
-          onClick={getPlaylist(id, index, playlistIndex, currentPlaylist)}
+          onClick={getPlaylist(id, index)}
           leftAvatar={ <Avatar src={list.get('thumbnail')} /> }>
           {title}
           </ListItem>
@@ -58,6 +50,7 @@ function Playlists({
   }
 
   function LastItem() {
+    const {fetchNext} = props;
     return fetchNext ?
         <ListItem
           key={'fetchNext'}
@@ -66,41 +59,54 @@ function Playlists({
           Next
         </ListItem>
     : <span/>;
+  }
 
+  function getPlaylist(listId, index) {
+    const {
+      playlistIndex,
+      currentPlaylist,
+      playlistName,
+      setPlaylistIndex,
+      fetchPlaylistItems,
+      goToVideo,
+      changePlayState,
+      resetClock,
+      setCurrentPlaylist,
+      setLoaded,
+      resetCallNext,
+      invertModalState,
+      setSearchingToFalse
+    } = props;
+
+    return function () {
+      if (index !== playlistIndex || playlistName !== currentPlaylist) {
+        setPlaylistIndex(index);
+        fetchPlaylistItems(listId);
+        goToVideo(0);
+        changePlayState(false);
+        resetClock();
+        setCurrentPlaylist(playlistName);
+      } else {
+        setLoaded(true);
+      }
+
+      resetCallNext();
+      invertModalState();
+      setSearchingToFalse();
+    };
   }
 }
-
 
 const mapStateToProps = makeProps({playlistIndex, currentPlaylist});
 
-function mapDispatchToProps(dispatch, {fetchPlaylistItems, playlistName}) {
-  function getPlaylist(listId, index, playlistIndex, currentPlaylist) {
-    var first;
-    if (index !== playlistIndex || playlistName !== currentPlaylist) {
-      first = [
-        setPlaylistIndex(index),
-        fetchPlaylistItems(listId),
-        goToVideo(0),
-        changePlayState(false),
-        resetClock(),
-        setCurrentPlaylist(playlistName)
-      ];
-    } else {
-      first = [setLoaded(true)];
-    }
-
-    return dispatchAll(
-      dispatch,
-      first,
-      resetCallNext(),
-      invertModalState(),
-      setSearchingToFalse()
-    );
-  }
-
-  return {
-    getPlaylist
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Playlists);
+export default connect(mapStateToProps, {
+  goToVideo,
+  changePlayState,
+  resetClock,
+  invertModalState,
+  setPlaylistIndex,
+  setCurrentPlaylist,
+  resetCallNext,
+  setLoaded,
+  setSearchingToFalse
+})(Playlists);

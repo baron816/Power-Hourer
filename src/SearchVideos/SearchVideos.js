@@ -55,12 +55,12 @@ function SearchVideos(props) {
   function handleSearch(event) {
     const term = event.target.value;
     searchComponent.setState({searchTerm: term});
-    searchComponent.props.search(term);
+    searchComponent.props.searchVideos(term);
   }
 
   function handleNext() {
     const term = searchComponent.state.searchTerm;
-    searchComponent.props.search(term);
+    searchComponent.props.searchVideos(term);
   }
 
 
@@ -92,7 +92,7 @@ function SearchVideos(props) {
     function handleAdd(index) {
       return function () {
         itemComponent.setState({added: true});
-        searchComponent.props.addVideo(index);
+        searchComponent.props.addVideoToServerPlaylist(index);
       };
     }
 
@@ -102,23 +102,6 @@ function SearchVideos(props) {
   return searchComponent;
 }
 
-
-
 const mapStateToProps = makeProps({searchResults, nextPageToken});
 
-function mapDispatchToProps(dispatch) {
-  function search(query) {
-    dispatch(searchVideos(query));
-  }
-
-  function addVideo(index) {
-    dispatch(addVideoToServerPlaylist(index));
-  }
-
-  return {
-    search,
-    addVideo
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SearchVideos);
+export default connect(mapStateToProps, {searchVideos, addVideoToServerPlaylist})(SearchVideos);

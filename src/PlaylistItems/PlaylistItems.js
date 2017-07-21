@@ -5,7 +5,7 @@ import Avatar from 'material-ui/Avatar';
 import Paper from 'material-ui/Paper';
 import './PlaylistItems.css';
 import Reorder from 'material-ui/svg-icons/action/reorder';
-import { makeProps, dispatchAll } from '../utils';
+import { makeProps } from '../utils';
 
 import {
   playlistItems,
@@ -26,7 +26,7 @@ import {
 
 const DragHandle = SortableHandle(() => <Reorder className='reorder'/>);
 
-const SortableItem = SortableElement((props) => {
+let SortableItem = SortableElement((props) => {
   const c = new React.Component(props);
 
   c.shouldComponentUpdate = function (newProps) {
@@ -36,40 +36,52 @@ const SortableItem = SortableElement((props) => {
   };
 
   c.render = function () {
-    const {item, index, setVideoIndex, currentVideo} = c.props.value;
+    const {item, currentVideo} = c.props.value;
     return (
       <ListItem
-      key={item.get('videoId')}
-      style={currentVideo ? { backgroundColor: 'rgba(0,0,0, 0.2)' } : {}}
-      onClick={setVideoIndex(index)}
-      leftAvatar={<Avatar src={item.get('thumbnail')} />}
-      rightIcon={<DragHandle />}
+        key={item.get('videoId')}
+        style={currentVideo ? { backgroundColor: 'rgba(0,0,0, 0.2)' } : {}}
+        onClick={setVideoIndex}
+        leftAvatar={<Avatar src={item.get('thumbnail')} />}
+        rightIcon={<DragHandle />}
       >
-      {item.get('title')}
+        {item.get('title')}
       </ListItem>
     );
   };
 
+  function setVideoIndex() {
+    const { value: {index}, changePlayState, resetClock, goToVideo } = c.props;
+
+    if (index === 0) {
+      changePlayState(false);
+      resetClock();
+    }
+
+    goToVideo(index);
+  }
+
   return c;
 });
 
+SortableItem = connect(function(){ return {}; }, {changePlayState, resetClock, goToVideo})(SortableItem);
+
 const SortableList = SortableContainer(({
   playlistItems,
-  setVideoIndex,
   playlistItemsIndex
 }) => {
   return (
     <List id='playlistItems'>
-    {playlistItems.map(function (item, index) {
-      const currentVideo = playlistItemsIndex === index;
-      return(
-        <SortableItem
-        value={{item, index, setVideoIndex, currentVideo}}
-        index={index}
-        key={`item-${item.get('videoId')}`}
-        />
-      );
-    })}
+      {playlistItems.map(function (item, index) {
+        const currentVideo = playlistItemsIndex === index;
+        return(
+          <SortableItem
+            value={{item, index, currentVideo}}
+            index={index}
+            key={`item-${item.get('videoId')}`}
+          />
+        );
+      })}
     </List>
   );
 });
@@ -81,7 +93,6 @@ function PlaylistItems(props) {
     const {
       moveItem,
       playlistItems,
-      setVideoIndex,
       playlistItemsIndex
     } = c.props;
     return (
@@ -91,7 +102,6 @@ function PlaylistItems(props) {
           onSortEnd={moveItem}
           helperClass='sortableHelper'
           playlistItems={playlistItems}
-          setVideoIndex={setVideoIndex}
           playlistItemsIndex={playlistItemsIndex}
         />
       </Paper>
@@ -103,11 +113,4 @@ function PlaylistItems(props) {
 
 const mapStateToProps = makeProps({playlistItems, playlistItemsIndex});
 
-function mapDispatchToProps(dispatch) {
-  return {
-    setVideoIndex: (index) => dispatchAll(dispatch, index === 0 && [changePlayState(false), resetClock()], goToVideo(index))
-  };
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(PlaylistItems);
+export default connect(mapStateToProps)(PlaylistItems);

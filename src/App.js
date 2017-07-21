@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { connect } from 'react-redux';
-import { makeProps, dispatchAll } from './utils';
+import { makeProps } from './utils';
 
 import {
   accessToken,
@@ -34,8 +34,10 @@ import {
 
 function App({
   accessToken,
-  logout,
-  getPlaylists,
+  resetState,
+  fetchYoutubePlaylists,
+  fetchServerPlaylists,
+  fetchPublicPlaylists,
   currentPlaylist
 }) {
 
@@ -74,7 +76,7 @@ function App({
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
         <MenuItem onClick={getPlaylists} primaryText="Reload Playlists" />
-        <MenuItem onClick={logout} primaryText="Logout" />
+        <MenuItem onClick={resetState} primaryText="Logout" />
       </IconMenu>
     );
   }
@@ -85,19 +87,19 @@ function App({
 
     return <Handler />;
   }
+
+  function getPlaylists() {
+    fetchYoutubePlaylists();
+    fetchServerPlaylists();
+    fetchPublicPlaylists();
+  }
 }
 
 const mapStateToProps = makeProps({accessToken, serverId, currentPlaylist});
 
-function mapDispatchToProps(dispatch) {
-
-  const logout = dispatchAll(dispatch, resetState);
-  const getPlaylists = dispatchAll(dispatch, fetchYoutubePlaylists, fetchServerPlaylists, fetchPublicPlaylists);
-
-  return {
-    logout,
-    getPlaylists
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, {
+  resetState,
+  fetchYoutubePlaylists,
+  fetchServerPlaylists,
+  fetchPublicPlaylists
+})(App);

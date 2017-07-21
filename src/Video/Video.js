@@ -5,7 +5,7 @@ import { Card, CardHeader, CardMedia, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
-import { makeProps, dispatchAll } from '../utils';
+import { makeProps } from '../utils';
 
 import {
   video,
@@ -27,8 +27,7 @@ import './Video.css';
 
 function Video({
   video,
-  handleVideoEnd,
-  changePlay,
+  changePlayState,
   callNext,
   videoLength,
   changeVidLen,
@@ -36,8 +35,9 @@ function Video({
   videoStart,
   videoEnd,
   autoplay,
-  handleVideoError,
   changeStartToNow,
+  nextVideo,
+  flipNext
 }) {
 
   let videoElement;
@@ -61,7 +61,7 @@ function Video({
               rel: 0
             }
           }}
-          onEnd={handleVideoEnd(callNext, videoEnd)}
+          onEnd={handleVideoEnd}
           onPlay={changePlay(true)}
           onPause={changePlay(false)}
           onError={handleVideoError}
@@ -76,7 +76,7 @@ function Video({
           onChange={changeVidLen}
           type='number'
           step={5}
-          min={1}
+          min={5}
         /> <br/>
         <TextField
           floatingLabelText='Video start time'
@@ -97,35 +97,37 @@ function Video({
       changeStartToNow(Math.floor(time));
     });
   }
+
+  function changePlay(bool) {
+    return function () {
+      changePlayState(bool);
+    };
+  }
+
+  function handleVideoError() {
+    nextVideo();
+    changePlayState(false);
+  }
+
+  function handleVideoEnd(event) {
+    if (callNext) {
+      nextVideo();
+    }
+
+    const duration = event.target.getDuration();
+
+    if (duration >= videoEnd || duration === 0) {
+      flipNext();
+    }
+
+    changePlayState(false);
+  }
 }
 
 const mapStateToProps = makeProps({video, videoStart, videoEnd, videoLength, autoplay, callNext, showModal});
 
-function mapDispatchToProps(dispatch) {
-  function handleVideoEnd(next, videoEnd) {
-    return function (event) {
-      // if statement is workaround for bug that causes onEnd to be called twice
-      if (next) {
-        dispatch(nextVideo());
-      }
-      const duration = event.target.getDuration();
-
-      if (duration >= videoEnd || duration === 0) {
-        dispatch(flipNext());
-      }
-      dispatch(changePlayState(false));
-    };
-  }
-
-  const handleVideoError = dispatchAll(dispatch, nextVideo, changePlayState(false));
-
-  const changePlay = (bool) => dispatchAll(dispatch, changePlayState(bool));
-
-  return {
-    handleVideoEnd,
-    handleVideoError,
-    changePlay
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Video);
+export default connect(mapStateToProps, {
+  nextVideo,
+  changePlayState,
+  flipNext
+})(Video);
