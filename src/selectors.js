@@ -50,29 +50,6 @@ export const video = createSelector(
     (items, index) => items.get(index, Map())
 );
 
-export function videoLength(state, props) {
-  return createSelector(
-    video,
-    (vid) => vid.get('videoLength') || props.defaultLength || 60
-  )(state, props);
-}
-
-export function videoStart(state, ownProps) {
-  return createSelector(
-    video,
-    function (vid) {
-      const time = vid.get('startTime');
-
-      return time !== undefined ? time : ownProps.defaultStart || 30;
-    }
-  )(state, ownProps);
-}
-
-export const videoEnd = createSelector(
-  [videoStart, videoLength],
-  (start, length) => start + length
-);
-
 
 export const autoplay = createSelector(
   playlistItemsIndex,
@@ -97,6 +74,25 @@ export const defaultStart = createSelector(
 export const defaultLength = createSelector(
   selectedPlaylist,
   (playlist) => playlist.get('defaultLength', 60)
+);
+
+export const videoStart = createSelector(
+  [video, defaultStart],
+  function (vid, defStart) {
+    const time = vid.get('startTime');
+
+    return time !== undefined ? time : defStart || 30;
+  }
+);
+
+export const videoLength = createSelector(
+  [video, defaultLength],
+  (vid, defLen) => vid.get('videoLength') || defLen || 60
+);
+
+export const videoEnd = createSelector(
+  [videoStart, videoLength],
+  (start, length) => start + length
 );
 
 //VideoModalHOC
