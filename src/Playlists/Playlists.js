@@ -28,7 +28,7 @@ function Playlists(props) {
     return (
       <Paper zDepth={3} className="playlists" style={props.style}>
       <List>
-      <Subheader inset={true}>{name} Playlists</Subheader>
+      <Subheader inset={true}>{props.name} Playlists</Subheader>
       {props.playlists.map(function (list, index) {
         const id = list.get('_id');
         const title = list.get('title');
