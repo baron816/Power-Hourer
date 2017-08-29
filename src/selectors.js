@@ -81,7 +81,7 @@ export const videoStart = createSelector(
   function (vid, defStart) {
     const time = vid.get('startTime');
 
-    return time !== undefined ? time : defStart || 30;
+    return time !== undefined ? time : defStart !== undefined ? defStart : 0;
   }
 );
 
@@ -109,12 +109,12 @@ export const serverId = withGetIn(['root', 'serverId']);
 //PlaylistItemsEpcis
 export const playlistId = createSelector(
   [serverPlaylists, playlistIndex],
-  (playlist, index) => playlist.get(index).get('_id')
+  (playlist, index) => playlist.get([index, 'id'])
 );
 
 export const playlistItemId = createSelector(
   [playlistItems, playlistItemsIndex],
-  (items, index) => items.get(index).get('_id')
+  (items, index) => items.getIn([index, 'id'])
 );
 
 //searchVideos
