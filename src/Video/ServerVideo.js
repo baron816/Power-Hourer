@@ -34,7 +34,7 @@ function ServerVideo({
   return (
     <Video
       changeVidStart={changeVidStart}
-      changeVidLength={changeVidLen}
+      changeVidLen={changeVidLen}
       changeStartToNow={changeStartToNow}
     />
   );
