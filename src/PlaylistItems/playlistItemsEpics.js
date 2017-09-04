@@ -43,8 +43,6 @@ function updateVideo(store, payload) {
 
   const updateData = JSON.stringify({startTime: payload});
 
-  console.log(item)
-
   return ajax.put(`${SERVER_URL}playlists/${playlist}/playlistItems/${item}`, updateData, {
     'Content-Type': 'application/json',
     Authorization: 'Bearer ' + token
