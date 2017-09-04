@@ -4,4 +4,4 @@ Uses Redux, Immutable.js, RxJS, Redux-Observable, Material-UI, Redux-Persist, an
 
 Backend [here](https://github.com/baron816/Power-Hourer-Server)
 
-[Demo](./public/power-hourer.gif)
+![Demo](./public/power-hourer.gif)
