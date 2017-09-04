@@ -109,12 +109,12 @@ export const serverId = withGetIn(['root', 'serverId']);
 //PlaylistItemsEpcis
 export const playlistId = createSelector(
   [serverPlaylists, playlistIndex],
-  (playlist, index) => playlist.get([index, 'id'])
+  (playlist, index) => playlist.getIn([index, '_id'])
 );
 
 export const playlistItemId = createSelector(
   [playlistItems, playlistItemsIndex],
-  (items, index) => items.getIn([index, 'id'])
+  (items, index) => items.getIn([index, '_id'])
 );
 
 //searchVideos
