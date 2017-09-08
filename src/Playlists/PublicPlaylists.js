@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeProps } from '../utils';
 
@@ -46,7 +47,20 @@ function PublicPlaylists(props) {
   return c;
 }
 
-const mapStateToProps = makeProps({publicPlaylists, publicPlaylistPageCount, publicPlaylistPage});
+PublicPlaylists.propTypes = {
+  publicPlaylists: PropTypes.object.isRequired,
+  publicPlaylistPageCount: PropTypes.number.isRequired,
+  publicPlaylistPage: PropTypes.number.isRequired,
+  fetchPublicPlaylists: PropTypes.func.isRequired,
+  fetchServerPlaylistItems: PropTypes.func.isRequired,
+  fetchNextPublicPlaylistsPage: PropTypes.func.isRequired
+};
+
+const mapStateToProps = makeProps({
+  publicPlaylists, 
+  publicPlaylistPageCount, 
+  publicPlaylistPage
+});
 
 export default connect(mapStateToProps, {
   fetchPublicPlaylists,

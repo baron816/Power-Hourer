@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
@@ -110,6 +111,12 @@ function PlaylistItems(props) {
 
   return c;
 }
+
+PlaylistItems.propTypes = {
+  playlistItems: PropTypes.object.isRequired,
+  playlistItemsIndex: PropTypes.number.isRequired,
+  moveItem: PropTypes.func.isRequired
+};
 
 const mapStateToProps = makeProps({playlistItems, playlistItemsIndex});
 

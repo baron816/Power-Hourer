@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Video from './Video';
 
@@ -41,6 +42,12 @@ function YouTubeVideo({
     />
   );
 }
+
+YouTubeVideo.propTypes = {
+  changeVideoStart: PropTypes.func.isRequired,
+  changeVideoLength: PropTypes.func.isRequired,
+  setPlaylistDefaultStartTime: PropTypes.func.isRequired
+};
 
 export default connect(function(){return{};}, {
   changeVideoStart,

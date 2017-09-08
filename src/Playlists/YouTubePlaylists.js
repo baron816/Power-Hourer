@@ -1,7 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { makeProps } from '../utils';
 
+import { connect } from 'react-redux';
 import {
   youtubePlaylists
 } from '../selectors';
@@ -18,6 +19,11 @@ function YouTubePlaylists({youtubePlaylists, fetchYoutubePlaylistItems}) {
     />
   );
 }
+
+YouTubePlaylists.propTypes = {
+  youtubePlaylists: PropTypes.object.isRequired,
+  fetchYoutubePlaylistItems: PropTypes.func.isRequired
+};
 
 const mapStateToProps = makeProps({youtubePlaylists});
 

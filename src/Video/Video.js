@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import YouTube from 'react-youtube';
 import { Card, CardHeader, CardMedia, CardText } from 'material-ui/Card';
@@ -57,7 +58,7 @@ function Video({
             playerVars: {
               start: videoStart,
               end: videoEnd,
-              autoplay: autoplay,
+              autoplay,
               rel: 0
             }
           }}
@@ -124,7 +125,30 @@ function Video({
   }
 }
 
-const mapStateToProps = makeProps({video, videoStart, videoEnd, videoLength, autoplay, callNext, showModal});
+Video.propTypes = {
+  video: PropTypes.object.isRequired,
+  changePlayState: PropTypes.func.isRequired,
+  callNext: PropTypes.bool.isRequired,
+  videoLength: PropTypes.number.isRequired,
+  changeVidLen: PropTypes.func.isRequired,
+  changeVidStart: PropTypes.func.isRequired,
+  videoStart: PropTypes.number.isRequired,
+  videoEnd: PropTypes.number.isRequired,
+  autoplay: PropTypes.number.isRequired,
+  changeStartToNow: PropTypes.func.isRequired,
+  nextVideo: PropTypes.func.isRequired,
+  flipNext: PropTypes.func.isRequired
+};
+
+const mapStateToProps = makeProps({
+  video, 
+  videoStart, 
+  videoEnd, 
+  videoLength, 
+  autoplay, 
+  callNext, 
+  showModal
+});
 
 export default connect(mapStateToProps, {
   nextVideo,

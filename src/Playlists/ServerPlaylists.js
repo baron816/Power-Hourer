@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeProps } from '../utils';
 
@@ -20,6 +21,11 @@ function ServerPlaylists({serverPlaylists, fetchServerPlaylistItems}) {
     />
   );
 }
+
+ServerPlaylists.propTypes = {
+  serverPlaylists: PropTypes.object.isRequired,
+  fetchServerPlaylistItems: PropTypes.func.isRequired
+};
 
 const mapStateToProps = makeProps({serverPlaylists});
 

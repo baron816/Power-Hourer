@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeProps } from '../utils';
 
@@ -38,7 +39,7 @@ function Clock(props) {
   c.render = function () {
     return (
       <div className="Clock">
-      {parseTime()}
+        {parseTime()}
       </div>
     );
   };
@@ -53,6 +54,14 @@ function Clock(props) {
 
   return c;
 }
+
+Clock.propTypes = {
+  time: PropTypes.number.isRequired,
+  currentPlaylist: PropTypes.string.isRequired,
+  startTime: PropTypes.func.isRequired,
+  endTime: PropTypes.func.isRequired,
+  incrementPlayCount: PropTypes.func.isRequired
+};
 
 const mapStateToProps = makeProps({time, currentPlaylist});
 

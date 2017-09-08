@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Snackbar from 'material-ui/Snackbar';
 
@@ -23,6 +24,12 @@ function ErrorBar({open, message, hideError}) {
     />
   );
 }
+
+ErrorBar.propTypes = {
+  open: PropTypes.bool.isRequired,
+  message: PropTypes.string.isRequired,
+  hideError: PropTypes.func.isRequired
+};
 
 const mapStateToProps = makeProps({ open, message });
 

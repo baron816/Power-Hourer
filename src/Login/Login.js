@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import GoogleLogin from 'react-google-login';
 import { connect } from 'react-redux';
 
@@ -33,6 +34,13 @@ function Login({setAccessToken, fetchYoutubePlaylists, loginUser, setError}) {
     };
   }
 }
+
+Login.propTypes = {
+  setAccessToken: PropTypes.func.isRequired,
+  fetchYoutubePlaylists: PropTypes.func.isRequired,
+  loginUser: PropTypes.func.isRequired,
+  setError: PropTypes.func.isRequired
+};
 
 function mapStateToProps() {
   return {};

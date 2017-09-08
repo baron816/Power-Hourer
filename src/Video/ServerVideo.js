@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Video from './Video';
 
@@ -40,6 +41,12 @@ function ServerVideo({
   );
 }
 
+ServerVideo.propTypes = {
+  changeVideoStart: PropTypes.func.isRequired,
+  changeVideoLength: PropTypes.func.isRequired,
+  changeServerVideoStart: PropTypes.func.isRequired,
+  changeServerVideoLength: PropTypes.func.isRequired
+};
 
 export default connect(function(){return{};}, {
   changeVideoStart,

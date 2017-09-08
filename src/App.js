@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './App.css';
 import { connect } from 'react-redux';
 import { makeProps } from './utils';
@@ -94,6 +95,16 @@ function App({
     fetchPublicPlaylists();
   }
 }
+
+App.propTypes = {
+  accessToken: PropTypes.string,
+  serverId: PropTypes.string,
+  currentPlaylist: PropTypes.string.isRequired,
+  resetState: PropTypes.func.isRequired,
+  fetchYoutubePlaylists: PropTypes.func.isRequired,
+  fetchServerPlaylists: PropTypes.func.isRequired,
+  fetchPublicPlaylists: PropTypes.func.isRequired
+};
 
 const mapStateToProps = makeProps({accessToken, serverId, currentPlaylist});
 
