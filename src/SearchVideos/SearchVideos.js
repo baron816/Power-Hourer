@@ -1,14 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
+
+import {GridList} from 'material-ui/GridList';
 import TextField from 'material-ui/TextField';
-import {GridList, GridTile} from 'material-ui/GridList';
-import IconButton from 'material-ui/IconButton';
-import Star from 'material-ui/svg-icons/toggle/star';
 import RaisedButton from 'material-ui/RaisedButton';
 
+import GridItem from './GridItem';
+
 import {
-  searchVideos,
-  addVideoToServerPlaylist
+  searchVideos
 } from '../actions';
 
 import { makeProps } from '../utils';
@@ -21,13 +23,14 @@ import {
 import './SearchVideos.css';
 
 function SearchVideos(props) {
-  const searchComponent = new React.Component(props);
+  const c = new React.Component(props);
 
-  searchComponent.state = {
+  c.state = {
     searchTerm: ''
   };
 
-  searchComponent.render = function () {
+  c.render = function () {
+    const { searchResults, nextPageToken } = c.props;
     return (
       <div id='searchVideos'>
         <TextField
@@ -38,7 +41,7 @@ function SearchVideos(props) {
         <GridList
           cellHeight={180}
         >
-        {searchComponent.props.searchResults.map((item, index) => (
+        {searchResults.map((item, index) => (
           <GridItem
             item={item}
             index={index}
@@ -47,61 +50,37 @@ function SearchVideos(props) {
         ))}
         </GridList>
         <br/>
-        {searchComponent.props.nextPageToken && <RaisedButton primary={true} label='Next' onClick={handleNext} />}
+        {nextPageToken && 
+          <RaisedButton 
+            primary={true} 
+            label='Next' 
+            onClick={handleNext} 
+          />
+        }
       </div>
     );
   };
 
   function handleSearch(event) {
     const term = event.target.value;
-    searchComponent.setState({searchTerm: term});
-    searchComponent.props.searchVideos(term);
+    c.setState({searchTerm: term});
+    c.props.searchVideos(term);
   }
 
   function handleNext() {
-    const term = searchComponent.state.searchTerm;
-    searchComponent.props.searchVideos(term);
+    const term = c.state.searchTerm;
+    c.props.searchVideos(term);
   }
 
-
-  function GridItem(props) {
-    const itemComponent = new React.Component(props);
-
-    itemComponent.state = {
-      added: false
-    };
-
-    itemComponent.render = function () {
-      const { item, index } = itemComponent.props;
-      return (
-        <GridTile
-          title={item.get('title')}
-          actionIcon={
-            <IconButton
-              disabled={itemComponent.state.added}
-              onClick={handleAdd(index)}>
-              <Star color='white' />
-            </IconButton>
-          }
-        >
-          <img src={`https://i.ytimg.com/vi/${item.get('videoId')}/mqdefault.jpg`} alt='#' />
-        </GridTile>
-      );
-    };
-
-    function handleAdd(index) {
-      return function () {
-        itemComponent.setState({added: true});
-        searchComponent.props.addVideoToServerPlaylist(index);
-      };
-    }
-
-    return itemComponent;
-  }
-
-  return searchComponent;
+  return c;
 }
+
+SearchVideos.propTypes = {
+  searchResults: PropTypes.array.isRequired,
+  nextPageToken: PropTypes.string,
+  searchVideos: PropTypes.func.isRequired
+};
 
 const mapStateToProps = makeProps({searchResults, nextPageToken});
 
-export default connect(mapStateToProps, {searchVideos, addVideoToServerPlaylist})(SearchVideos);
+export default connect(mapStateToProps, {searchVideos})(SearchVideos);
