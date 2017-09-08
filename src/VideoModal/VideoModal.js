@@ -1,14 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeProps } from '../utils';
 
 import {
   showModal,
-  loaded,
-  serverId,
-  searching,
-  defaultStart,
-  defaultLength
+  searching
 } from '../selectors';
 
 import Dialog from 'material-ui/Dialog';
@@ -16,18 +13,13 @@ import FlatButton from 'material-ui/FlatButton';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
-import MenuItem from 'material-ui/MenuItem';
-import IconMenu from 'material-ui/IconMenu';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import CircularProgress from 'material-ui/CircularProgress';
-import TextField from 'material-ui/TextField';
 
-import PlaylistItems from '../PlaylistItems/PlaylistItems';
+import Content from './Content';
+import Settings from './Settings';
 import SearchVideos from '../SearchVideos/SearchVideos';
 
 import {
   invertModalState,
-  savePlaylist,
   setLoaded
 } from '../actions';
 
@@ -48,7 +40,15 @@ function VideoModal(props) {
     />
   ];
   c.render = function () {
-    const { showModal, selectedPlaylist } = c.props;
+    const { 
+      showModal, 
+      selectedPlaylist, 
+      settingsItems, 
+      Video,
+      moveItem,
+      setDefaultLength,
+      setDefaultStart
+    } = c.props;
     return (
       <Dialog
         modal={true}
@@ -60,60 +60,27 @@ function VideoModal(props) {
         <AppBar
           title={selectedPlaylist.get('title')}
           iconElementLeft={<CloseButton />}
-          iconElementRight={<Settings />}
+          iconElementRight={
+            <Settings 
+              settingsItems={settingsItems}
+              handleDefaultsOpen={handleDefaultsOpen}
+            />
+          }
         />
-        {c.props.searching ? <SearchVideos /> : <Content />}
+        {c.props.searching ? 
+          <SearchVideos /> : 
+          <Content
+            handleDefaultsOpen={handleDefaultsOpen}
+            open={c.state.open}
+            Video={Video}
+            moveItem={moveItem}
+            setDefaultLength={setDefaultLength}
+            setDefaultStart={setDefaultStart}
+          />
+        }
       </Dialog>
     );
   };
-
-  function Content() {
-    const { loaded, moveItem, Video } = c.props;
-
-    return loaded ? (
-      <div id='modalContent'>
-        <PlaylistItems moveItem={moveItem}/>
-        <Video />
-
-        <DefaultsDialog />
-      </div>
-    ) : <div id='spinner'><CircularProgress size={100} thickness={8} /></div>;
-  }
-
-  function DefaultsDialog() {
-    const {
-      defaultLength,
-      defaultStart,
-      setDefaultStart,
-      setDefaultLength
-    } = c.props;
-
-    return (
-      <Dialog
-        open={c.state.open}
-        title='Playlist Defaults'
-        onRequestClose={handleDefaultsOpen}
-        actions={<FlatButton label='Close' primary={true} onTouchTap={handleDefaultsOpen} />}
-      >
-       <TextField
-         floatingLabelText='Default Length'
-         value={defaultLength}
-         onChange={setDefaultLength}
-         type='number'
-         step={5}
-         min={1}
-       />
-       <TextField
-         floatingLabelText='Default Start'
-         value={defaultStart}
-         onChange={setDefaultStart}
-         type='number'
-         step={5}
-         min={0}
-       />
-      </Dialog>
-    );
-  }
 
   function CloseButton() {
     return (
@@ -124,24 +91,6 @@ function VideoModal(props) {
         <NavigationClose />
       </IconButton>
     );
-  }
-
-  function Settings() {
-    const { settingsItems, serverId: {length}, savePlaylist } = c.props;
-    return (
-      <IconMenu
-        iconButtonElement={
-          <IconButton iconStyle={{color: 'white'}}><MoreVertIcon /></IconButton>
-        }
-        targetOrigin={{horizontal: 'right', vertical: 'top'}}
-        anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-      >
-        {settingsItems}
-        {length && <MenuItem primaryText="Save Playlist Copy" onClick={savePlaylist} />}
-        <MenuItem primaryText='Set Defaults' onClick={handleDefaultsOpen}/>
-      </IconMenu>
-    );
-
   }
 
   function invertModal() {
@@ -157,6 +106,18 @@ function VideoModal(props) {
   return c;
 }
 
-const mapStateToProps = makeProps({showModal, loaded, serverId, searching, defaultStart, defaultLength});
+VideoModal.propTypes = {
+  invertModalState: PropTypes.func.isRequired,
+  setLoaded: PropTypes.func.isRequired,
+  moveItem: PropTypes.func.isRequired,
+  showModal: PropTypes.bool.isRequired,
+  selectedPlaylist: PropTypes.object.isRequired,
+  settingsItems: PropTypes.array.isRequired,
+  Video: PropTypes.func.isRequired,
+  setDefaultLength: PropTypes.func.isRequired,
+  setDefaultStart: PropTypes.func.isRequired
+};
 
-export default connect(mapStateToProps, {invertModalState, setLoaded, savePlaylist})(VideoModal);
+const mapStateToProps = makeProps({ showModal, searching });
+
+export default connect(mapStateToProps, { invertModalState, setLoaded })(VideoModal);
