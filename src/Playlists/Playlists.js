@@ -115,7 +115,9 @@ Playlists.propTypes = {
   setCurrentPlaylist: PropTypes.func.isRequired,
   resetCallNext: PropTypes.func.isRequired,
   setLoaded: PropTypes.func.isRequired,
-  setSearchingToFalse: PropTypes.func.isRequired
+  setSearchingToFalse: PropTypes.func.isRequired,
+  fetchPlaylistItems: PropTypes.func.isRequired,
+  playlistName: PropTypes.string.isRequired
 };
 
 const mapStateToProps = makeProps({playlistIndex, currentPlaylist});

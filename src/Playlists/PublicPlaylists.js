@@ -25,9 +25,10 @@ function PublicPlaylists(props) {
   };
 
   c.render = function () {
+    const { publicPlaylists, fetchServerPlaylistItems } = c.props;
     return (
       <Playlists
-        playlists={c.props.publicPlaylists}
+        playlists={publicPlaylists}
         name='Public'
         playlistName='publicPlaylists'
         fetchPlaylistItems={fetchServerPlaylistItems}
@@ -57,8 +58,8 @@ PublicPlaylists.propTypes = {
 };
 
 const mapStateToProps = makeProps({
-  publicPlaylists, 
-  publicPlaylistPageCount, 
+  publicPlaylists,
+  publicPlaylistPageCount,
   publicPlaylistPage
 });
 
