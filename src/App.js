@@ -2,13 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './App.css';
 import { connect } from 'react-redux';
-import { makeProps } from './utils';
-
-import {
-  accessToken,
-  serverId,
-  currentPlaylist
-} from './selectors';
+import { makePropsFromActions, makePropsFromSelectors } from './utils';
 
 import AppBar from 'material-ui/AppBar';
 import MenuItem from 'material-ui/MenuItem';
@@ -26,21 +20,8 @@ import YouTubeModal from './VideoModal/YouTubeModal';
 import PublicModal from './VideoModal/PublicModal';
 import ErrorBar from './ErrorBar/ErrorBar';
 
-import {
-  resetState,
-  fetchYoutubePlaylists,
-  fetchServerPlaylists,
-  fetchPublicPlaylists
-} from './actions';
 
-function App({
-  accessToken,
-  resetState,
-  fetchYoutubePlaylists,
-  fetchServerPlaylists,
-  fetchPublicPlaylists,
-  currentPlaylist
-}) {
+function App(props) {
 
   const MODALS = {
     youtubePlaylists: YouTubeModal,
@@ -52,7 +33,7 @@ function App({
       <div className="App">
         <AppBar
           title="Power Hourer"
-          iconElementRight={accessToken.length ? <Logged /> : <Login />}
+          iconElementRight={props.accessToken.length ? <Logged /> : <Login />}
           iconElementLeft={<IconButton><MusicNote /></IconButton>}
         />
 
@@ -77,22 +58,22 @@ function App({
         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
       >
         <MenuItem onClick={getPlaylists} primaryText="Reload Playlists" />
-        <MenuItem onClick={resetState} primaryText="Logout" />
+        <MenuItem onClick={props.resetState} primaryText="Logout" />
       </IconMenu>
     );
   }
 
 
   function VideoModal() {
-    const Handler = MODALS[currentPlaylist] || PublicModal;
+    const Handler = MODALS[props.currentPlaylist] || PublicModal;
 
     return <Handler />;
   }
 
   function getPlaylists() {
-    fetchYoutubePlaylists();
-    fetchServerPlaylists();
-    fetchPublicPlaylists();
+    props.fetchYoutubePlaylists();
+    props.fetchServerPlaylists();
+    props.fetchPublicPlaylists();
   }
 }
 
@@ -106,11 +87,17 @@ App.propTypes = {
   fetchPublicPlaylists: PropTypes.func.isRequired
 };
 
-const mapStateToProps = makeProps({accessToken, serverId, currentPlaylist});
+const mapStateToProps = makePropsFromSelectors([
+  'accessToken',
+  'serverId',
+  'currentPlaylist'
+]);
 
-export default connect(mapStateToProps, {
-  resetState,
-  fetchYoutubePlaylists,
-  fetchServerPlaylists,
-  fetchPublicPlaylists
-})(App);
+const mapDispatchToProps = makePropsFromActions([
+  'resetState',
+  'fetchYoutubePlaylists',
+  'fetchServerPlaylists',
+  'fetchPublicPlaylists'
+]);
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

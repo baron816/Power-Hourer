@@ -2,25 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Video from './Video';
+import { makePropsFromActions } from '../utils';
 
-import {
-  changeVideoStart,
-  changeVideoLength,
-  setPlaylistDefaultStartTime
- } from '../actions';
 
-function YouTubeVideo({
-  changeVideoStart,
-  setPlaylistDefaultStartTime,
-  changeVideoLength
-}) {
+function YouTubeVideo(props) {
   function changeVidStart(event) {
     const time = Number(event.target.value);
-    changeVideoStart(time);
+    props.changeVideoStart(time);
   }
 
   function changeStartToNow(time) {
-    changeVideoStart(time);
+    props.changeVideoStart(time);
   }
 
   function changeSettings(fn) {
@@ -30,8 +22,8 @@ function YouTubeVideo({
     };
   }
 
-  const setDefaultStart = changeSettings(setPlaylistDefaultStartTime);
-  const changeVidLen = changeSettings(changeVideoLength);
+  const setDefaultStart = changeSettings(props.setPlaylistDefaultStartTime);
+  const changeVidLen = changeSettings(props.changeVideoLength);
 
   return (
     <Video
@@ -49,8 +41,10 @@ YouTubeVideo.propTypes = {
   setPlaylistDefaultStartTime: PropTypes.func.isRequired
 };
 
-export default connect(function(){return{};}, {
-  changeVideoStart,
-  setPlaylistDefaultStartTime,
-  changeVideoLength
-})(YouTubeVideo);
+const mapDispatchToProps = makePropsFromActions([
+  'changeVideoStart',
+  'setPlaylistDefaultStartTime',
+  'changeVideoLength'
+]);
+
+export default connect(() => ({}), mapDispatchToProps)(YouTubeVideo);

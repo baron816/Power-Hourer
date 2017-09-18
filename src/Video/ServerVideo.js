@@ -2,34 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Video from './Video';
+import { makePropsFromActions } from '../utils';
 
-import {
-  changeVideoStart,
-  changeVideoLength,
-  changeServerVideoStart,
-  changeServerVideoLength
-} from '../actions';
-
-function ServerVideo({
-  changeVideoStart,
-  changeServerVideoStart,
-  changeVideoLength,
-  changeServerVideoLength
-}) {
+function ServerVideo(props) {
   function changeStartToNow(time) {
-    changeVideoStart(time);
-    changeServerVideoStart(time);
+    props.changeVideoStart(time);
+    props.changeServerVideoStart(time);
   }
 
   function changeVidStart(event) {
     const time = Number(event.target.value);
-    changeStartToNow(time);
+    props.changeStartToNow(time);
   }
 
   function changeVidLen(event) {
     const time = Number(event.target.value);
-    changeVideoLength(time);
-    changeServerVideoLength(time);
+    props.changeVideoLength(time);
+    props.changeServerVideoLength(time);
   }
 
   return (
@@ -48,9 +37,11 @@ ServerVideo.propTypes = {
   changeServerVideoLength: PropTypes.func.isRequired
 };
 
-export default connect(function(){return{};}, {
-  changeVideoStart,
-  changeServerVideoStart,
-  changeVideoLength,
-  changeServerVideoLength
-})(ServerVideo);
+const mapDispatchToProps = makePropsFromActions([
+  'changeVideoStart',
+  'changeServerVideoStart',
+  'changeVideoLength',
+  'changeServerVideoLength'
+]);
+
+export default connect(() => ({}), mapDispatchToProps)(ServerVideo);

@@ -2,13 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import GoogleLogin from 'react-google-login';
 import { connect } from 'react-redux';
-
-import {
-  setAccessToken,
-  fetchYoutubePlaylists,
-  loginUser,
-  setError
-} from '../actions';
+import { makePropsFromActions } from '../utils';
 
 function Login({setAccessToken, fetchYoutubePlaylists, loginUser, setError}) {
   return (
@@ -46,5 +40,11 @@ function mapStateToProps() {
   return {};
 }
 
+const mapDispatchToProps = makePropsFromActions([
+  'setAccessToken',
+  'fetchYoutubePlaylists',
+  'loginUser',
+  'setError'
+]);
 
-export default connect(mapStateToProps, {setAccessToken, fetchYoutubePlaylists, loginUser, setError})(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

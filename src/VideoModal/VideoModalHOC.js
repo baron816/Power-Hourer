@@ -1,12 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { makeProps } from '../utils';
-import {
-  selectedPlaylist,
-} from '../selectors';
+
 import MenuItem from 'material-ui/MenuItem';
 import VideoModal from './VideoModal';
 
+import { makePropsFromSelectors } from '../utils';
 import {
   setPlaylistDefaultLength,
   setPlaylistDefaultStartTime,
@@ -37,6 +35,7 @@ export default function VideoModalHOC(Video, fetch) {
     const setDefaultStart = setDefault(props.setPlaylistDefaultStartTime);
     const setDefaultLength = setDefault(props.setPlaylistDefaultLength);
 
+
     return (
       <VideoModal
         Video={Video}
@@ -48,7 +47,7 @@ export default function VideoModalHOC(Video, fetch) {
     );
   }
 
-  const mapStateToProps = makeProps({selectedPlaylist});
+  const mapStateToProps = makePropsFromSelectors(['selectedPlaylist']);
 
   return connect(mapStateToProps, {
     setPlaylistDefaultLength,

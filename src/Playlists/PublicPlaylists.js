@@ -1,21 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { makeProps } from '../utils';
+import { makePropsFromActions, makePropsFromSelectors } from '../utils';
 
 import Playlists from './Playlists';
-
-import {
-  publicPlaylists,
-  publicPlaylistPageCount,
-  publicPlaylistPage
-} from '../selectors';
-
-import {
-  fetchPublicPlaylists,
-  fetchServerPlaylistItems,
-  fetchNextPublicPlaylistsPage
-} from '../actions';
 
 function PublicPlaylists(props) {
   const c = new React.Component(props);
@@ -57,14 +45,16 @@ PublicPlaylists.propTypes = {
   fetchNextPublicPlaylistsPage: PropTypes.func.isRequired
 };
 
-const mapStateToProps = makeProps({
-  publicPlaylists,
-  publicPlaylistPageCount,
-  publicPlaylistPage
-});
+const mapStateToProps = makePropsFromSelectors([
+  'publicPlaylists',
+  'publicPlaylistPageCount',
+  'publicPlaylistPage'
+]);
 
-export default connect(mapStateToProps, {
-  fetchPublicPlaylists,
-  fetchServerPlaylistItems,
-  fetchNextPublicPlaylistsPage
-})(PublicPlaylists);
+const mapDispatchToProps = makePropsFromActions([
+  'fetchPublicPlaylists',
+  'fetchServerPlaylistItems',
+  'fetchNextPublicPlaylistsPage'
+]);
+
+export default connect(mapStateToProps, mapDispatchToProps)(PublicPlaylists);

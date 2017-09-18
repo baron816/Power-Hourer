@@ -1,18 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { makeProps } from '../utils';
-
-import {
-  time,
-  currentPlaylist
-} from '../selectors';
-
-import {
-  startTime,
-  endTime,
-  incrementPlayCount
-} from '../actions';
+import { makePropsFromActions, makePropsFromSelectors } from '../utils';
 
 function Clock(props) {
   const c = new React.Component(props);
@@ -39,13 +28,12 @@ function Clock(props) {
   c.render = function () {
     return (
       <div className="Clock">
-        {parseTime()}
+        {parseTime(c.props.time)}
       </div>
     );
   };
 
-  function parseTime() {
-    const { time } = c.props;
+  function parseTime(time) {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
 
@@ -63,6 +51,7 @@ Clock.propTypes = {
   incrementPlayCount: PropTypes.func.isRequired
 };
 
-const mapStateToProps = makeProps({time, currentPlaylist});
+const mapStateToProps = makePropsFromSelectors(['time', 'currentPlaylist']);
+const mapDispatchToProps = makePropsFromActions(['startTime', 'endTime', 'incrementPlayCount']);
 
-export default connect(mapStateToProps, {startTime, endTime, incrementPlayCount})(Clock);
+export default connect(mapStateToProps, mapDispatchToProps)(Clock);

@@ -6,24 +6,13 @@ import Avatar from 'material-ui/Avatar';
 import Paper from 'material-ui/Paper';
 import './PlaylistItems.css';
 import Reorder from 'material-ui/svg-icons/action/reorder';
-import { makeProps } from '../utils';
-
-import {
-  playlistItems,
-  playlistItemsIndex
-} from '../selectors';
+import { makePropsFromActions, makePropsFromSelectors } from '../utils';
 
 import {
   SortableContainer,
   SortableElement,
   SortableHandle
 } from 'react-sortable-hoc';
-
-import {
-  goToVideo,
-  resetClock,
-  changePlayState,
-} from '../actions';
 
 const DragHandle = SortableHandle(() => <Reorder className='reorder'/>);
 
@@ -65,7 +54,9 @@ let SortableItem = SortableElement((props) => {
   return c;
 });
 
-SortableItem = connect(function(){ return {}; }, {changePlayState, resetClock, goToVideo})(SortableItem);
+const mapDispatchToProps = makePropsFromActions(['changePlayState', 'resetClock', 'goToVideo']);
+
+SortableItem = connect(() => ({}), mapDispatchToProps)(SortableItem);
 
 const SortableList = SortableContainer(({
   playlistItems,
@@ -118,6 +109,6 @@ PlaylistItems.propTypes = {
   moveItem: PropTypes.func.isRequired
 };
 
-const mapStateToProps = makeProps({playlistItems, playlistItemsIndex});
+const mapStateToProps = makePropsFromSelectors(['playlistItems', 'playlistItemsIndex']);
 
 export default connect(mapStateToProps)(PlaylistItems);

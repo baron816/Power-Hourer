@@ -8,24 +8,7 @@ import Avatar from 'material-ui/Avatar';
 import Paper from 'material-ui/Paper';
 import './Playlists.css';
 
-import { makeProps } from '../utils';
-
-import {
-  playlistIndex,
-  currentPlaylist
-} from '../selectors';
-
-import {
-  goToVideo,
-  changePlayState,
-  resetClock,
-  invertModalState,
-  setPlaylistIndex,
-  setCurrentPlaylist,
-  resetCallNext,
-  setLoaded,
-  setSearchingToFalse
-} from '../actions';
+import { makePropsFromActions, makePropsFromSelectors } from '../utils';
 
 function Playlists(props) {
   if (props.playlists.size) {
@@ -66,37 +49,21 @@ function Playlists(props) {
   }
 
   function getPlaylist(listId, index) {
-    const {
-      playlistIndex,
-      currentPlaylist,
-      playlistName,
-      setPlaylistIndex,
-      fetchPlaylistItems,
-      goToVideo,
-      changePlayState,
-      resetClock,
-      setCurrentPlaylist,
-      setLoaded,
-      resetCallNext,
-      invertModalState,
-      setSearchingToFalse
-    } = props;
-
     return function () {
-      if (index !== playlistIndex || playlistName !== currentPlaylist) {
-        setPlaylistIndex(index);
-        fetchPlaylistItems(listId);
-        goToVideo(0);
-        changePlayState(false);
-        resetClock();
-        setCurrentPlaylist(playlistName);
+      if (index !== props.playlistIndex || props.playlistName !== props.currentPlaylist) {
+        props.setPlaylistIndex(index);
+        props.fetchPlaylistItems(listId);
+        props.goToVideo(0);
+        props.changePlayState(false);
+        props.resetClock();
+        props.setCurrentPlaylist(props.playlistName);
       } else {
-        setLoaded(true);
+        props.setLoaded(true);
       }
 
-      resetCallNext();
-      invertModalState();
-      setSearchingToFalse();
+      props.resetCallNext();
+      props.invertModalState();
+      props.setSearchingToFalse();
     };
   }
 }
@@ -120,16 +87,17 @@ Playlists.propTypes = {
   playlistName: PropTypes.string.isRequired
 };
 
-const mapStateToProps = makeProps({playlistIndex, currentPlaylist});
+const mapStateToProps = makePropsFromSelectors(['playlistIndex', 'currentPlaylist']);
+const mapDispatchToProps = makePropsFromActions([
+  'goToVideo',
+  'changePlayState',
+  'resetClock',
+  'invertModalState',
+  'setPlaylistIndex',
+  'setCurrentPlaylist',
+  'resetCallNext',
+  'setLoaded',
+  'setSearchingToFalse'
+]);
 
-export default connect(mapStateToProps, {
-  goToVideo,
-  changePlayState,
-  resetClock,
-  invertModalState,
-  setPlaylistIndex,
-  setCurrentPlaylist,
-  resetCallNext,
-  setLoaded,
-  setSearchingToFalse
-})(Playlists);
+export default connect(mapStateToProps, mapDispatchToProps)(Playlists);

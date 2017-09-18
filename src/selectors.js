@@ -1,9 +1,9 @@
 import { Map, List } from 'immutable';
 import { createSelector } from 'reselect';
-import { dismember, composer } from './utils';
+import { dismember, caller } from './utils';
 
 const getIn = dismember('Map', 'getIn');
-const withGetIn = composer(getIn);
+const withGetIn = caller(getIn);
 //Clock
 // export const time = (state) => state.getIn(['clock', 'time']);
 export const time = withGetIn(['clock', 'time']);

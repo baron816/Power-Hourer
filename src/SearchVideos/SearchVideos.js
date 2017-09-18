@@ -2,25 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-
 import {GridList} from 'material-ui/GridList';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
 import GridItem from './GridItem';
-
-import {
-  searchVideos
-} from '../actions';
-
-import { makeProps } from '../utils';
-
-import {
-  searchResults,
-  nextPageToken
-} from '../selectors';
-
 import './SearchVideos.css';
+
+import { makePropsFromActions, makePropsFromSelectors } from '../utils';
 
 function SearchVideos(props) {
   const c = new React.Component(props);
@@ -50,11 +39,11 @@ function SearchVideos(props) {
         ))}
         </GridList>
         <br/>
-        {nextPageToken && 
-          <RaisedButton 
-            primary={true} 
-            label='Next' 
-            onClick={handleNext} 
+        {nextPageToken &&
+          <RaisedButton
+            primary={true}
+            label='Next'
+            onClick={handleNext}
           />
         }
       </div>
@@ -81,6 +70,7 @@ SearchVideos.propTypes = {
   searchVideos: PropTypes.func.isRequired
 };
 
-const mapStateToProps = makeProps({searchResults, nextPageToken});
+const mapStateToProps = makePropsFromSelectors(['searchResults', 'nextPageToken']);
+const mapDispatchToProps = makePropsFromActions(['searchVideos']);
 
-export default connect(mapStateToProps, {searchVideos})(SearchVideos);
+export default connect(mapStateToProps, mapDispatchToProps)(SearchVideos);

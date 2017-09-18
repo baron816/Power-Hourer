@@ -6,59 +6,30 @@ import { Card, CardHeader, CardMedia, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
-import { makeProps } from '../utils';
-
-import {
-  video,
-  videoStart,
-  videoEnd,
-  videoLength,
-  autoplay,
-  callNext,
-  showModal
-} from '../selectors';
+import { makePropsFromSelectors, makePropsFromActions } from '../utils';
 
 import Clock from '../Clock/Clock';
-import {
-  changePlayState,
-  nextVideo,
-  flipNext
-} from '../actions';
 import './Video.css';
 
-function Video({
-  video,
-  changePlayState,
-  callNext,
-  videoLength,
-  changeVidLen,
-  changeVidStart,
-  videoStart,
-  videoEnd,
-  autoplay,
-  changeStartToNow,
-  nextVideo,
-  flipNext
-}) {
-
+function Video(props) {
   let videoElement;
   return (
     <Card id='video'>
       <CardHeader
-        title={video.get('title')}
+        title={props.video.get('title')}
         subtitle={<Clock />}
         actAsExpander={true}
         showExpandableButton={true}/>
       <CardMedia style={{justifyContent: 'center', display: 'flex'}}>
         <YouTube
-          videoId={video.get('videoId')}
+          videoId={props.video.get('videoId')}
           opts={{
             height: '420',
             width: '670',
             playerVars: {
-              start: videoStart,
-              end: videoEnd,
-              autoplay,
+              start: props.videoStart,
+              end: props.videoEnd,
+              autoplay: props.autoplay,
               rel: 0
             }
           }}
@@ -73,16 +44,16 @@ function Video({
       <CardText expandable={true}>
         <TextField
           floatingLabelText='Video length'
-          value={String(videoLength)}
-          onChange={changeVidLen}
+          value={String(props.videoLength)}
+          onChange={props.changeVidLen}
           type='number'
           step={5}
           min={5}
         /> <br/>
         <TextField
           floatingLabelText='Video start time'
-          value={String(videoStart)}
-          onChange={changeVidStart}
+          value={String(props.videoStart)}
+          onChange={props.changeVidStart}
           type='number'
           step={5}
           min={0}
@@ -95,33 +66,33 @@ function Video({
   function startNow() {
     videoElement.internalPlayer.getCurrentTime()
     .then((time) => {
-      changeStartToNow(Math.floor(time));
+      props.changeStartToNow(Math.floor(time));
     });
   }
 
   function changePlay(bool) {
     return function () {
-      changePlayState(bool);
+      props.changePlayState(bool);
     };
   }
 
   function handleVideoError() {
-    nextVideo();
-    changePlayState(false);
+    props.nextVideo();
+    props.changePlayState(false);
   }
 
   function handleVideoEnd(event) {
-    if (callNext) {
-      nextVideo();
+    if (props.callNext) {
+      props.nextVideo();
     }
 
     const duration = event.target.getDuration();
 
-    if (duration >= videoEnd || duration === 0) {
-      flipNext();
+    if (duration >= props.videoEnd || duration === 0) {
+      props.flipNext();
     }
 
-    changePlayState(false);
+    props.changePlayState(false);
   }
 }
 
@@ -140,18 +111,20 @@ Video.propTypes = {
   flipNext: PropTypes.func.isRequired
 };
 
-const mapStateToProps = makeProps({
-  video, 
-  videoStart, 
-  videoEnd, 
-  videoLength, 
-  autoplay, 
-  callNext, 
-  showModal
-});
+const mapStateToProps = makePropsFromSelectors([
+  'video',
+  'videoStart',
+  'videoEnd',
+  'videoLength',
+  'autoplay',
+  'callNext',
+  'showModal'
+]);
 
-export default connect(mapStateToProps, {
-  nextVideo,
-  changePlayState,
-  flipNext
-})(Video);
+const mapDispatchToProps = makePropsFromActions([
+  'nextVideo',
+  'changePlayState',
+  'flipNext'
+]);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Video);

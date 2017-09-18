@@ -1,27 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import MenuItem from 'material-ui/MenuItem';
-import { makeProps } from '../utils';
-
-import {
-  selectedPlaylist,
-  playlistIndex,
-  playlistExposed,
-  searching
-} from '../selectors';
+import { makePropsFromActions, makePropsFromSelectors } from '../utils';
 
 import ServerVideo from '../Video/ServerVideo';
 import VideoModal from './VideoModal';
-import {
-  deletePlaylist,
-  moveItem,
-  moveServerItem,
-  updatePlaylist,
-  setPlaylistDefaultLength,
-  setPlaylistDefaultStartTime,
-  removeItem,
-  flipSearching
- } from '../actions';
 
 function ServerModal(props) {
   function changeExposure() {
@@ -45,6 +28,12 @@ function ServerModal(props) {
     <MenuItem primaryText='Delete Playlist' onClick={props.deletePlaylist} key='delete'/>
   ];
 
+  function ExposureItem() {
+    const {playlistExposed} = props;
+
+    return playlistExposed ? <MenuItem primaryText='Make Playlist Private' onClick={changeExposure} /> : <MenuItem primaryText='Make Playlist Public' onClick={changeExposure} />;
+  }
+
   return (
     <VideoModal
       Video={ServerVideo}
@@ -54,24 +43,24 @@ function ServerModal(props) {
       {...props}
     />
   );
-
-  function ExposureItem() {
-    const {playlistExposed} = props;
-
-    return playlistExposed ? <MenuItem primaryText='Make Playlist Private' onClick={changeExposure} /> : <MenuItem primaryText='Make Playlist Public' onClick={changeExposure} />;
-  }
-
 }
 
-const mapStateToProps = makeProps({selectedPlaylist, playlistIndex,playlistExposed, searching});
+const mapStateToProps = makePropsFromSelectors([
+  'selectedPlaylist',
+  'playlistIndex',
+  'playlistExposed',
+  'searching'
+]);
 
-export default connect(mapStateToProps, {
-  deletePlaylist,
-  moveItem,
-  moveServerItem,
-  removeItem,
-  flipSearching,
-  updatePlaylist,
-  setPlaylistDefaultStartTime,
-  setPlaylistDefaultLength
-})(ServerModal);
+const mapDispatchToProps = makePropsFromActions([
+  'deletePlaylist',
+  'moveItem',
+  'moveServerItem',
+  'removeItem',
+  'flipSearching',
+  'updatePlaylist',
+  'setPlaylistDefaultStartTime',
+  'setPlaylistDefaultLength'
+]);
+
+export default connect(mapStateToProps, mapDispatchToProps)(ServerModal);

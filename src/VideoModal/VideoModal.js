@@ -1,12 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { makeProps } from '../utils';
-
-import {
-  showModal,
-  searching
-} from '../selectors';
+import { makePropsFromActions, makePropsFromSelectors } from '../utils';
 
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -17,11 +12,6 @@ import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import Content from './Content';
 import Settings from './Settings';
 import SearchVideos from '../SearchVideos/SearchVideos';
-
-import {
-  invertModalState,
-  setLoaded
-} from '../actions';
 
 import './VideoModal.css';
 
@@ -40,42 +30,33 @@ function VideoModal(props) {
     />
   ];
   c.render = function () {
-    const { 
-      showModal, 
-      selectedPlaylist, 
-      settingsItems, 
-      Video,
-      moveItem,
-      setDefaultLength,
-      setDefaultStart
-    } = c.props;
     return (
       <Dialog
         modal={true}
-        open={showModal}
+        open={c.props.showModal}
         actions={actions}
         bodyStyle={{minHeight: '600px', overflowY: 'scroll'}}
         contentStyle={{width: '98%', maxWidth: 'none'}}
       >
         <AppBar
-          title={selectedPlaylist.get('title')}
+          title={c.props.selectedPlaylist.get('title')}
           iconElementLeft={<CloseButton />}
           iconElementRight={
-            <Settings 
-              settingsItems={settingsItems}
+            <Settings
+              settingsItems={c.props.settingsItems}
               handleDefaultsOpen={handleDefaultsOpen}
             />
           }
         />
-        {c.props.searching ? 
-          <SearchVideos /> : 
+        {c.props.searching ?
+          <SearchVideos /> :
           <Content
             handleDefaultsOpen={handleDefaultsOpen}
             open={c.state.open}
-            Video={Video}
-            moveItem={moveItem}
-            setDefaultLength={setDefaultLength}
-            setDefaultStart={setDefaultStart}
+            Video={c.props.Video}
+            moveItem={c.props.moveItem}
+            setDefaultLength={c.props.setDefaultLength}
+            setDefaultStart={c.props.setDefaultStart}
           />
         }
       </Dialog>
@@ -118,6 +99,7 @@ VideoModal.propTypes = {
   setDefaultStart: PropTypes.func.isRequired
 };
 
-const mapStateToProps = makeProps({ showModal, searching });
+const mapStateToProps = makePropsFromSelectors(['showModal', 'searching']);
+const mapDispatchToProps = makePropsFromActions(['invertModalState', 'setLoaded']);
 
-export default connect(mapStateToProps, { invertModalState, setLoaded })(VideoModal);
+export default connect(mapStateToProps, mapDispatchToProps)(VideoModal);
