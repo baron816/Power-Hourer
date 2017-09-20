@@ -1,30 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { makeProps } from '../utils';
+import { makePropsFromActions, makePropsFromSelectors } from '../utils';
 
 import { connect } from 'react-redux';
-import {
-  youtubePlaylists
-} from '../selectors';
-import Playlists from './Playlists';
-import { fetchYoutubePlaylistItems } from '../actions';
 
-function YouTubePlaylists({youtubePlaylists, fetchYoutubePlaylistItems}) {
+import Playlists from './Playlists';
+
+function YouTubePlaylists(props) {
   return (
     <Playlists
-      playlists={youtubePlaylists}
-      fetchPlaylistItems={fetchYoutubePlaylistItems}
+      playlists={props.youtubePlaylists}
+      fetchPlaylistItems={props.fetchYoutubePlaylistItems}
       name='YouTube'
       playlistName='youtubePlaylists'
     />
   );
 }
 
-YouTubePlaylists.propTypes = {
-  youtubePlaylists: PropTypes.object.isRequired,
-  fetchYoutubePlaylistItems: PropTypes.func.isRequired
-};
+const mapStateToProps = makePropsFromSelectors(['youtubePlaylists']);
+const mapDispatchToProps = makePropsFromActions(['fetchYoutubePlaylistItems']);
 
-const mapStateToProps = makeProps({youtubePlaylists});
-
-export default connect(mapStateToProps, {fetchYoutubePlaylistItems})(YouTubePlaylists);
+export default connect(mapStateToProps, mapDispatchToProps)(YouTubePlaylists);

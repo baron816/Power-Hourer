@@ -1,32 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { makeProps } from '../utils';
+import { makePropsFromActions, makePropsFromSelectors } from '../utils';
 
-import {
-  serverPlaylists
-} from '../selectors';
 import Playlists from './Playlists';
 
-import { fetchServerPlaylistItems } from '../actions';
-
-function ServerPlaylists({serverPlaylists, fetchServerPlaylistItems}) {
+function ServerPlaylists(props) {
   return (
     <Playlists
-      playlists={serverPlaylists}
+      playlists={props.serverPlaylists}
       name='Saved'
       playlistName='serverPlaylists'
       style={{marginRight: '5px', marginLeft: '5px'}}
-      fetchPlaylistItems={fetchServerPlaylistItems}
+      fetchPlaylistItems={props.fetchServerPlaylistItems}
     />
   );
 }
 
-ServerPlaylists.propTypes = {
-  serverPlaylists: PropTypes.object.isRequired,
-  fetchServerPlaylistItems: PropTypes.func.isRequired
-};
+const mapStateToProps = makePropsFromSelectors(['serverPlaylists']);
+const mapDispatchToProps = makePropsFromActions(['fetchServerPlaylistItems']);
 
-const mapStateToProps = makeProps({serverPlaylists});
-
-export default connect(mapStateToProps, {fetchServerPlaylistItems})(ServerPlaylists);
+export default connect(mapStateToProps, mapDispatchToProps)(ServerPlaylists);

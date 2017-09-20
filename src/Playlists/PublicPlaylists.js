@@ -13,13 +13,12 @@ function PublicPlaylists(props) {
   };
 
   c.render = function () {
-    const { publicPlaylists, fetchServerPlaylistItems } = c.props;
     return (
       <Playlists
-        playlists={publicPlaylists}
+        playlists={c.props.publicPlaylists}
         name='Public'
         playlistName='publicPlaylists'
-        fetchPlaylistItems={fetchServerPlaylistItems}
+        fetchPlaylistItems={c.props.fetchServerPlaylistItems}
         fetchNext={fetchNext}
       />
     );
@@ -37,11 +36,9 @@ function PublicPlaylists(props) {
 }
 
 PublicPlaylists.propTypes = {
-  publicPlaylists: PropTypes.object.isRequired,
   publicPlaylistPageCount: PropTypes.number.isRequired,
   publicPlaylistPage: PropTypes.number.isRequired,
   fetchPublicPlaylists: PropTypes.func.isRequired,
-  fetchServerPlaylistItems: PropTypes.func.isRequired,
   fetchNextPublicPlaylistsPage: PropTypes.func.isRequired
 };
 
