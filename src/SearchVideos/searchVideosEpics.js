@@ -37,6 +37,9 @@ export function searchVideos(action$, store) {
               thumbnail: url,
               title
             };
+          })
+          .filter(function(item) {
+            return item.videoId !== undefined;
           });
 
           return searchVideosFulfilled(normalizedItems, nextPageToken);
