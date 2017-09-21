@@ -27,6 +27,21 @@ export function caller(fn) {
   };
 }
 
+function curry(fn) {
+  var arity = fn.length;
+
+  return (function resolve(...prevArgs){
+    return function(...newArgs){
+      var currArgs = [...prevArgs, ...newArgs];
+
+      if (arity - currArgs.length <= 0) {
+        return fn(...currArgs);
+      } else {
+        return resolve(...currArgs);
+      }
+    };
+  }());
+}
 
 export function pick(obj, list) {
   return list.reduce(function(acc, curr) {
@@ -40,12 +55,9 @@ export function pick(obj, list) {
   }, {});
 }
 
-function pickSelectors(list) {
-  return pick(selectors, list);
-}
+const picks = curry(pick);
+const pickSelectors = picks(selectors);
 
-export function makePropsFromActions(list){
-  return pick(actions, list);
-}
+export const makePropsFromActions = picks(actions);
 
 export const makePropsFromSelectors = compose(makeProps, pickSelectors);
