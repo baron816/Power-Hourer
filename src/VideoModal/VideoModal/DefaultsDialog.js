@@ -7,37 +7,37 @@ import TextField from 'material-ui/TextField';
 
 
 export default function DefaultsDialog(props) {
-    return (
-      <Dialog
-        open={props.open}
-        title='Playlist Defaults'
-        onRequestClose={props.handleDefaultsOpen}
-        actions={
-          <FlatButton
-            label='Close'
-            primary={true}
-            onTouchTap={props.handleDefaultsOpen}
-          />
-        }
-      >
-        <TextField
-          floatingLabelText='Default Length'
-          value={props.defaultLength}
-          onChange={props.setDefaultLength}
-          type='number'
-          step={5}
-          min={1}
+  return (
+    <Dialog
+      open={props.open}
+      title='Playlist Defaults'
+      onRequestClose={props.handleDefaultsOpen}
+      actions={
+        <FlatButton
+          label='Close'
+          primary={true}
+          onTouchTap={props.handleDefaultsOpen}
         />
-        <TextField
-          floatingLabelText='Default Start'
-          value={props.defaultStart}
-          onChange={props.setDefaultStart}
-          type='number'
-          step={5}
-          min={0}
-        />
-      </Dialog>
-    );
+      }
+    >
+      <TextField
+        floatingLabelText='Default Length'
+        value={props.defaultLength}
+        onChange={props.setDefaultLength}
+        type='number'
+        step={5}
+        min={1}
+      />
+      <TextField
+        floatingLabelText='Default Start'
+        value={props.defaultStart}
+        onChange={props.setDefaultStart}
+        type='number'
+        step={5}
+        min={0}
+      />
+    </Dialog>
+  );
 }
 
 DefaultsDialog.propTypes = {
