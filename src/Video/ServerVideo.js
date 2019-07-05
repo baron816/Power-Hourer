@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import enhancedConnect from '../enhancedConnect';
 import Video from './Video';
-import { makePropsFromActions } from '../utils';
 
 function ServerVideo(props) {
   function changeStartToNow(time) {
@@ -37,11 +36,11 @@ ServerVideo.propTypes = {
   changeServerVideoLength: PropTypes.func.isRequired
 };
 
-const mapDispatchToProps = makePropsFromActions([
+const mapDispatchToProps = [
   'changeVideoStart',
   'changeServerVideoStart',
   'changeVideoLength',
   'changeServerVideoLength'
-]);
+];
 
-export default connect(() => ({}), mapDispatchToProps)(ServerVideo);
+export default enhancedConnect([], mapDispatchToProps)(ServerVideo);

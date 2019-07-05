@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { makePropsFromActions, makePropsFromSelectors } from '../../utils';
+import enhancedConnect from '../../enhancedConnect';
 
 import VideoModalComponent from './VideoModalComponent';
 
@@ -40,18 +39,19 @@ VideoModal.propTypes = {
   setLoaded: PropTypes.func.isRequired
 };
 
-const mapStateToProps = makePropsFromSelectors([
+const mapStateToProps = [
   'showModal',
   'searching',
   'loaded',
   'serverId',
   'defaultStart',
   'defaultLength'
-]);
-const mapDispatchToProps = makePropsFromActions([
+];
+
+const mapDispatchToProps = [
   'invertModalState',
   'setLoaded',
   'savePlaylist'
-]);
+];
 
-export default connect(mapStateToProps, mapDispatchToProps)(VideoModal);
+export default enhancedConnect(mapStateToProps, mapDispatchToProps)(VideoModal);

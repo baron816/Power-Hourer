@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { makePropsFromActions, makePropsFromSelectors } from '../utils';
+import enhancedConnect from '../enhancedConnect';
 
 import Playlists from './Playlists';
 
@@ -42,16 +41,16 @@ PublicPlaylists.propTypes = {
   fetchNextPublicPlaylistsPage: PropTypes.func.isRequired
 };
 
-const mapStateToProps = makePropsFromSelectors([
+const mapStateToProps = [
   'publicPlaylists',
   'publicPlaylistPageCount',
   'publicPlaylistPage'
-]);
+];
 
-const mapDispatchToProps = makePropsFromActions([
+const mapDispatchToProps = [
   'fetchPublicPlaylists',
   'fetchServerPlaylistItems',
   'fetchNextPublicPlaylistsPage'
-]);
+];
 
-export default connect(mapStateToProps, mapDispatchToProps)(PublicPlaylists);
+export default enhancedConnect(mapStateToProps, mapDispatchToProps)(PublicPlaylists);

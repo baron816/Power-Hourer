@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './App.css';
-import { connect } from 'react-redux';
-import { makePropsFromActions, makePropsFromSelectors } from './utils';
+import enhancedConnect from './enhancedConnect';
 
 import AppBar from 'material-ui/AppBar';
 import MenuItem from 'material-ui/MenuItem';
@@ -87,17 +86,17 @@ App.propTypes = {
   fetchPublicPlaylists: PropTypes.func.isRequired
 };
 
-const mapStateToProps = makePropsFromSelectors([
+const mapStateToProps = [
   'accessToken',
   'serverId',
   'currentPlaylist'
-]);
+];
 
-const mapDispatchToProps = makePropsFromActions([
+const mapDispatchToProps = [
   'resetState',
   'fetchYoutubePlaylists',
   'fetchServerPlaylists',
   'fetchPublicPlaylists'
-]);
+];
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default enhancedConnect(mapStateToProps, mapDispatchToProps)(App);

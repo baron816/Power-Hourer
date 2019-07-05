@@ -1,8 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import enhancedConnect from '../enhancedConnect';
 import PropTypes from 'prop-types';
 
-import { makePropsFromActions, makePropsFromSelectors } from '../utils';
 
 import PlaylistComponent from './PlaylistComponent';
 
@@ -50,8 +49,8 @@ Playlists.propTypes = {
   playlistName: PropTypes.string.isRequired
 };
 
-const mapStateToProps = makePropsFromSelectors(['playlistIndex', 'currentPlaylist']);
-const mapDispatchToProps = makePropsFromActions([
+const mapStateToProps = ['playlistIndex', 'currentPlaylist'];
+const mapDispatchToProps = [
   'goToVideo',
   'changePlayState',
   'resetClock',
@@ -61,6 +60,6 @@ const mapDispatchToProps = makePropsFromActions([
   'resetCallNext',
   'setLoaded',
   'setSearchingToFalse'
-]);
+];
 
-export default connect(mapStateToProps, mapDispatchToProps)(Playlists);
+export default enhancedConnect(mapStateToProps, mapDispatchToProps)(Playlists);

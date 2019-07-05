@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { makePropsFromActions, makePropsFromSelectors } from '../utils';
+import enhancedConnect from '../enhancedConnect';
 
 function Clock(props) {
   const c = new React.Component(props);
@@ -51,7 +50,7 @@ Clock.propTypes = {
   incrementPlayCount: PropTypes.func.isRequired
 };
 
-const mapStateToProps = makePropsFromSelectors(['time', 'currentPlaylist']);
-const mapDispatchToProps = makePropsFromActions(['startTime', 'endTime', 'incrementPlayCount']);
+const mapStateToProps = ['time', 'currentPlaylist'];
+const mapDispatchToProps = ['startTime', 'endTime', 'incrementPlayCount'];
 
-export default connect(mapStateToProps, mapDispatchToProps)(Clock);
+export default enhancedConnect(mapStateToProps, mapDispatchToProps)(Clock);

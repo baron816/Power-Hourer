@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import enhancedConnect from '../../enhancedConnect';
 import SearchVideosComponent from './SearchVideosComponent';
-
-import { makePropsFromActions, makePropsFromSelectors } from '../../utils';
 
 function SearchVideos(props) {
   const c = new React.Component(props);
@@ -40,7 +38,7 @@ SearchVideos.propTypes = {
   searchVideos: PropTypes.func.isRequired
 };
 
-const mapStateToProps = makePropsFromSelectors(['searchResults', 'nextPageToken']);
-const mapDispatchToProps = makePropsFromActions(['searchVideos', 'addVideoToServerPlaylist']);
+const mapStateToProps = ['searchResults', 'nextPageToken'];
+const mapDispatchToProps = ['searchVideos', 'addVideoToServerPlaylist'];
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchVideos);
+export default enhancedConnect(mapStateToProps, mapDispatchToProps)(SearchVideos);

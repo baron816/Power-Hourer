@@ -1,6 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { makePropsFromActions, makePropsFromSelectors } from '../utils';
+import enhancedConnect from '../enhancedConnect';
 
 import Playlists from './Playlists';
 
@@ -16,7 +15,7 @@ function ServerPlaylists(props) {
   );
 }
 
-const mapStateToProps = makePropsFromSelectors(['serverPlaylists']);
-const mapDispatchToProps = makePropsFromActions(['fetchServerPlaylistItems']);
+const mapStateToProps = ['serverPlaylists'];
+const mapDispatchToProps = ['fetchServerPlaylistItems'];
 
-export default connect(mapStateToProps, mapDispatchToProps)(ServerPlaylists);
+export default enhancedConnect(mapStateToProps, mapDispatchToProps)(ServerPlaylists);

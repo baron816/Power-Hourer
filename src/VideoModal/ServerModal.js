@@ -1,7 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import enhancedConnect from '../enhancedConnect';
 import MenuItem from 'material-ui/MenuItem';
-import { makePropsFromActions, makePropsFromSelectors } from '../utils';
 
 import ServerVideo from '../Video/ServerVideo';
 import VideoModal from './VideoModal';
@@ -45,14 +44,14 @@ function ServerModal(props) {
   );
 }
 
-const mapStateToProps = makePropsFromSelectors([
+const mapStateToProps = [
   'selectedPlaylist',
   'playlistIndex',
   'playlistExposed',
   'searching'
-]);
+];
 
-const mapDispatchToProps = makePropsFromActions([
+const mapDispatchToProps = [
   'deletePlaylist',
   'moveItem',
   'moveServerItem',
@@ -61,6 +60,6 @@ const mapDispatchToProps = makePropsFromActions([
   'updatePlaylist',
   'setPlaylistDefaultStartTime',
   'setPlaylistDefaultLength'
-]);
+];
 
-export default connect(mapStateToProps, mapDispatchToProps)(ServerModal);
+export default enhancedConnect(mapStateToProps, mapDispatchToProps)(ServerModal);

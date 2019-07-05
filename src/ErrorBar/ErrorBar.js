@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import enhancedConnect from '../enhancedConnect';
 import Snackbar from 'material-ui/Snackbar';
-
-import { makePropsFromActions, makePropsFromSelectors } from '../utils';
 
 function ErrorBar({open, message, hideError}) {
   return (
@@ -22,7 +20,7 @@ ErrorBar.propTypes = {
   hideError: PropTypes.func.isRequired
 };
 
-const mapStateToProps = makePropsFromSelectors(['open', 'message' ]);
-const mapDispatchToProps = makePropsFromActions(['hideError']);
+const mapStateToProps = ['open', 'message' ];
+const mapDispatchToProps = ['hideError'];
 
-export default connect(mapStateToProps, mapDispatchToProps)(ErrorBar);
+export default enhancedConnect(mapStateToProps, mapDispatchToProps)(ErrorBar);

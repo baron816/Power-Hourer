@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import enhancedConnect from '../enhancedConnect';
 import VideoComponent from './VideoComponent';
-
-import { makePropsFromSelectors, makePropsFromActions } from '../utils';
 
 import './Video.css';
 
@@ -68,7 +66,7 @@ Video.propTypes = {
   flipNext: PropTypes.func.isRequired
 };
 
-const mapStateToProps = makePropsFromSelectors([
+const mapStateToProps = [
   'video',
   'videoStart',
   'videoEnd',
@@ -76,12 +74,12 @@ const mapStateToProps = makePropsFromSelectors([
   'autoplay',
   'callNext',
   'showModal'
-]);
+];
 
-const mapDispatchToProps = makePropsFromActions([
+const mapDispatchToProps = [
   'nextVideo',
   'changePlayState',
   'flipNext'
-]);
+];
 
-export default connect(mapStateToProps, mapDispatchToProps)(Video);
+export default enhancedConnect(mapStateToProps, mapDispatchToProps)(Video);

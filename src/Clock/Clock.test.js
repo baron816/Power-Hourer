@@ -1,4 +1,5 @@
 import React from 'react';
+import '../test_config';
 import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
@@ -22,10 +23,9 @@ describe('Clock', () => {
 
         var div = enzymeWrapper.find('div');
 
+        expect(div.length).toEqual(1);
         expect(div.hasClass('Clock')).toBe(true);
         expect(div.first().text()).toBe('00');
     });
-    
+
 });
-
-

@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import enhancedConnect from '../enhancedConnect';
 import Video from './Video';
-import { makePropsFromActions } from '../utils';
 
 
 function YouTubeVideo(props) {
@@ -41,10 +40,10 @@ YouTubeVideo.propTypes = {
   setPlaylistDefaultStartTime: PropTypes.func.isRequired
 };
 
-const mapDispatchToProps = makePropsFromActions([
+const mapDispatchToProps = [
   'changeVideoStart',
   'setPlaylistDefaultStartTime',
   'changeVideoLength'
-]);
+];
 
-export default connect(() => ({}), mapDispatchToProps)(YouTubeVideo);
+export default enhancedConnect([], mapDispatchToProps)(YouTubeVideo);
